@@ -13,6 +13,7 @@ from rasterio.transform import from_origin
 from lumen_pipeline.common.frames import site_rotation_matrix, site_up_vector
 from lumen_pipeline.terrain.crops import CropSpec, TerrainCrop, TerrainCrops
 from lumen_pipeline.terrain.dem_io import LUNAR_SPHERICAL_CRS, DemWindow
+from lumen_pipeline.terrain.dispersion import generate_dispersion
 from lumen_pipeline.terrain.pad import (
     compute_slope_statistics,
     fit_ground_plane,
@@ -221,3 +222,57 @@ def test_pad_json_records_statistics_baseline_and_under_resolution(tmp_path):
     normal = record["ground_normal_me"]
     assert len(normal) == 3
     assert math.hypot(*normal) == pytest.approx(1.0, abs=1e-6)
+
+
+def test_dispersion_grid_uses_the_same_plane_fit_for_every_node():
+    size = 181
+    resolution_m = 5.0
+    flat = _dem(resolution_m=resolution_m)
+    row_grid, col_grid = np.indices((size, size), dtype=float)
+    transformer = Transformer.from_crs(flat.crs, LUNAR_SPHERICAL_CRS, always_xy=True)
+    x_projected, y_projected = flat.transform @ (
+        col_grid + 0.5 - (size - 31) / 2,
+        row_grid + 0.5 - (size - 31) / 2,
+    )
+    longitudes, latitudes = transformer.transform(x_projected, y_projected)
+    points = np.stack(
+        (
+            np.cos(np.radians(latitudes)) * np.cos(np.radians(longitudes)),
+            np.cos(np.radians(latitudes)) * np.sin(np.radians(longitudes)),
+            np.sin(np.radians(latitudes)),
+        ),
+        axis=-1,
+    )
+    local = (
+        1_737_400.0
+        * (points - site_up_vector(LATITUDE, LONGITUDE))
+        @ site_rotation_matrix(LATITUDE, LONGITUDE).T
+    )
+    elevation = 100.0 + math.tan(math.radians(3.0)) * local[..., 0]
+    dem = DemWindow(
+        elevation=elevation.astype(np.float32),
+        valid=np.ones((size, size), dtype=bool),
+        transform=from_origin(
+            -size * resolution_m / 2.0, size * resolution_m / 2.0, resolution_m, resolution_m
+        ),
+        crs=flat.crs,
+        bounds=(
+            -size * resolution_m / 2.0,
+            -size * resolution_m / 2.0,
+            size * resolution_m / 2.0,
+            size * resolution_m / 2.0,
+        ),
+        resolution_m=(resolution_m, resolution_m),
+        source="synthetic_test_dem",
+        provenance={"synthetic_test_data": True},
+    )
+
+    payload, sidecar = generate_dispersion(
+        "im2_athena", _crops(dem), latitude_deg=LATITUDE, longitude_deg_east=LONGITUDE
+    )
+
+    assert len(payload) == 121
+    assert sidecar["nodes"] == [11, 11]
+    assert sidecar["spacing_m"] == 50.0
+    assert sidecar["slope_deg_min"] == pytest.approx(3.0, abs=0.02)
+    assert sidecar["slope_deg_max"] == pytest.approx(3.0, abs=0.02)

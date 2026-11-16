@@ -1,0 +1,22 @@
+{
+  "clipped_nodes": 0,
+  "created_utc": "2026-11-16T16:38:31.791522Z",
+  "dem_source": "lroc_nac_dtm_change6",
+  "dtype": "uint8",
+  "latitude_deg": -41.6385,
+  "longitude_deg_east": 206.0148,
+  "method": "R3 7x7 plane-fit slope evaluated at each node (pad.fit_ground_plane)",
+  "near_field_resolution_m": 3.9999999999986,
+  "nodes": [
+    11,
+    11
+  ],
+  "order": "row-major [north row j][east column i]; j increases north, i increases east; node (5, 5) is the site",
+  "producer": "lumen_pipeline.terrain.dispersion",
+  "site_id": "change6_apollo_basin",
+  "slope_deg_max": 7.243454079399223,
+  "slope_deg_min": 0.2062651058369244,
+  "spacing_m": 50.0,
+  "unit_deg": 0.1,
+  "version": "0.1.0"
+}
