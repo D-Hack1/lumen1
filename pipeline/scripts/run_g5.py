@@ -119,7 +119,7 @@ def main() -> None:
     report = {
         "gate": "G5", "description": "Multi-year averages versus independent PGDA map pixels", "criterion_pct_points": TOLERANCE_PCT_POINTS,
         "recorded_utc": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip(),
+        "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=False).stdout.strip(),
         "command": "python pipeline/scripts/run_g5.py", "sites": rows,
         "method": "LUMEN: Python reference engine over 2023-01-01..2030-12-29, every UTC day, 2-minute samples, 2 m terrain mask, Sun available at >=50% disk. PGDA: average-illumination raster read at the site "
         "(fraction of time illuminated, hourly over an 18.6-year nutation cycle). The spans differ (8 of ~18.6 years) and PGDA's disk treatment is not spelled out, so yearly spread and an any-part-of-disk variant are recorded as the explanation of differences.",

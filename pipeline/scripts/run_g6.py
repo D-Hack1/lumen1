@@ -74,7 +74,7 @@ def main() -> None:
     report = {
         "gate": "G6", "description": "Pad slope versus PGDA slope rasters", "criterion_deg": TOLERANCE_DEG,
         "recorded_utc": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip(),
+        "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=False).stdout.strip(),
         "command": "python pipeline/scripts/run_g6.py", "sites": rows,
         "method": "PGDA slope raster read over HTTP at the site; centre pixel compared with the published pad slope. The baselines differ (70 m plane fit vs 20 m / 60 m pixel slope).",
     }

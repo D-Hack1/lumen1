@@ -26,7 +26,12 @@ to one elevation threshold; Tier-B snap error is up to about 2.8 km in the 4 km 
 ## Data coverage
 - **Terrain masks:** fine (5–60 m) for IM-2, Chandrayaan-3 and the Shackleton ridge sites; coarse (~237 m, NASA global LDEM_128) for
   Apollo 11/12/14/15/16/17, SLIM, Chang'e-6 and Blue Ghost. Custom points outside a mask use a smooth-Moon estimate and are labelled as one. The Tier-B regional grid (80–90°S) is not produced, so custom points near the pole have no terrain.
-- **Dispersion grids** (landing-ellipse slope statistics) and **pad-slope validation against PGDA slope rasters (G6)** are not produced.
+- **Pad slope and dispersion grids** exist only for the polar sites with fine terrain: pad files for IM-2, Chandrayaan-3 and both Shackleton
+  ridge sites (validated against PGDA slope rasters, gate G6 PASS; IM-2's is flagged under-resolved), and 11 × 11 dispersion grids for IM-2,
+  Chandrayaan-3 and the Shackleton-rim site. The verdict uses the pad file's slope for the slope requirement.
+- **"Unconfirmed" on the coarse-mask sites.** The nine coarse-mask sites have no pad slope (237 m terrain cannot resolve a lander pad, and
+  none is invented), so their slope requirement is always "no data". When the 14-day window catches a long lunar night they are judged
+  No-go; when it falls mostly in daylight nothing fails and the verdict is **Unconfirmed** ("Pad slope: no data yet"). This is expected.
 - **Catalogue:** 13 sites. The Artemis candidate regions are not in the catalogue yet; unverified rows are deliberately not shown as verified.
 - **Shackleton connecting ridge:** the catalogue coordinates (−89.54°, 129.0°E; source: USGS navigation grid and NASA CLPS material) read
   **0 % average illumination** on NASA's illumination map, so the engine correctly reports 0 % sunlit there. The mask itself is a faithful
