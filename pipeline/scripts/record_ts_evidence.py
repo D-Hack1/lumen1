@@ -51,7 +51,7 @@ def _vitest(files: list[str], env: dict[str, str]) -> dict:
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "vitest.json"
         cmd = [_npx(), "vitest", "run", *files, "--reporter=json", f"--outputFile={out}"]
-        proc = subprocess.run(cmd, cwd=WEB, env={**os.environ, **env}, capture_output=True, text=True)
+        proc = subprocess.run(cmd, cwd=WEB, env={**os.environ, **env}, capture_output=True, text=True, check=False)
         if not out.exists():
             raise SystemExit(f"vitest produced no report:\n{proc.stdout}\n{proc.stderr}")
         return json.loads(out.read_text(encoding="utf-8"))
@@ -62,7 +62,7 @@ def _common() -> dict:
         "recorded_utc": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "git_commit": _git("rev-parse", "HEAD"),
         "working_tree_dirty": bool(_git("status", "--porcelain", "--", "web/src", "web/public/data", "pipeline/lumen_pipeline")),
-        "node": subprocess.run(["node", "--version"], capture_output=True, text=True).stdout.strip(),
+        "node": subprocess.run(["node", "--version"], capture_output=True, text=True, check=False).stdout.strip(),
     }
 
 
@@ -110,7 +110,7 @@ def record_g0() -> Path:
 
     with tempfile.TemporaryDirectory() as tmp:
         xml = Path(tmp) / "junit.xml"
-        subprocess.run([sys.executable, "-m", "pytest", str(ROOT / G0_TEST_FILE), "-q", f"--junitxml={xml}"], cwd=ROOT / "pipeline", capture_output=True, text=True)
+        subprocess.run([sys.executable, "-m", "pytest", str(ROOT / G0_TEST_FILE), "-q", f"--junitxml={xml}"], cwd=ROOT / "pipeline", capture_output=True, text=True, check=False)
         if not xml.exists():
             raise SystemExit("pytest produced no JUnit report for G0")
         cases = []

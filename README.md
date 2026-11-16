@@ -95,8 +95,16 @@ Layout, slot ids, density modes and the hot-path rules for teammates: [`docs/ui_
 
 ```
 cd pipeline
-pip install -e .
-pytest
+pip install -e ".[dev]"
+# NASA NAIF SPICE kernels (git-ignored; the same files CI downloads in .github/workflows/ci-backend.yml)
+mkdir -p kernels && cd kernels
+N=https://naif.jpl.nasa.gov/pub/naif
+curl -fLO $N/generic_kernels/lsk/naif0012.tls
+curl -fLO $N/generic_kernels/pck/pck00011.tpc
+curl -fLO $N/MAVEN/kernels/spk/de421.bsp      # also at generic_kernels/spk/planets/a_old_versions/
+curl -fLO $N/generic_kernels/pck/moon_pa_de421_1900-2050.bpc
+curl -fLO $N/generic_kernels/fk/satellites/moon_080317.tf
+cd .. && ruff check . && pytest
 ```
 
 The published data under `web/public/data/` is produced by the scripts in `pipeline/scripts/`:

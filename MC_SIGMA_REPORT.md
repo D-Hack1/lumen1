@@ -99,6 +99,33 @@ No Shackleton coordinates/rotation/masks/fixtures, no IM-2/CY-3 production masks
 3. **Vertical datum of the adjusted DEM is still not formally confirmed** against authoritative PGDA documentation (same open question from earlier in this session) — doesn't block σ but blocks full DEM provenance sign-off.
 4. **Transient per-process memory peaks (~7.6-7.7 GB RSS)** were observed during long MC runs (cause not root-caused — possibly tied to specific moments in the 90-raycast-call sequence, not a monotonic leak); running sites one at a time was required to avoid OOM kills in this container. Needs investigation/optimization before this can run unattended or concurrently in production.
 5. **Only 2 correlation lengths and 1 clone-count comparison (20 vs 30) have been evaluated.** A broader, more systematic sensitivity sweep is warranted before treating any single configuration as final.
-6. No downstream frontend consumption of these σ artifacts has been wired up or tested — this work produced only the backend artifacts per the task's explicit scope.
+6. ~~No downstream frontend consumption~~ — superseded: the web engine now loads every σ file (`web/src/engine/data/sigma.ts`), checks it against its mask, and uses it for the ± bounds and the verdict; `web/src/engine/__tests__/realMode.test.ts` checks every published σ file.
 
 Every sidecar JSON encodes `"preliminary": true`, `"production_ready": false`, and the full methodology/provenance detail above directly in its own fields, so the artifacts are self-describing without this report.
+
+## 8. Addendum (2026-11-16): the nine coarse-mask sites — ASSUMED-error σ
+
+Apollo 11/12/14/15/16/17, SLIM, Chang'e-6 and Blue Ghost have coarse masks from NASA's global LDEM_128 (236.9 m/px). **No per-pixel error raster exists for that model**, so the method above (perturb by the DEM's own `_ERR`) cannot be applied. What was checked:
+
+- PDS LOLA GDR [`cylindrical/img`](https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/) and `float_img/` hold only `ldem_128.img/.lbl/.xml`; the label mentions no uncertainty.
+- [PGDA product 90](https://pgda.gsfc.nasa.gov/products/90) `_ERR` rasters cover 60°S–pole only; [PGDA product 78](https://pgda.gsfc.nasa.gov/products/78) covers named south-pole sites only (none of the nine).
+
+At the project owner's explicit request, σ was produced anyway with a stated assumption, by `pipeline/scripts/run_mc_sigma_coarse.py`:
+
+- the DEM is perturbed by a **constant 1 m one-σ elevation error** (LOLA's commonly quoted ~1 m vertical accuracy, cited as Mazarico et al. 2013 in secondary text; the primary paper and LDEM_128's own accuracy were **not** read);
+- 50 m correlation length (below the 237 m pixel, so effectively uncorrelated between pixels), 30 clones, `ddof=1`, seed 20260515 — same machinery as above, unmodified;
+- each sidecar records `error_model: "assumed_uniform"`, `assumed_error_m: 1.0`, `preliminary: true`; the app labels it "Monte-Carlo, 30 clones, assumed 1 m DEM error".
+
+| Site | σ mean (deg) | σ max (deg) | 20-vs-30 max \|Δ\| (deg) | nominal vs published mask max \|Δ\| (deg) |
+|---|---|---|---|---|
+| `apollo_11` | 0.01275 | 0.06916 | 0.00644 | 0.0112 |
+| `apollo_12` | 0.01585 | 0.06892 | 0.00841 | 0.0650 |
+| `apollo_14` | 0.01627 | 0.05356 | 0.00771 | 0.0000 |
+| `apollo_15` | 0.00713 | 0.04886 | 0.00676 | 0.0000 |
+| `apollo_16` | 0.00805 | 0.06027 | 0.00770 | 0.0000 |
+| `apollo_17` | 0.00388 | 0.01039 | 0.00267 | 0.0000 |
+| `slim_shioli` | 0.00750 | 0.03035 | 0.00645 | 0.0000 |
+| `change6_apollo_basin` | 0.00628 | 0.04741 | 0.01343 | 0.0000 |
+| `blue_ghost_m1` | 0.01638 | 0.06209 | 0.00798 | 0.0000 |
+
+**Caveats.** (1) This σ is an assumption, not a measured uncertainty. (2) The published Apollo 11 and Apollo 12 masks do not reproduce bit-for-bit from the current code and DEM window (the production generator reproduces the recomputed nominal exactly, so the difference is in the published masks); σ was computed with the tolerance raised and the actual difference recorded in each sidecar; the masks were not regenerated. (3) Coarse runs peak below 1 GB RSS and ~4 s per clone, so all nine ran in parallel; the slow step is the first HTTP read of the LDEM_128 window.

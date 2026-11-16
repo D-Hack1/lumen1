@@ -57,7 +57,7 @@ class IlluminationMap:
         return -(90 - math.degrees(colat)), (math.degrees(math.atan2(x, y)) + 360) % 360
 
     def pixel(self, x: float, y: float) -> tuple[int, int]:
-        return int(round((self.radius - y) / self.res)), int(round((x + self.radius) / self.res))  # row, col
+        return int(round((self.radius - y) / self.res)), int(round((x + self.radius) / self.res))  # row, col  # noqa: RUF046 (numpy inputs)
 
     def at(self, lat: float, lon: float) -> float | None:
         x, y = self.project(lat, lon)
@@ -115,7 +115,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{name:18s} lat {lat:8.3f} lon {lon:8.2f}E   outside the 85-90S map")
             continue
         mean = m.mean_within(lat, lon)
-        flag = "  <-- in PERMANENT SHADOW at these coordinates" if here == here and here < 1.0 and (mean is None or mean < 3.0) else ""
+        flag = "  <-- in PERMANENT SHADOW at these coordinates" if not math.isnan(here) and here < 1.0 and (mean is None or mean < 3.0) else ""
         print(f"{name:18s} lat {lat:8.3f} lon {lon:8.2f}E   at point {here:5.1f}%   mean(1.5 km) {mean if mean is None else round(mean, 1)}%{flag}")
         for v, la, lo, d in m.bright_spots(lat, lon):
             print(f"{'':18s}   bright spot {v:5.1f}%  lat {la:8.3f}  lon {lo:7.2f}E   {d:4.1f} km away")

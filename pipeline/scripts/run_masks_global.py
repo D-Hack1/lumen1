@@ -59,10 +59,10 @@ def _read_window(ds: rasterio.DatasetReader, lat: float, lon_east: float) -> tup
     far_lat = min(89.0, abs(lat) + half_lat)  # the window is widest (in degrees of longitude) at its poleward edge
     half_lon = min(170.0, half_lat / max(0.05, math.cos(math.radians(far_lat))) * 1.02)
     width, height = ds.width, ds.height
-    r0 = int(math.floor((90.0 - (lat + half_lat)) * PPD))
-    r1 = int(math.ceil((90.0 - (lat - half_lat)) * PPD))
-    c0 = int(math.floor((lon_east - half_lon) * PPD))
-    c1 = int(math.ceil((lon_east + half_lon) * PPD))
+    r0 = math.floor((90.0 - (lat + half_lat)) * PPD)
+    r1 = math.ceil((90.0 - (lat - half_lat)) * PPD)
+    c0 = math.floor((lon_east - half_lon) * PPD)
+    c1 = math.ceil((lon_east + half_lon) * PPD)
     if r0 < 0 or r1 > height:
         raise ValueError("the window reaches a pole; use the polar products for this site")
     pieces = []
@@ -90,7 +90,7 @@ def build_crops(ds: rasterio.DatasetReader, site_id: str, lat: float, lon_east: 
     if not np.isfinite(heights).all():
         raise ValueError(f"{site_id}: the elevation window has {int((~np.isfinite(heights)).sum())} missing pixels")
     pixel = abs(ds.transform.a)
-    n = int(math.ceil(2 * HALF_KM * 1000.0 / pixel))
+    n = math.ceil(2 * HALF_KM * 1000.0 / pixel)
     dst_crs = CRS.from_proj4(f"+proj=stere +lat_0={lat} +lon_0={lon_east} +R={MOON_R_M} +units=m +no_defs")
     dst_transform = Affine(pixel, 0.0, -n * pixel / 2.0, 0.0, -pixel, n * pixel / 2.0)
     out = np.full((n, n), np.nan, dtype="float64")

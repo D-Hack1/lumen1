@@ -197,8 +197,10 @@ def main() -> None:
         },
         "outstanding_blockers": [
             "Cross-length (50 m vs 150 m) sensitivity was not run for this site.",
-            "G5: the mask's multi-year sunlight (39%) disagrees with NASA's map (78%); "
-            "the site sits on a steep crest, so sigma on this mask is not yet trustworthy.",
+            (
+                "G5: the mask's multi-year sunlight (39%) disagrees with NASA's map (78%); "
+                "the site sits on a steep crest, so sigma on this mask is not yet trustworthy."
+            ),
         ],
         "orchestration_script": "pipeline/scripts/run_mc_sigma_site.py",
     }
