@@ -58,11 +58,12 @@ def test_validation_report_uses_actual_horizons_and_g7_evidence(tmp_path):
     assert artifact["max_decoded_elevation_error_deg"] < DSN_ARTIFACT_TOLERANCE_PROPOSAL_DEG
     assert artifact["status"] == "PROPOSED_NOT_LOCKED"
     g7 = _gate(report, "G7")
-    assert g7["status"] == "BLOCKED"
-    assert g7["numerical_result"] == "NOT_EVALUATED"
+    assert g7["status"] == "PASS"  # sourced reference (TOI 2023-09-02, project director) within the plan's tolerance, timeline consistent
+    assert g7["numerical_result"] == "PASS"
     assert g7["calculation_status"] == "COMPUTED"
     assert "tolerances" not in g7
-    assert g7["value"]["unverified_planned_comparison"]["recorded_tolerance_deg"] == 0.25
+    assert g7["value"]["mission_reference_comparison"]["recorded_tolerance_deg"] == 0.25
+    assert g7["value"]["mission_reference_comparison"]["open_caveats"]  # limb convention / tolerance origin stay visible
     assert g7["value"]["im2_touchdown_conditions"]["status"] == "SOURCE_UNVERIFIED"
 
 

@@ -11,21 +11,23 @@ propagate into horizons (quantified through σ); lander-scale rocks are not mode
 to one elevation threshold; Tier-B snap error is up to about 2.8 km in the 4 km band.
 
 ## Validation
-- The validation report (`web/public/data/validation/report.json`, shown on the Methodology page) is **NOT_READY**: 8 of 13 gates pass
-  (G0, G1, G2, G3, G3b, G4, G6, G11); G5 fails; G8 and G9 are pending; G7 and G10 are blocked. A gate is PASS only when a recorded check meets
+- The validation report (`web/public/data/validation/report.json`, shown on the Methodology page) is **NOT_READY**: 9 of 13 gates pass
+  (G0, G1, G2, G3, G3b, G4, G6, G7, G11); G5 fails; G8 and G9 are pending; G10 is blocked. A gate is PASS only when a recorded check meets
   its criterion.
 - **G5** (multi-year sunlight vs NASA's illumination map) FAILS at the Shackleton–de Gerlache ridge site only (LUMEN 39 %, map 78 %; the
   other three sites agree within 0.6 points). Ruled out: a single-pixel/footprint effect (LUMEN is lower than the map at all nine map pixels
   around the site, mean 35 % vs 62 %, `pipeline/reports/g5_pixels_shackleton_rim_ridge.json`), terrain resolution (10 m / 20 m / 240 m
   terrain give 39 / 32 / 27 %, `g5_resolution_shackleton_rim_ridge.json`), the disk definition and a ±0.5° horizon bias. Untested: a horizontal
   offset of this knife-edge crest between the 2016 map's terrain and the 2023 re-adjusted DEMs. Treat this site's sunlight as unvalidated.
-- **G7** (Chandrayaan-3): BLOCKED on its quantitative half — the 8.75° ± 0.25° touchdown Sun elevation has no primary source (LUMEN computes
-  8.61°). The qualitative half is evaluated against ISRO's own timeline (isro.gov.in, "September 04, 2023: The lander and rover are in sleep
-  mode. Awaiting their awakening around September 22, 2023"): LUMEN's terrain sunset at the site is 4 Sep 05:45 UTC, the Sun drops below 6°
-  on 3 Sep, and the next sunrise is 20 Sep — consistent (`pipeline/reports/g7_timeline.json`).
-- **G8** (performance on the demo laptop): the machine is not confirmed to be the demo laptop. Latest live measurement (i5-13420H, headless
-  Chromium): site switch p50 160 ms / p95 210 ms (budget 100 ms — over, because every site now runs the three-pass ± bounds), hover and
-  slip drag within one 60 Hz frame. Scan and Quick Answer are not in the live pages, so they cannot be timed.
+- **G7** (Chandrayaan-3) PASSES. The reference is the project director's statement to the Times of India (2 Sep 2023, "we managed to land
+  when elevation was 8.75°"; "we need a minimum of 6° elevation angle" for operations). LUMEN computes 8.61° at 2023-08-23 12:33 UTC (error
+  0.14°, inside ±0.25°), and the Sun drops below 6° on 3 Sep 05:39 UTC, inside the 2–4 Sep sleep window (ISRO, 4 Sep: "The lander and rover are
+  in sleep mode"). Caveats kept in the report: the source does not say whether "elevation" means the Sun's centre or limb, states no
+  uncertainty (the ±0.25° is the plan's), and is a press interview, not an ISRO technical document.
+- **G8** (performance on the demo laptop): the machine is not confirmed to be the demo laptop. Stand here now runs a staged evaluation: the
+  nominal numbers first (no ± or verdict, labelled "computing ±…"), then the three-pass ± and the verdict. Same-machine measurement:
+  numbers on screen p50 ~160 / p95 ~180 ms (unstaged: 250 / 340 ms), final ± and verdict p50 ~390 / p95 ~470 ms — both over the 100 ms
+  budget. Hover and slip drag stay within one 60 Hz frame. Scan and Quick Answer are not in the live pages, so they cannot be timed.
 - **G9** (predicted shadows vs an LROC image): evidence produced, PENDING a human visual sign-off. At the Chandrayaan-3 landing area, shadows
   cast on LROC's 3 m NAC DTM by LUMEN's Sun were compared with the two LROC orthophotos made from the same stereo images (same grid, no hand
   alignment). LUMEN's Sun elevation matches LROC's reported incidence angle to 0.001–0.005°; every predicted shadow region lands on a dark

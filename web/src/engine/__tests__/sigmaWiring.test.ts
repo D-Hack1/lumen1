@@ -77,6 +77,18 @@ describe('sigma wiring (synthetic sigma)', () => {
     expect(narrow.v).toBeCloseTo(wide.v, 9); // the nominal value does not depend on sigma
   });
 
+  it('staged stage 1 (nominalOnly): marked nominal, no verdict and no +/-, and the SAME nominal values as the final result (G8)', () => {
+    const sigma = syntheticSigma('im2_athena', 0.5);
+    const quick = buildScenarioResult(eph, { ...req(), nominalOnly: true }, null, mask, null); // the worker passes no sigma for stage 1
+    const final = buildScenarioResult(eph, req(), null, mask, sigma);
+    expect(quick.meta!.stage).toBe('nominal');
+    expect(final.meta!.stage).toBeUndefined();
+    expect(quick.verdict).toBe('PENDING');
+    expect(quick.verdictReasons).toEqual(['Computing the terrain uncertainty (±) and the verdict…']);
+    expect(quick.meta!.tierBadge).toContain('computing ±');
+    expect(quick.metrics!.sunlitPct.lo).toBeNull();
+    for (const k of ['sunlitPct', 'linkPct', 'longestNightH'] as const) expect(quick.metrics![k].value).toBe(final.metrics![k].value);
+  });
   it('the series carries sigma at the Sun azimuth', () => {
     const r = buildScenarioResult(eph, req(), null, mask, syntheticSigma('im2_athena', 0.25));
     expect(r.series!.sigmaBandDeg[100]).toBeCloseTo(0.25, 5);

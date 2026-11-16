@@ -3621,14 +3621,14 @@
 "sunEvents": [
 {
 "type": "sunset",
-"utcMs": 1742331986250.0,
+"utcMs": 1742331978750.0,
 "bracketMs": [
-594382500.0,
-594390000.0
+594375000.0,
+594382500.0
 ],
 "fast": {
-"deltaTSeconds": 5808.271747396404,
-"rateDegPerHour": -0.12044479239369021,
+"deltaTSeconds": 5808.105324589276,
+"rateDegPerHour": -0.12044904912220489,
 "grazingReason": null
 },
 "exact": {
@@ -3638,14 +3638,14 @@
 },
 {
 "type": "shadowExit",
-"utcMs": 1743761576250.0,
+"utcMs": 1743761568750.0,
 "bracketMs": [
-2023972500.0,
-2023980000.0
+2023965000.0,
+2023972500.0
 ],
 "fast": {
-"deltaTSeconds": 14990.176277716078,
-"rateDegPerHour": 0.03027946444466911,
+"deltaTSeconds": 14986.904736692213,
+"rateDegPerHour": 0.03028706835081718,
 "grazingReason": null
 },
 "exact": {
@@ -3663,8 +3663,8 @@
 319935000.0
 ],
 "fast": {
-"deltaTSeconds": 3656.7502264935183,
-"rateDegPerHour": -0.055383079649296015,
+"deltaTSeconds": 3656.6146417129003,
+"rateDegPerHour": -0.055385059618301424,
 "grazingReason": null
 },
 "exact": {
@@ -3680,12 +3680,12 @@
 1336672500.0
 ],
 "fast": {
-"deltaTSeconds": 4352.314255509524,
-"rateDegPerHour": 0.06368758700483923,
+"deltaTSeconds": 4352.080444363477,
+"rateDegPerHour": 0.06369094522258645,
 "grazingReason": null
 },
 "exact": {
-"deltaTSeconds": 4353.75,
+"deltaTSeconds": 4350.0,
 "grazingReason": null
 }
 }
@@ -3697,7 +3697,7 @@
 "hi": 41.996217757936506
 },
 "earthVisiblePct": {
-"lo": 57.641679067460316,
+"lo": 57.64198908730159,
 "nominal": 57.97216021825397,
 "hi": 58.303881448412696
 },

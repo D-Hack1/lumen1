@@ -179,6 +179,8 @@ export interface ResultMeta {
   definitionsSummary: string;
   dataVersions: Record<string, number | string>;
   mock: boolean;
+  /** 'nominal' = stage 1 of a staged evaluation (numbers only; no verdict, no +/-; replaced by the final result). Absent = final. */
+  stage?: 'nominal' | 'final';
 }
 
 /** One Mission Profile requirement as the verdict judged it (the engine's own answer, so the UI never re-derives it). 'unknown' = missing data or insufficient terrain evidence. */

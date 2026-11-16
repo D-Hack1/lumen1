@@ -61,6 +61,9 @@ export function groundNormalFromPad(slopeDeg: number, downhillAzimuthDeg: number
 export function generationAt(cfg: PowerConfig, sun: SunSample): PowerAt {
   const dir = sunDirection(sun.azimuthDeg, sun.elevationDeg);
   const panels = genericPanelPreset(cfg.preset, { panelAreaM2: cfg.panelAreaM2, efficiency: cfg.efficiency, headingDeg: 0, trackingAzimuthDeg: sun.azimuthDeg });
+  // Sun fully hidden: every output is exactly 0 (solarGenerationW multiplies by diskFraction), and the yaw is the configured one or 0 (the
+  // sweep below runs only when the disk is visible). Skip the panel orientation and per-face work -- about half of all samples (G8).
+  if (sun.diskFraction === 0) return { watts: 0, flatWatts: 0, yawDeg: cfg.yawDeg ?? 0, faces: panels.map(() => ({ watts: 0, flatWatts: 0 })) };
   const ground = cfg.groundNormal ?? FLAT;
   const yaw = cfg.yawDeg ?? (sun.diskFraction > 0 && sun.elevationDeg > 0 ? bestYawDeg(panels, dir, ground, cfg.tiltMagDeg, cfg.tiltDirDeg) : 0);
   const oriented = orientPanels(panels, ground, yaw, cfg.tiltMagDeg, cfg.tiltDirDeg);

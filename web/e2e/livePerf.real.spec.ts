@@ -26,6 +26,7 @@ test('site switch on Stand here: click -> new numbers on screen', async ({ page 
   await page.waitForSelector('[data-testid="stand-here-details"]', { timeout: 60_000 });
   const names = ['Ridge', 'CY-3', 'IM-2', 'Blue Ghost', 'CY-3', 'IM-2', 'Ridge', 'IM-2'];
   const times: number[] = [];
+  const finals: number[] = [];
   for (const name of names) {
     const ms = await page.evaluate(async (n) => {
       const btn = [...document.querySelectorAll('button')].find((b) => b.textContent?.trim() === n && b.getAttribute('aria-pressed') === 'false') as HTMLButtonElement | undefined;
@@ -47,12 +48,19 @@ test('site switch on Stand here: click -> new numbers on screen', async ({ page 
         const back = () => (document.querySelector('.lm-nums__value') ? res() : requestAnimationFrame(back));
         back();
       });
-      return performance.now() - t0;
+      const first = performance.now() - t0;
+      // Staged evaluation: the numbers above are stage 1 (nominal). Also time the final stage (+/- and verdict), so both are reported.
+      await new Promise<void>((res) => {
+        const done = () => (document.querySelector('.lm-nums[data-stage="final"]') ? res() : requestAnimationFrame(done));
+        done();
+      });
+      return [first, performance.now() - t0];
     }, name);
-    if (ms >= 0) times.push(ms);
+    if (ms !== -1) { times.push((ms as number[])[0]); finals.push((ms as number[])[1]); }
     await page.waitForTimeout(400);
   }
   out.siteSwitchMs = stats(times);
+  out.siteSwitchFinalMs = stats(finals); // to the +/- and verdict (stage 2), reported alongside
   expect(times.length).toBeGreaterThan(3);
 });
 

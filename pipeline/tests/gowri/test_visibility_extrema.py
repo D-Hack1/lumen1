@@ -51,3 +51,14 @@ def test_exact_extrema_preserve_near_zone_and_negative_downhill_terrain():
     assert maximum == pytest.approx(horizon.effective_at(0.0))
     assert maximum >= max(horizon.effective_at(azimuth) for azimuth in range(136))
     assert Horizon(terrain, bin_width_deg=90.0).extrema(180.0, 0.0) == (-1.0, -1.0)
+
+
+@pytest.mark.parametrize("elevation_deg", [-89.95, -89.8, -89.74, -89.6, 89.8, 89.95])
+def test_disk_fraction_is_defined_near_the_nadir_and_zenith(elevation_deg):
+    # Regression: the span test used the signed elevation while the cosine used |elevation|, so near the NADIR (an equatorial site at
+    # local midnight) sin(r)/cos exceeded 1 and asin raised. Below the horizon the disk is invisible; near the zenith it is fully visible.
+    from lumen_pipeline.reference.visibility import disk_fraction
+
+    horizon = Horizon(np.zeros(3600), bin_width_deg=0.1)
+    fraction = disk_fraction("sun", elevation_deg, 10.0, 1.496e8, horizon)
+    assert fraction == (0.0 if elevation_deg < 0 else 1.0)

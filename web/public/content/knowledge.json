@@ -291,8 +291,8 @@
    "id": "validation:g2-hourly-ephemeris-hermite-validation",
    "kind": "validation",
    "title": "G2 - Hourly ephemeris Hermite validation",
-   "summary": "- Epochs: 10000 (deterministic seed 421) - Sun maximum direction residual: 0.000006502 deg - Earth maximum direction residual: 0.000002091 deg - Gate: PASS (< 0.001 deg; measured 0.000006502 deg)",
-   "body": "- Epochs: 10000 (deterministic seed 421) - Sun maximum direction residual: 0.000006502 deg - Earth maximum direction residual: 0.000002091 deg - Gate: PASS (< 0.001 deg; measured 0.000006502 deg)",
+   "summary": "- Epochs: 10000 (deterministic seed 421) - Sun maximum direction residual: 0.000007731 deg - Earth maximum direction residual: 0.000001708 deg - Gate: PASS (< 0.001 deg; measured 0.000007731 deg)",
+   "body": "- Epochs: 10000 (deterministic seed 421) - Sun maximum direction residual: 0.000007731 deg - Earth maximum direction residual: 0.000001708 deg - Gate: PASS (< 0.001 deg; measured 0.000007731 deg)",
    "source": "docs/validation.md",
    "anchor": "g2-hourly-ephemeris-hermite-validation",
    "metrics": []

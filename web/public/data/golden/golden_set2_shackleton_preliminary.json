@@ -3,58 +3,58 @@
     {
       "expected": {
         "earth": {
-          "azimuth_deg": 355.4076767632522,
+          "azimuth_deg": 355.4076801631058,
           "by_height_m": {
             "1": {
-              "clearance_deg": -21.983079593754304,
+              "clearance_deg": -21.9830735029248,
               "disk_fraction": 0.0,
               "visible": false
             },
             "10": {
-              "clearance_deg": -21.94315878686954,
+              "clearance_deg": -21.943152696040034,
               "disk_fraction": 0.0,
               "visible": false
             },
             "2": {
-              "clearance_deg": -21.978645008183015,
+              "clearance_deg": -21.97863891735351,
               "disk_fraction": 0.0,
               "visible": false
             },
             "5": {
-              "clearance_deg": -21.9653383904462,
+              "clearance_deg": -21.96533325329101,
               "disk_fraction": 0.0,
               "visible": false
             }
           },
-          "distance_km": 381923.64538754814,
-          "elevation_deg": -6.627352398014557
+          "distance_km": 381923.6068101073,
+          "elevation_deg": -6.627345353510736
         },
         "sun": {
-          "azimuth_deg": 162.19573969726844,
+          "azimuth_deg": 162.1955983610207,
           "by_height_m": {
             "1": {
-              "clearance_deg": -23.789567859293758,
+              "clearance_deg": -23.789574950519714,
               "disk_fraction": 0.0,
               "visible": false
             },
             "10": {
-              "clearance_deg": -23.728532703043758,
+              "clearance_deg": -23.728539794269714,
               "disk_fraction": 0.0,
               "visible": false
             },
             "2": {
-              "clearance_deg": -23.782789142252742,
+              "clearance_deg": -23.7827962334787,
               "disk_fraction": 0.0,
               "visible": false
             },
             "5": {
-              "clearance_deg": -23.762447269083797,
+              "clearance_deg": -23.762456267658386,
               "disk_fraction": 0.0,
               "visible": false
             }
           },
-          "distance_km": 146736905.0179283,
-          "elevation_deg": 1.9046727107746004
+          "distance_km": 146736903.60166243,
+          "elevation_deg": 1.9046732489431757
         }
       },
       "id": "shackleton_ridge_visibility_2025-01-01",
@@ -71,58 +71,58 @@
     {
       "expected": {
         "earth": {
-          "azimuth_deg": 7.307511446818732,
+          "azimuth_deg": 7.307510926889838,
           "by_height_m": {
             "1": {
-              "clearance_deg": -12.411465205559338,
+              "clearance_deg": -12.411477019839538,
               "disk_fraction": 0.0,
               "visible": false
             },
             "10": {
-              "clearance_deg": -12.368771113762463,
+              "clearance_deg": -12.368783881716979,
               "disk_fraction": 0.0,
               "visible": false
             },
             "2": {
-              "clearance_deg": -12.406721629509533,
+              "clearance_deg": -12.40673439746405,
               "disk_fraction": 0.0,
               "visible": false
             },
             "5": {
-              "clearance_deg": -12.392492808708752,
+              "clearance_deg": -12.392504622988952,
               "disk_fraction": 0.0,
               "visible": false
             }
           },
-          "distance_km": 383658.96323195036,
-          "elevation_deg": 3.5756220441965203
+          "distance_km": 383659.0197295061,
+          "elevation_deg": 3.575608322567689
         },
         "sun": {
-          "azimuth_deg": 122.40153898419238,
+          "azimuth_deg": 122.40139627355472,
           "by_height_m": {
             "1": {
-              "clearance_deg": -27.78549485937741,
+              "clearance_deg": -27.78549329845175,
               "disk_fraction": 0.0,
               "visible": false
             },
             "10": {
-              "clearance_deg": -27.723752076784635,
+              "clearance_deg": -27.723750515858978,
               "disk_fraction": 0.0,
               "visible": false
             },
             "2": {
-              "clearance_deg": -27.778637941042447,
+              "clearance_deg": -27.77863638011679,
               "disk_fraction": 0.0,
               "visible": false
             },
             "5": {
-              "clearance_deg": -27.758061463991666,
+              "clearance_deg": -27.75805990306601,
               "disk_fraction": 0.0,
               "visible": false
             }
           },
-          "distance_km": 151524107.3162819,
-          "elevation_deg": -1.0403853012719397
+          "distance_km": 151524104.72334495,
+          "elevation_deg": -1.0403856476949154
         }
       },
       "id": "shackleton_ridge_visibility_2025-06-01",
@@ -139,58 +139,58 @@
     {
       "expected": {
         "earth": {
-          "azimuth_deg": 353.8746393236711,
+          "azimuth_deg": 353.87465213986076,
           "by_height_m": {
             "1": {
-              "clearance_deg": -12.756082709206922,
+              "clearance_deg": -12.756064033504854,
               "disk_fraction": 0.0,
               "visible": false
             },
             "10": {
-              "clearance_deg": -12.716913397683484,
+              "clearance_deg": -12.716894721981417,
               "disk_fraction": 0.0,
               "visible": false
             },
             "2": {
-              "clearance_deg": -12.751732046975476,
+              "clearance_deg": -12.751713371273409,
               "disk_fraction": 0.0,
               "visible": false
             },
             "5": {
-              "clearance_deg": -12.738676245583875,
+              "clearance_deg": -12.738657569881807,
               "disk_fraction": 0.0,
               "visible": false
             }
           },
-          "distance_km": 367292.97142290976,
-          "elevation_deg": 2.5869386836153447
+          "distance_km": 367292.9050698843,
+          "elevation_deg": 2.586955451968779
         },
         "sun": {
-          "azimuth_deg": 49.40765437603157,
+          "azimuth_deg": 49.407515673908236,
           "by_height_m": {
             "1": {
-              "clearance_deg": -19.622165421347212,
+              "clearance_deg": -19.62214554323854,
               "disk_fraction": 0.0,
               "visible": false
             },
             "10": {
-              "clearance_deg": -19.56875203023393,
+              "clearance_deg": -19.568732152125257,
               "disk_fraction": 0.0,
               "visible": false
             },
             "2": {
-              "clearance_deg": -19.616233567099165,
+              "clearance_deg": -19.61621178164186,
               "disk_fraction": 0.0,
               "visible": false
             },
             "5": {
-              "clearance_deg": -19.59843418965776,
+              "clearance_deg": -19.598412404200452,
               "disk_fraction": 0.0,
               "visible": false
             }
           },
-          "distance_km": 147731646.56598124,
-          "elevation_deg": 1.6013186179594274
+          "distance_km": 147731647.29553977,
+          "elevation_deg": 1.6013175152331398
         }
       },
       "id": "shackleton_ridge_visibility_2025-12-01",
@@ -307,7 +307,7 @@
   "kind": "real_site_preliminary_parity_fixtures",
   "provenance": {
     "coordinate_frame": "MOON_ME_DE421",
-    "ephem_sha256": "765308c4598651c34ba0f1328b31f0b53947f1a9cab3b4df6defd44c0225a281",
+    "ephem_sha256": "295a9b5cb41199f00af7a691b593d23aef37141b9c5b61bbc27d5254064ec809",
     "label": "Python-generated preliminary parity fixtures",
     "mask_site_id": "shackleton_ridge",
     "pad": "unavailable; no pad values asserted",

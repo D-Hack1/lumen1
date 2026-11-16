@@ -31,10 +31,9 @@ Human-readable gate results, scope statement.
 ## G2 - Hourly ephemeris Hermite validation
 
 - Epochs: 10000 (deterministic seed 421)
-- Sun maximum direction residual: 0.000006502 deg
-- Earth maximum direction residual: 0.000002091 deg
-- Gate: PASS (< 0.001 deg; measured 0.000006502 deg)
-
+- Sun maximum direction residual: 0.000007731 deg
+- Earth maximum direction residual: 0.000001708 deg
+- Gate: PASS (< 0.001 deg; measured 0.000007731 deg)
 ## G7 - Chandrayaan-3 touchdown Sun elevation
 
 - Calculation input: 2023-08-23T12:33:00Z (minute precision), 69.373 degrees S,

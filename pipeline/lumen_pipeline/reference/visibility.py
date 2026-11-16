@@ -190,7 +190,9 @@ def disk_fraction(body: str, elevation_deg: float, azimuth_deg: float, distance_
     """Return visible disk fraction using R3 span checks and 24/32 chord quadrature."""
     radius = angular_radius_deg(body, distance_km)
     cosine = max(math.cos(math.radians(min(abs(elevation_deg), 89.9))), math.cos(math.radians(89.9)))
-    half_width = 180.0 if radius >= 90.0 - elevation_deg else math.degrees(math.asin(math.sin(math.radians(radius)) / cosine))
+    # The span check is symmetric in elevation (the cosine uses |elevation|): a disk within its radius of the zenith OR the nadir spans all
+    # azimuths. Using the signed elevation here made sin(radius)/cosine exceed 1 near the nadir (equatorial sites at local midnight).
+    half_width = 180.0 if radius >= 90.0 - abs(elevation_deg) else math.degrees(math.asin(min(1.0, math.sin(math.radians(radius)) / cosine)))
     minimum, maximum = horizon.extrema(azimuth_deg, half_width)
     if elevation_deg - 1.05 * radius > maximum:
         return 1.0

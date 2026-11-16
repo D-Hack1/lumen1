@@ -35,7 +35,7 @@ export function SurfacePage() {
   const readout = useRef<HTMLDivElement>(null);
 
   // Real engine values when the data mode is real and the result has arrived; otherwise the design's sample model (the fallback).
-  const eng = useEngineResult(site, mast);
+  const eng = useEngineResult(site, mast, 0, 30, true); // staged: numbers first, then +/- and the verdict (G8)
   const sky = useSkyline(site, mast);
   const shadowNote = usePolarShadowNote(site.lat, site.lon, sky?.terrain ?? false);
   const v = useMemo(() => (eng ? standHereView(eng, sky, t) : null), [eng, sky, t]);

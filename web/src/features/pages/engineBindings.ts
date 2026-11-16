@@ -52,16 +52,27 @@ export function requestFor(site: LiveSite, mastM: number, slipDays: number, dura
 }
 
 /** The engine result for the live site/mast over [window start + slip, + durationDays]; null while loading, on error, and unless the data mode is real. */
-export function useEngineResult(site: LiveSite, mastM: number, slipDays = 0, durationDays: DurationDays = 30): ScenarioResult | null {
+export function useEngineResult(site: LiveSite, mastM: number, slipDays = 0, durationDays: DurationDays = 30, staged = false): ScenarioResult | null {
   const [res, setRes] = useState<ScenarioResult | null>(null);
   const startUtc = useWindowStart(); // a new window start re-runs the engine
   useEffect(() => {
     setRes(null); // never keep another site's numbers on screen
     if (dataMode() !== 'real') return;
     let live = true;
+    let final = false;
     void (async () => {
       const { sites } = await loadCatalog();
-      const r = await evaluateScenario(requestFor(site, mastM, slipDays, durationDays, sites));
+      const req = requestFor(site, mastM, slipDays, durationDays, sites);
+      // Staged (G8): a nominal-only pass first, so the numbers appear well before the three-pass bounds finish; it is marked
+      // meta.stage = 'nominal' (no verdict, no +/-) and replaced by the final result. Both run on the same worker, in order.
+      const quick = staged ? evaluateScenario({ ...req, nominalOnly: true }) : null;
+      const full = evaluateScenario(req);
+      if (quick) {
+        const q = await quick;
+        if (live && !final && q.status === 'ready') setRes(q);
+      }
+      const r = await full;
+      final = true;
       if (live) setRes(r.status === 'ready' ? r : null);
     })().catch(() => {
       if (live) setRes(null);
@@ -69,7 +80,7 @@ export function useEngineResult(site: LiveSite, mastM: number, slipDays = 0, dur
     return () => {
       live = false;
     };
-  }, [site.id, site.lat, site.lon, mastM, slipDays, durationDays, startUtc]);
+  }, [site.id, site.lat, site.lon, mastM, slipDays, durationDays, startUtc, staged]);
   return res;
 }
 

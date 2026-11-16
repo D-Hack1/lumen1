@@ -34,7 +34,7 @@ export function evaluateScenario(req: ScenarioRequest): Promise<ScenarioResult> 
     const w = engine();
     if (w) return w.evaluateScenario(mode, req);
     const eph = await loadEphem();
-    return buildScenarioResult(eph, { ...req, dataVersions: { ...req.dataVersions, ephem: eph.mock ? 'mock' : 'real' } }, await loadDsnOrNull(), await loadMaskOrNull(req.siteId), await loadSigmaOrNull(req.siteId));
+    return buildScenarioResult(eph, { ...req, dataVersions: { ...req.dataVersions, ephem: eph.mock ? 'mock' : 'real' } }, await loadDsnOrNull(), await loadMaskOrNull(req.siteId), req.nominalOnly ? null : await loadSigmaOrNull(req.siteId));
   });
 }
 

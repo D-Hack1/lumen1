@@ -5,7 +5,7 @@
     "time"
   ],
   "cadence_s": 600,
-  "created_utc": "2026-11-14T10:07:53.395326Z",
+  "created_utc": "2026-11-16T14:20:12.204234Z",
   "dtype": "int16",
   "earth_orientation": "IAU_EARTH fallback from pck00011.tpc",
   "end_utc": "2030-12-31T23:50:00Z",
@@ -18,11 +18,11 @@
   "kernel_provenance": [
     {
       "filename": "naif0012.tls",
-      "sha256": "3c2c786080569f0336b7c090866acc0f0b38a935db51c15da54de1efc10bfa17"
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
     },
     {
       "filename": "pck00011.tpc",
-      "sha256": "8fd7588e258d49362198381b039c6d577db7e6f9be35dacfe43220698669f1eb"
+      "sha256": "3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1"
     },
     {
       "filename": "de421.bsp",
@@ -34,14 +34,14 @@
     },
     {
       "filename": "moon_080317.tf",
-      "sha256": "3a5bf575b1b946349b703719853c760db3b3902a6fce750bb721bb93c474cd00"
+      "sha256": "78732477b96f9863e7b0d65bcee3c22b8707ca5ed0db56d1173319cb2e8c7993"
     }
   ],
   "mode": "geometric_only",
   "offset": 0.0,
   "producer": "lumen_pipeline.ephem.dsn",
   "scale": 0.5,
-  "sha256": "5a06a409e5ba080e044f8258d1dad4be6e3c7250b0eaffb091f048d4e1be4e46",
+  "sha256": "005fd3a5a4b9cea3b679efe759dead037b2e57ce61cadf211b8b8bd5baa3cf55",
   "shape": [
     3,
     420768

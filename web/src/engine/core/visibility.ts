@@ -138,7 +138,9 @@ export function angularRadiusDeg(body: BodyId, distanceKm: number): number {
 export function diskFraction(body: BodyId, elevationDeg: number, azimuthDeg: number, distanceKm: number, horizon: Horizon): number {
   const radius = angularRadiusDeg(body, distanceKm);
   const cosine = Math.max(Math.cos(Math.min(Math.abs(elevationDeg), 89.9) * DEG), Math.cos(89.9 * DEG));
-  const halfWidth = radius >= 90 - elevationDeg ? 180 : Math.asin(Math.sin(radius * DEG) / cosine) / DEG;
+  // Symmetric in elevation (the cosine uses |elevation|): within its radius of the zenith OR the nadir the disk spans all azimuths. The signed
+  // test let sin(r)/cos exceed 1 near the nadir (equatorial sites at local midnight), giving NaN and a RangeError from extrema().
+  const halfWidth = radius >= 90 - Math.abs(elevationDeg) ? 180 : Math.asin(Math.min(1, Math.sin(radius * DEG) / cosine)) / DEG;
   const [minimum, maximum] = horizon.extrema(azimuthDeg, halfWidth);
   if (elevationDeg - 1.05 * radius > maximum) return 1;
   if (elevationDeg + 1.05 * radius < minimum) return 0;

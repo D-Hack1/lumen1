@@ -13,9 +13,10 @@ export function StandHereNumbers({ result, terrain, windowLabel }: { result: Sce
   const t = useCopyFn();
   const m: MetricSet | null = result.metrics;
   if (!m || result.status !== 'ready') return null;
-  const verdict = verdictLines(result.verdict, result.verdictReasons, t);
+  const pending = result.meta?.stage === 'nominal'; // stage 1 of a staged evaluation: numbers only; the verdict and +/- are still being computed
+  const verdict = pending ? { headline: 'Computing the uncertainty (±) and the verdict…', lines: [] as string[] } : verdictLines(result.verdict, result.verdictReasons, t);
   return (
-    <section className="lm-nums lm-box" aria-label="Numbers for this window" data-verdict={result.verdict}>
+    <section className="lm-nums lm-box" aria-label="Numbers for this window" data-verdict={pending ? 'computing' : result.verdict} data-stage={pending ? 'nominal' : 'final'}>
       <div className="lm-nums__head">
         <h2 className="lm-nums__title">Numbers for this window</h2>
         <span className="lm-nums__window">{windowLabel}</span>

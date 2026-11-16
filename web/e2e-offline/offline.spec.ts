@@ -43,6 +43,9 @@ test('the app, real data and the engine all work with no network at all', async 
   await page.goto('/#stand-here');
   await expect(page.locator('[data-testid="stand-here-details"] tbody tr').first()).toBeVisible({ timeout: 60_000 });
   await expect(nums.first()).toBeVisible({ timeout: 60_000 });
+  // Stand here is staged (numbers first, then +/- and the verdict): compare the FINAL numbers on both sides.
+  const final = page.locator('.lm-nums[data-stage="final"]');
+  await expect(final).toBeVisible({ timeout: 60_000 });
   const onlineNumbers = await nums.allInnerTexts();
   await waitForPrecache(page);
 
@@ -53,7 +56,7 @@ test('the app, real data and the engine all work with no network at all', async 
   failed.length = 0;
   await page.reload();
   await expect(page.locator('[data-testid="stand-here-details"] tbody tr').first()).toBeVisible({ timeout: 60_000 });
-  await expect(nums.first()).toBeVisible({ timeout: 60_000 });
+  await expect(final).toBeVisible({ timeout: 60_000 });
   await expect.poll(() => nums.allInnerTexts(), { timeout: 30_000 }).toEqual(onlineNumbers);
 
   // 3. The raw data files are served from the cache too (no network behind them).

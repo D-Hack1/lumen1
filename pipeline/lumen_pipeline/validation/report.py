@@ -316,16 +316,19 @@ def _g7_gate(path: Path) -> dict[str, Any]:
         return _gate(
             "G7",
             "Chandrayaan-3 touchdown Sun elevation and timeline",
-            report["source_provenance_result"],
+            report["status"] if report.get("status") in ("PASS", "FAIL") else report["source_provenance_result"],
             calculation_status=report["calculation_status"],
             numerical_result=report["numerical_result"],
             source_provenance_result=report["source_provenance_result"],
             value={
                 "computed_sun_elevation_deg": report["computed"]["sun_elevation_deg"],
-                "unverified_planned_comparison": {
+                "mission_reference_comparison": {
                     "reference_sun_elevation_deg": report["reference"]["sun_elevation_deg"],
                     "recorded_tolerance_deg": report["reference"]["recorded_tolerance_deg"],
                     "absolute_error_deg": report["absolute_error_deg"],
+                    "reference_source_status": report["reference"]["primary_source_status"],
+                    "reference_source_url": report["reference"]["source_metadata"].get("source_url"),
+                    "open_caveats": report["reference"]["source_metadata"].get("open_caveats", []),
                 },
                 "timeline_status": report["qualitative_timeline_check"]["status"],
                 "primary_sourced_timeline": timeline_value,
@@ -479,6 +482,9 @@ def _g8_gate(path: Path) -> dict[str, Any]:
         over = []
         if site_p95 > budgets["siteSwitch"]:
             over.append(f"site switch p95 {site_p95:.0f} ms (budget {budgets['siteSwitch']} ms)")
+        final = measured.get("siteSwitchFinalMs")  # staged evaluation: numbers first (siteSwitchMs), +/- and verdict later
+        if final and float(final["p95"]) > budgets["siteSwitch"]:
+            over.append(f"site switch to the final +/- and verdict p95 {float(final['p95']):.0f} ms")
         if slip_p95 > budgets["slipFrame"] + 0.5:
             over.append(f"slip drag frame p95 {slip_p95:.1f} ms (budget {budgets['slipFrame']} ms)")
         reasons = list(over)
@@ -489,10 +495,10 @@ def _g8_gate(path: Path) -> dict[str, Any]:
         return _gate(
             "G8", G8_DESCRIPTION, "PENDING", criterion=G8_CRITERION,
             reason="Partly measured on " + str(report["machine"].get("cpu")) + "; not promoted: " + "; ".join(reasons) + ".",
-            value={"site_switch_ms": measured["siteSwitchMs"], "slip_drag_frame_ms": measured["slipDragFrameMs"],
+            value={"site_switch_ms": measured["siteSwitchMs"], "site_switch_final_ms": measured.get("siteSwitchFinalMs"), "slip_drag_frame_ms": measured["slipDragFrameMs"],
                    "hover_to_next_frame_ms": measured["hoverToFrameMs"], "site_switch_p50_over_budget": site_p50 > budgets["siteSwitch"]},
             artifact_paths=[_relative(path)],
-            provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]}; " + " ".join(report["notes"]),
+            provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]}; " + " ".join(report["notes"]) + (f" {report['note']}" if report.get("note") else ""),
             test_commands=["LUMEN_G8_OUT=<file> npx playwright test -c e2e/playwright.real.config.ts livePerf"],
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:

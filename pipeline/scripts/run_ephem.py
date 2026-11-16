@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
+
+# Prefer this checkout over an editable install from another worktree (an installed copy elsewhere would read ITS kernels/paths).
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from lumen_pipeline.ephem.ephemeris import (
     build_ephemeris,

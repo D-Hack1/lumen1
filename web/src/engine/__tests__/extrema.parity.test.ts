@@ -100,3 +100,12 @@ describe(`parity with ${fixture.source} (${fixture.cases.length} cases)`, () => 
     same(diskFraction(c.body, c.elevation, c.azimuth, c.distanceKm, horizonOf(c)), c.expected, 1e-9);
   });
 });
+
+describe('disk fraction near the nadir and zenith (regression)', () => {
+  // The span test used the signed elevation while the cosine used |elevation|: near the NADIR (an equatorial site at local midnight)
+  // sin(r)/cos exceeded 1, asin gave NaN and extrema() threw. Below the horizon the disk is invisible; near the zenith it is fully visible.
+  it.each([-89.95, -89.8, -89.74, -89.6, 89.8, 89.95])('elevation %s deg is defined', (el) => {
+    const h = new Horizon({ elevationsDeg: new Float64Array(3600), binWidthDeg: 0.1 });
+    expect(diskFraction('sun', el, 10, 1.496e8, h)).toBe(el < 0 ? 0 : 1);
+  });
+});

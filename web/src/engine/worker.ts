@@ -23,7 +23,7 @@ const api: EngineApi = {
   async evaluateScenario(mode, req) {
     setDataMode(mode); // the worker has its own module state; mirror the main thread's mock/real choice
     const eph = await loadEphem();
-    return buildScenarioResult(eph, { ...req, dataVersions: { ...req.dataVersions, ephem: eph.mock ? 'mock' : 'real' } }, await loadDsnOrNull(), await loadMaskOrNull(req.siteId), await loadSigmaOrNull(req.siteId));
+    return buildScenarioResult(eph, { ...req, dataVersions: { ...req.dataVersions, ephem: eph.mock ? 'mock' : 'real' } }, await loadDsnOrNull(), await loadMaskOrNull(req.siteId), req.nominalOnly ? null : await loadSigmaOrNull(req.siteId));
   },
   async scanStage1(mode, input) {
     setDataMode(mode);

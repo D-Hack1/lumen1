@@ -41,6 +41,12 @@ export interface ScenarioRequest {
   dataVersions: Record<string, number | string>;
   /** Panel preset, yaw, tilt and pad ground normal; omitted/null = no power model (powerW stays 0, no energy metric). */
   power?: PowerConfig | null;
+  /**
+   * Stage 1 of a staged evaluation (G8): nominal geometry only, evaluated without sigma even when the site has one, so numbers can appear
+   * before the three-pass bounds. The result is marked meta.stage = 'nominal' and carries NO verdict judgement and no +/- claim; the caller
+   * must replace it with the full (stage 'final') result.
+   */
+  nominalOnly?: boolean;
 }
 
 /** Masks built from a DEM coarser than this (metres per pixel) are labelled "coarse". The polar Tier-A masks are 5-60 m. */
@@ -245,21 +251,23 @@ export function buildScenarioResult(
         bw && sigma
           ? `Terrain mask · σ ${sigmaSourceLabel(sigma)}`
           : terrainHorizon
-            ? `${coarse ? `Coarse terrain mask (${Math.round(mask!.meta.nearFieldResolutionM)} m)` : 'Terrain mask'} · σ unavailable`
+            ? `${coarse ? `Coarse terrain mask (${Math.round(mask!.meta.nearFieldResolutionM)} m)` : 'Terrain mask'} · ${req.nominalOnly ? 'computing ±…' : 'σ unavailable'}`
             : 'Smooth-Moon horizon · terrain pending',
       sigmaSource:
         bw && sigma
           ? sigmaSourceLabel(sigma)
           : terrainHorizon
-            ? `${coarse ? 'coarse terrain mask' : 'terrain mask'}, σ unavailable`
+            ? `${coarse ? 'coarse terrain mask' : 'terrain mask'}, ${req.nominalOnly ? 'computing ±' : 'σ unavailable'}`
             : 'smooth-sphere estimate; terrain unavailable',
       snapDistanceKm: null,
       definitionsSummary: `Sun available = ≥${Math.round(d.sunDiskThreshold * 100)}% disk above the horizon${d.minSunElevationOpsDeg > 0 ? ` and ≥${d.minSunElevationOpsDeg}° elevation` : ''} @${req.heightM} m · Link = Earth ≥${d.earthMarginDeg}° above the horizon${ev.dsnApplied ? ` + DSN ≥${d.dsnMaskDeg}°` : ' (DSN not applied)'}`,
       dataVersions: req.dataVersions,
       mock: eph.mock,
+      ...(req.nominalOnly ? { stage: 'nominal' as const } : {}),
     },
-    verdict: verdict.verdict,
-    verdictReasons: verdict.reasons,
+    // Stage 1 (nominalOnly) makes no judgement: the verdict needs the bounds, which only the final stage computes.
+    verdict: req.nominalOnly ? 'PENDING' : verdict.verdict,
+    verdictReasons: req.nominalOnly ? ['Computing the terrain uncertainty (±) and the verdict…'] : verdict.reasons,
     verdictRequirements: verdict.requirements,
     viability: { index: verdict.viabilityIndex, components: verdict.components },
     answer,

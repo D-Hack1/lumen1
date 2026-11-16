@@ -42,9 +42,9 @@ def test_g7_report_reproduces_touchdown_reference_and_provenance(tmp_path):
     assert report["absolute_error_deg"] == pytest.approx(
         abs(report["computed"]["sun_elevation_deg"] - REFERENCE_ELEVATION_DEG)
     )
-    assert report["numerical_result"] == "NOT_EVALUATED"
-    assert report["source_provenance_result"] == "BLOCKED"
-    assert report["status"] == "BLOCKED"
+    # The 8.75 deg reference is now sourced (TOI 2023-09-02, project director) and evaluated against the plan's +/-0.25 deg tolerance.
+    assert report["numerical_result"] == ("PASS" if report["absolute_error_deg"] <= TOLERANCE_DEG else "FAIL")
+    assert report["source_provenance_result"] == "PASS"
     expected_provenance_reasons = []
     if not report["ephemeris"]["ephemeris_hash_matches_sidecar"]:
         expected_provenance_reasons.append("ephemeris_sha256_mismatch")
@@ -53,24 +53,20 @@ def test_g7_report_reproduces_touchdown_reference_and_provenance(tmp_path):
     assert report["provenance_result"] == (
         "PASS" if not expected_provenance_reasons else "FAIL"
     )
-    assert report["failure_reasons"]["numerical"] == [
-        "unverified_mission_reference_not_a_pass_criterion"
-    ]
+    assert report["failure_reasons"]["numerical"] == ([] if report["numerical_result"] == "PASS" else ["outside_tolerance"])
     assert report["failure_reasons"]["provenance"] == expected_provenance_reasons
-    assert report["failure_reasons"]["timeline"] == [
-        "unverified_operations_threshold_not_a_pass_criterion"
-    ]
-    assert report["qualitative_timeline_check"]["status"] == "SOURCE_UNVERIFIED"
+    assert report["failure_reasons"]["timeline"] == []
+    assert report["qualitative_timeline_check"]["status"] == "PASS"
+    expected = "PASS" if (report["numerical_result"] == "PASS" and report["provenance_result"] == "PASS") else "FAIL"
+    assert report["status"] == expected
     assert report["qualitative_timeline_check"]["sun_below_6_deg_utc"].startswith("2023-09-")
     assert report["ephemeris"]["ephemeris_hash_matches_sidecar"]
-    assert report["reference"]["primary_source_status"] == "SOURCE_UNVERIFIED"
+    assert report["reference"]["primary_source_status"] == "MISSION_TEAM_STATEMENT_IN_PRESS"
     assert report["reference"]["source_metadata"] == REFERENCE_SOURCE
-    assert report["reference"]["source_metadata"]["source_url"] is None
-    assert report["reference"]["source_metadata"]["quoted_numerical_claim"] is None
-    assert all(
-        not source["supports_8_75_degree_claim"]
-        for source in report["reference"]["source_metadata"]["sources_examined"]
-    )
+    assert report["reference"]["source_metadata"]["source_url"].startswith("https://timesofindia.indiatimes.com/")
+    assert "8.75" in report["reference"]["source_metadata"]["quoted_numerical_claim"]
+    assert report["reference"]["source_metadata"]["reported_uncertainty_deg"] is None  # the source states none; the tolerance is the plan's
+    assert any(source["supports_8_75_degree_claim"] for source in report["reference"]["source_metadata"]["sources_examined"])
     assert report["calculation_assumptions"]["touchdown_time"]["value_utc"] == report["timestamp_utc"]
     assert report["calculation_assumptions"]["landing_location"]["latitude_deg"] == pytest.approx(
         -69.373
@@ -81,7 +77,7 @@ def test_g7_report_reproduces_touchdown_reference_and_provenance(tmp_path):
     assert report["calculation_assumptions"]["reference_frame"]["value"] == "MOON_ME_DE421"
     assert report["calculation_assumptions"]["sun_elevation_definition"][
         "reported_claim_limb_convention"
-    ] == "SOURCE_UNVERIFIED"
+    ] == "NOT_STATED_BY_SOURCE"
     im2 = report["im2_touchdown_conditions"]
     assert im2["status"] == "SOURCE_UNVERIFIED"
     assert im2["timestamp_utc"] == "2025-03-06T17:28:50Z"

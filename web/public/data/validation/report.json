@@ -165,8 +165,8 @@
       ],
       "value": {
         "epochs": 10000,
-        "max_earth_direction_error_deg": 2.091e-06,
-        "max_sun_direction_error_deg": 6.502e-06
+        "max_earth_direction_error_deg": 1.708e-06,
+        "max_sun_direction_error_deg": 7.731e-06
       }
     },
     {
@@ -516,16 +516,25 @@
       "calculation_status": "COMPUTED",
       "description": "Chandrayaan-3 touchdown Sun elevation and timeline",
       "id": "G7",
-      "numerical_result": "NOT_EVALUATED",
+      "numerical_result": "PASS",
       "provenance": {
-        "document_title": null,
-        "page_or_section": null,
-        "publication_date": null,
-        "quoted_numerical_claim": null,
+        "byline": "Chethan Kumar",
+        "document_title": "Chandrayaan-3: Mission goals met, Vikram, Pragyan to be put to sleep Sunday",
+        "open_caveats": [
+          "limb convention (Sun centre vs limb) not stated by the source",
+          "no uncertainty stated by the source; the +/-0.25 deg tolerance is the plan's",
+          "press interview with the project director, not an ISRO technical document"
+        ],
+        "page_or_section": "Quote of Chandrayaan-3 project director P Veeramuthuvel (exclusive interaction with TOI)",
+        "publication_date": "2023-09-02T23:28:00+05:30",
+        "publisher": "The Times of India",
+        "quoted_numerical_claim": "For landing, the angle requirement was 6-9\u00b0 elevation and we managed to land when elevation was 8.75\u00b0.",
+        "quoted_operations_claim": "For operations, we need a minimum of 6\u00b0 elevation angle because our cameras and other systems are characterised for that.",
+        "quoted_sleep_plan": "Isro is opting to begin the process of enabling sleep mode earlier than that.",
         "reported_sun_elevation_deg": 8.75,
-        "reported_uncertainty_deg": 0.25,
-        "research_note": "No ISRO mission document or primary mission publication located during the R3 source review states a Chandrayaan-3 landing Sun elevation of 8.75 degrees, an uncertainty of +/-0.25 degrees, or its limb convention. The value must not be used as a quantitative pass criterion.",
-        "source_url": null,
+        "reported_uncertainty_deg": null,
+        "research_note": "Located after the R3 source review: the project director's statement to the Times of India gives both the 8.75 degree landing Sun elevation and the 6 degree operations minimum. ISRO's own mission page states no landing time or angle.",
+        "source_url": "https://timesofindia.indiatimes.com/india/chandrayaan-3-mission-goals-met-vikram-pragyan-to-be-put-to-sleep-sunday/articleshow/103314801.cms",
         "sources_examined": [
           {
             "document_title": "Chandrayaan-3",
@@ -542,25 +551,34 @@
             "quoted_claim": "4 km x 2.4 km 69.367621 S, 32.348126 E",
             "supports_8_75_degree_claim": false,
             "url": "https://www.isro.gov.in/Chandrayaan3_Details.html"
+          },
+          {
+            "document_title": "Chandrayaan-3: Mission goals met, Vikram, Pragyan to be put to sleep Sunday",
+            "page_or_section": "Quote of project director P Veeramuthuvel",
+            "publication_date": "2023-09-02",
+            "quoted_claim": "we managed to land when elevation was 8.75\u00b0",
+            "supports_8_75_degree_claim": true,
+            "url": "https://timesofindia.indiatimes.com/india/chandrayaan-3-mission-goals-met-vikram-pragyan-to-be-put-to-sleep-sunday/articleshow/103314801.cms"
           }
         ],
-        "status": "SOURCE_UNVERIFIED"
+        "status": "MISSION_TEAM_STATEMENT_IN_PRESS",
+        "tolerance_source": "PLAN_FINAL_R3_DELTA.md D-13 (minute-level time precision); not stated by the source"
       },
-      "source_provenance_result": "BLOCKED",
-      "status": "BLOCKED",
+      "source_provenance_result": "PASS",
+      "status": "PASS",
       "test_commands": [
         "pytest tests/gowri/test_g7.py"
       ],
       "timestamp_utc": "2023-08-23T12:33:00Z",
       "value": {
-        "computed_sun_elevation_deg": 8.612140050356778,
+        "computed_sun_elevation_deg": 8.61218421884372,
         "im2_touchdown_conditions": {
           "computed": {
-            "earth_azimuth_deg": 5.142977340540992,
-            "earth_elevation_deg": 11.193155868767695,
-            "et_seconds": 794554198.1854653,
-            "sun_azimuth_deg": 94.97724230472686,
-            "sun_elevation_deg": 2.4646206853404022
+            "earth_azimuth_deg": 5.142985206810196,
+            "earth_elevation_deg": 11.19316028698669,
+            "et_seconds": 794554199.1854653,
+            "sun_azimuth_deg": 94.97710145981868,
+            "sun_elevation_deg": 2.4646319917619626
           },
           "coordinates": {
             "coordinate_frame": "MOON_ME_DE421",
@@ -574,6 +592,18 @@
           "status": "SOURCE_UNVERIFIED",
           "timestamp_precision": "second",
           "timestamp_utc": "2025-03-06T17:28:50Z"
+        },
+        "mission_reference_comparison": {
+          "absolute_error_deg": 0.1378157811562808,
+          "open_caveats": [
+            "limb convention (Sun centre vs limb) not stated by the source",
+            "no uncertainty stated by the source; the +/-0.25 deg tolerance is the plan's",
+            "press interview with the project director, not an ISRO technical document"
+          ],
+          "recorded_tolerance_deg": 0.25,
+          "reference_source_status": "MISSION_TEAM_STATEMENT_IN_PRESS",
+          "reference_source_url": "https://timesofindia.indiatimes.com/india/chandrayaan-3-mission-goals-met-vikram-pragyan-to-be-put-to-sleep-sunday/articleshow/103314801.cms",
+          "reference_sun_elevation_deg": 8.75
         },
         "primary_sourced_timeline": {
           "checks": {
@@ -592,12 +622,7 @@
           "lumen_sun_below_6deg_utc": "2023-09-03T05:39:00Z",
           "lumen_terrain_sunset_utc": "2023-09-04T05:45:07Z"
         },
-        "timeline_status": "SOURCE_UNVERIFIED",
-        "unverified_planned_comparison": {
-          "absolute_error_deg": 0.13785994964322157,
-          "recorded_tolerance_deg": 0.25,
-          "reference_sun_elevation_deg": 8.75
-        }
+        "timeline_status": "PASS"
       }
     },
     {
@@ -607,31 +632,37 @@
       "criterion": "site <100 ms; slip <16 ms/frame; hover <4 ms; Scan <300 ms; Quick Answer <150 ms",
       "description": "Performance on the demo laptop",
       "id": "G8",
-      "provenance": "Recorded 2026-11-16T10:57:35Z at commit e0707a4976; siteSwitchMs is click to the engine's new numbers on screen, end to end (worker evaluation included), headless Chromium. hoverToFrameMs is pointer event to the next animation frame; it is dominated by the 60 Hz frame wait and is NOT the 4 ms pointer-to-overlay-drawn measurement of the old harness. slipDragFrameMs is the frame time while dragging the slip slider; 16.7 ms is one 60 Hz frame (no dropped frames). Scan and Quick Answer are not part of the live pages, so they cannot be timed there. This machine is not confirmed to be the demo laptop.",
-      "reason": "Partly measured on 13th Gen Intel(R) Core(TM) i5-13420H; not promoted: site switch p95 210 ms (budget 100 ms); not measurable in the live app: scanStage1, scanFirstStage2, quickAnswer; hover is measured to the next frame, not to overlay-drawn; the measuring machine is not confirmed to be the demo laptop.",
+      "provenance": "Recorded 2026-11-16T14:50:43Z at commit 7e96523a7c; siteSwitchMs is click to the engine's new numbers on screen, end to end (worker evaluation included), headless Chromium. hoverToFrameMs is pointer event to the next animation frame; it is dominated by the 60 Hz frame wait and is NOT the 4 ms pointer-to-overlay-drawn measurement of the old harness. slipDragFrameMs is the frame time while dragging the slip slider; 16.7 ms is one 60 Hz frame (no dropped frames). Scan and Quick Answer are not part of the live pages, so they cannot be timed there. This machine is not confirmed to be the demo laptop. Stand here now uses a STAGED evaluation: siteSwitchMs is click -> the engine's nominal numbers on screen (stage 1, no +/- or verdict); siteSwitchFinalMs is click -> the final +/- and verdict (stage 2). Same-machine comparison on 2026-11-16 (after a reboot): unstaged numbers p50 250 / p95 342 ms; staged numbers p50 ~155 / p95 ~190 ms, final p50 ~390 / p95 ~460 ms. Every site now has sigma, so the final stage runs the three-pass bounds. Neither meets the 100 ms budget here; this machine is not confirmed to be the demo laptop.",
+      "reason": "Partly measured on 13th Gen Intel(R) Core(TM) i5-13420H; not promoted: site switch p95 179 ms (budget 100 ms); site switch to the final +/- and verdict p95 476 ms; not measurable in the live app: scanStage1, scanFirstStage2, quickAnswer; hover is measured to the next frame, not to overlay-drawn; the measuring machine is not confirmed to be the demo laptop.",
       "status": "PENDING",
       "test_commands": [
         "LUMEN_G8_OUT=<file> npx playwright test -c e2e/playwright.real.config.ts livePerf"
       ],
       "value": {
         "hover_to_next_frame_ms": {
-          "max": 14.7,
+          "max": 14.5,
           "n": 300,
-          "p50": 13,
-          "p95": 14.1
+          "p50": 12.7,
+          "p95": 13.8
+        },
+        "site_switch_final_ms": {
+          "max": 476.2,
+          "n": 8,
+          "p50": 375.4,
+          "p95": 476.2
         },
         "site_switch_ms": {
-          "max": 210,
+          "max": 179.3,
           "n": 8,
-          "p50": 159.9,
-          "p95": 210
+          "p50": 163.1,
+          "p95": 179.3
         },
         "site_switch_p50_over_budget": true,
         "slip_drag_frame_ms": {
           "max": 16.8,
-          "n": 182,
+          "n": 185,
           "p50": 16.7,
-          "p95": 16.8
+          "p95": 16.7
         }
       }
     },
@@ -772,7 +803,6 @@
   ],
   "non_pass_gates": [
     "G5",
-    "G7",
     "G8",
     "G9",
     "G10"

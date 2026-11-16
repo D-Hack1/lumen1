@@ -1,5 +1,5 @@
 {
-  "absolute_error_deg": 0.13785994964322157,
+  "absolute_error_deg": 0.1378157811562808,
   "calculation_assumptions": {
     "landing_location": {
       "basis": "PLAN_FINAL_R3_DELTA.md D-12 landing-coordinate input; the NASA/LROC observed fix and ISRO planned target are recorded separately.",
@@ -24,7 +24,7 @@
       "basis": "Ephemeris.body_at subtracts the site vector from the interpolated Sun-centre vector before site-frame elevation conversion.",
       "calculated_value": "Sun-centre apparent topocentric elevation above the local spherical horizontal",
       "calculation_status": "VERIFIED_IMPLEMENTATION",
-      "reported_claim_limb_convention": "SOURCE_UNVERIFIED"
+      "reported_claim_limb_convention": "NOT_STATED_BY_SOURCE"
     },
     "touchdown_time": {
       "basis": "PLAN_FINAL_R3_DELTA.md D-12; no primary seconds-level source located.",
@@ -36,9 +36,9 @@
   "calculation_status": "COMPUTED",
   "check": "CY-3 Sun elevation at touchdown",
   "computed": {
-    "et_seconds": 746066048.1827785,
-    "sun_azimuth_deg": 96.10953233222143,
-    "sun_elevation_deg": 8.612140050356778
+    "et_seconds": 746066049.1827785,
+    "sun_azimuth_deg": 96.1093964275995,
+    "sun_elevation_deg": 8.61218421884372
   },
   "coordinates": {
     "coordinate_frame": "MOON_ME_DE421",
@@ -71,11 +71,11 @@
     "kernel_provenance": [
       {
         "filename": "naif0012.tls",
-        "sha256": "3c2c786080569f0336b7c090866acc0f0b38a935db51c15da54de1efc10bfa17"
+        "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
       },
       {
         "filename": "pck00011.tpc",
-        "sha256": "8fd7588e258d49362198381b039c6d577db7e6f9be35dacfe43220698669f1eb"
+        "sha256": "3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1"
       },
       {
         "filename": "de421.bsp",
@@ -87,17 +87,17 @@
       },
       {
         "filename": "moon_080317.tf",
-        "sha256": "3a5bf575b1b946349b703719853c760db3b3902a6fce750bb721bb93c474cd00"
+        "sha256": "78732477b96f9863e7b0d65bcee3c22b8707ca5ed0db56d1173319cb2e8c7993"
       }
     ],
     "loaded_kernel_provenance": [
       {
         "filename": "naif0012.tls",
-        "sha256": "3c2c786080569f0336b7c090866acc0f0b38a935db51c15da54de1efc10bfa17"
+        "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
       },
       {
         "filename": "pck00011.tpc",
-        "sha256": "8fd7588e258d49362198381b039c6d577db7e6f9be35dacfe43220698669f1eb"
+        "sha256": "3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1"
       },
       {
         "filename": "de421.bsp",
@@ -109,31 +109,27 @@
       },
       {
         "filename": "moon_080317.tf",
-        "sha256": "3a5bf575b1b946349b703719853c760db3b3902a6fce750bb721bb93c474cd00"
+        "sha256": "78732477b96f9863e7b0d65bcee3c22b8707ca5ed0db56d1173319cb2e8c7993"
       }
     ],
     "path": "web/public/data/ephem/ephem.bin",
-    "sha256": "765308c4598651c34ba0f1328b31f0b53947f1a9cab3b4df6defd44c0225a281",
+    "sha256": "295a9b5cb41199f00af7a691b593d23aef37141b9c5b61bbc27d5254064ec809",
     "sidecar_path": "web/public/data/ephem/ephem.json",
-    "start_et_tdb": 725803268.1839136
+    "start_et_tdb": 725803269.1839136
   },
   "failure_reasons": {
-    "numerical": [
-      "unverified_mission_reference_not_a_pass_criterion"
-    ],
+    "numerical": [],
     "provenance": [],
-    "timeline": [
-      "unverified_operations_threshold_not_a_pass_criterion"
-    ]
+    "timeline": []
   },
   "id": "G7",
   "im2_touchdown_conditions": {
     "computed": {
-      "earth_azimuth_deg": 5.142977340540992,
-      "earth_elevation_deg": 11.193155868767695,
-      "et_seconds": 794554198.1854653,
-      "sun_azimuth_deg": 94.97724230472686,
-      "sun_elevation_deg": 2.4646206853404022
+      "earth_azimuth_deg": 5.142985206810196,
+      "earth_elevation_deg": 11.19316028698669,
+      "et_seconds": 794554199.1854653,
+      "sun_azimuth_deg": 94.97710145981868,
+      "sun_elevation_deg": 2.4646319917619626
     },
     "coordinates": {
       "coordinate_frame": "MOON_ME_DE421",
@@ -148,28 +144,37 @@
     "timestamp_precision": "second",
     "timestamp_utc": "2025-03-06T17:28:50Z"
   },
-  "numerical_result": "NOT_EVALUATED",
+  "numerical_result": "PASS",
   "provenance_result": "PASS",
   "qualitative_timeline_check": {
-    "criterion": "Recorded 6-degree crossing under an unverified operations threshold; not a pass criterion.",
+    "criterion": "The Sun drops below the project director's 6-degree operations minimum inside the 2-4 Sep 2023 sleep window (TOI 2023-09-02: sleep planned for Sunday 3 Sep, begun before 6 degrees; ISRO 4 Sep: lander and rover in sleep mode).",
     "expected_window_end_exclusive_utc": "2023-09-05T00:00:00Z",
     "expected_window_start_utc": "2023-09-02T00:00:00Z",
-    "status": "SOURCE_UNVERIFIED",
+    "status": "PASS",
     "sun_below_6_deg_utc": "2023-09-03T05:38:56Z"
   },
   "reference": {
-    "primary_source_status": "SOURCE_UNVERIFIED",
+    "primary_source_status": "MISSION_TEAM_STATEMENT_IN_PRESS",
     "recorded_tolerance_deg": 0.25,
-    "source": "PLAN_FINAL_R3_DELTA.md D-13 planned comparison input",
+    "source": "Times of India, 2023-09-02: Chandrayaan-3 project director P Veeramuthuvel (see source_metadata)",
     "source_metadata": {
-      "document_title": null,
-      "page_or_section": null,
-      "publication_date": null,
-      "quoted_numerical_claim": null,
+      "byline": "Chethan Kumar",
+      "document_title": "Chandrayaan-3: Mission goals met, Vikram, Pragyan to be put to sleep Sunday",
+      "open_caveats": [
+        "limb convention (Sun centre vs limb) not stated by the source",
+        "no uncertainty stated by the source; the +/-0.25 deg tolerance is the plan's",
+        "press interview with the project director, not an ISRO technical document"
+      ],
+      "page_or_section": "Quote of Chandrayaan-3 project director P Veeramuthuvel (exclusive interaction with TOI)",
+      "publication_date": "2023-09-02T23:28:00+05:30",
+      "publisher": "The Times of India",
+      "quoted_numerical_claim": "For landing, the angle requirement was 6-9\u00b0 elevation and we managed to land when elevation was 8.75\u00b0.",
+      "quoted_operations_claim": "For operations, we need a minimum of 6\u00b0 elevation angle because our cameras and other systems are characterised for that.",
+      "quoted_sleep_plan": "Isro is opting to begin the process of enabling sleep mode earlier than that.",
       "reported_sun_elevation_deg": 8.75,
-      "reported_uncertainty_deg": 0.25,
-      "research_note": "No ISRO mission document or primary mission publication located during the R3 source review states a Chandrayaan-3 landing Sun elevation of 8.75 degrees, an uncertainty of +/-0.25 degrees, or its limb convention. The value must not be used as a quantitative pass criterion.",
-      "source_url": null,
+      "reported_uncertainty_deg": null,
+      "research_note": "Located after the R3 source review: the project director's statement to the Times of India gives both the 8.75 degree landing Sun elevation and the 6 degree operations minimum. ISRO's own mission page states no landing time or angle.",
+      "source_url": "https://timesofindia.indiatimes.com/india/chandrayaan-3-mission-goals-met-vikram-pragyan-to-be-put-to-sleep-sunday/articleshow/103314801.cms",
       "sources_examined": [
         {
           "document_title": "Chandrayaan-3",
@@ -186,14 +191,23 @@
           "quoted_claim": "4 km x 2.4 km 69.367621 S, 32.348126 E",
           "supports_8_75_degree_claim": false,
           "url": "https://www.isro.gov.in/Chandrayaan3_Details.html"
+        },
+        {
+          "document_title": "Chandrayaan-3: Mission goals met, Vikram, Pragyan to be put to sleep Sunday",
+          "page_or_section": "Quote of project director P Veeramuthuvel",
+          "publication_date": "2023-09-02",
+          "quoted_claim": "we managed to land when elevation was 8.75\u00b0",
+          "supports_8_75_degree_claim": true,
+          "url": "https://timesofindia.indiatimes.com/india/chandrayaan-3-mission-goals-met-vikram-pragyan-to-be-put-to-sleep-sunday/articleshow/103314801.cms"
         }
       ],
-      "status": "SOURCE_UNVERIFIED"
+      "status": "MISSION_TEAM_STATEMENT_IN_PRESS",
+      "tolerance_source": "PLAN_FINAL_R3_DELTA.md D-13 (minute-level time precision); not stated by the source"
     },
     "sun_elevation_deg": 8.75
   },
-  "source_provenance_result": "BLOCKED",
-  "status": "BLOCKED",
+  "source_provenance_result": "PASS",
+  "status": "PASS",
   "timestamp_precision": "minute",
   "timestamp_utc": "2023-08-23T12:33:00Z"
 }
