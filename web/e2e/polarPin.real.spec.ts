@@ -46,9 +46,8 @@ test.describe('the site list tags (real data)', () => {
     for (const n of [/Apollo 11/, /Apollo 17/, /SLIM/, /Chang'e-6/, /Blue Ghost/]) {
       await expect(tag(n)).toHaveText('σ pending', { timeout: 60_000 });
     }
-    await expect(tag(/Rim|Shackleton-de Gerlache/)).toHaveText('σ pending', { timeout: 60_000 });
     // sites with terrain AND σ are judged for real: never "Unconfirmed" any more
-    for (const n of [/IM-2/, /Chandrayaan-3/, /Shackleton conne/]) {
+    for (const n of [/IM-2/, /Chandrayaan-3/, /Shackleton conne/, /Rim|Shackleton-de Gerlache/]) {
       await expect(tag(n)).not.toHaveText(/Unconfirmed|Checking/, { timeout: 60_000 });
     }
     console.log('TAGS', JSON.stringify(await page.locator('.lm-site').evaluateAll((els) => els.map((e) => (e.querySelector('.lm-site__name')?.textContent ?? '') + ' = ' + (e.querySelector('.lm-tag')?.textContent ?? '')))));

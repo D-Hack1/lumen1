@@ -38,8 +38,8 @@ describe.skipIf(!have)('real-mode loaders', () => {
     console.log(`psr: ${finite} finite samples, ${zero} inside a PSR`);
     expect(finite).toBeGreaterThan(1000);
   });
-  // Preliminary Monte-Carlo sigma (30 clones) is published for the three Tier-A sites; each must match its own mask's validity exactly.
-  it.each(['im2_athena', 'cy3_shiv_shakti', 'shackleton_ridge'])('sigma: %s is Monte-Carlo (30 clones) and matches its mask', async (id) => {
+  // Preliminary Monte-Carlo sigma (30 clones) is published for the four fine-terrain sites; each must match its own mask's validity exactly.
+  it.each(['im2_athena', 'cy3_shiv_shakti', 'shackleton_ridge', 'shackleton_rim_ridge'])('sigma: %s is Monte-Carlo (30 clones) and matches its mask', async (id) => {
     const [s, m] = await Promise.all([loadSigma(id), loadMask(id)]);
     expect(s.source).toBe('monte_carlo');
     expect(s.cloneCount).toBe(30);

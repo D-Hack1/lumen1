@@ -1,0 +1,94 @@
+{
+  "base_seed": 20260515,
+  "bin_width_deg": 0.1,
+  "binary": {
+    "array_order": "c_contiguous_height_major",
+    "byte_order": "little",
+    "float_encoding": "ieee754-binary32",
+    "format_version": 1,
+    "layout": "header_then_sigma",
+    "magic": "LUMENSGM"
+  },
+  "clone_count": 30,
+  "clone_counts_evaluated": {
+    "counts": [
+      20,
+      30
+    ],
+    "primary_length_m": 50.0
+  },
+  "convergence_20_vs_30": {
+    "correlation_length_m": 50.0,
+    "max_abs_diff_deg": 0.17227427661418915,
+    "max_sigma_30_deg": 0.5938127636909485,
+    "mean_abs_diff_deg": 0.0023948701564222574,
+    "mean_sigma_30_deg": 0.04191657900810242
+  },
+  "created_utc": "2026-11-16T07:20:12.558124Z",
+  "dem_error_sources": {
+    "far": {
+      "dem_url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_60S_240MPP_ADJ.TIF",
+      "error_window_aligned": true,
+      "resolution_m": 240.0,
+      "source_key": "regional_240m_lola_pgda_90"
+    },
+    "mid": {
+      "dem_url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_20MPP_ADJ.TIF",
+      "error_window_aligned": true,
+      "resolution_m": 20.0,
+      "source_key": "polar_20m_lola_pgda_90"
+    },
+    "near": {
+      "dem_url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_83S_10MPP_ADJ.TIF",
+      "error_window_aligned": true,
+      "resolution_m": 10.0,
+      "source_key": "polar_10m_lola_pgda_90"
+    }
+  },
+  "git_commit": "fb87cad5ba503230b3585014a13d60f2d764dd25",
+  "height_order_m": [
+    1.0,
+    2.0,
+    5.0,
+    10.0
+  ],
+  "notes": "PRELIMINARY Monte-Carlo terrain sigma. _ERR raster read as a 1-sigma magnitude (unverified); correlation length 50 m (not physically calibrated).",
+  "orchestration_script": "pipeline/scripts/run_mc_sigma_site.py",
+  "outstanding_blockers": [
+    "Cross-length (50 m vs 150 m) sensitivity was not run for this site.",
+    "G5: the mask's multi-year sunlight (39%) disagrees with NASA's map (78%); the site sits on a steep crest, so sigma on this mask is not yet trustworthy."
+  ],
+  "perturbation_model": {
+    "base_seed": 20261115,
+    "construction": "white noise smoothed by a Gaussian kernel (scipy.ndimage.gaussian_filter), renormalized to unit variance, scaled pointwise by the crop's _ERR raster magnitude",
+    "correlation_lengths_tested_m": [
+      50.0,
+      150.0
+    ],
+    "error_interpretation": "UNVERIFIED MODELLING ASSUMPTION: _ERR raster values (metres) are treated as a Gaussian 1-sigma elevation-error magnitude per pixel. This has not been confirmed against PGDA/Barker et al. (2023) documentation.",
+    "kind": "spatially_correlated_gaussian_field",
+    "selected_length_is_physically_calibrated": false,
+    "selected_length_m": 50.0
+  },
+  "preliminary": true,
+  "producer": "lumen_pipeline.terrain.mc_sigma",
+  "production_ready": false,
+  "ray_range_km": 250.0,
+  "shape": [
+    4,
+    3600
+  ],
+  "site_id": "shackleton_rim_ridge",
+  "source": "monte_carlo",
+  "status": "PRELIMINARY -- not production-accepted; see notes",
+  "unit": "deg",
+  "validation_status": {
+    "ddof": 1,
+    "dem_err_grid_alignment_verified": true,
+    "nan_pattern_matches_nominal_mask": true,
+    "nominal_reproduces_published_mask_max_abs_diff_deg": 0.0,
+    "seeded_reproducibility_verified": true
+  },
+  "version": "1.0.0",
+  "vertical_datum_caveat": "The adjusted LOLA DEM's exact vertical offset/scaling relative to the 1,737,400 m reference sphere is not formally confirmed (Barker et al. 2023, Planet. Sci. J. 4, 183, DOI 10.3847/PSJ/acf3e1 was not reachable from this environment). This does not affect sigma directly (sigma is a spread statistic, invariant to a constant vertical offset), but is recorded here as an outstanding scientific caveat on the underlying DEM."
+}
