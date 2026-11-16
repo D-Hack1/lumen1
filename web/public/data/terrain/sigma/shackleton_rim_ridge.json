@@ -52,7 +52,7 @@
     5.0,
     10.0
   ],
-  "notes": "PRELIMINARY Monte-Carlo terrain sigma. _ERR raster read as a 1-sigma magnitude (unverified); correlation length 50 m (not physically calibrated).",
+  "notes": "PRELIMINARY Monte-Carlo terrain sigma. _ERR raster (RMS height error, Barker et al. 2023 Sec. 3) used as a 1-sigma magnitude; correlation length 50 m (not physically calibrated).",
   "orchestration_script": "pipeline/scripts/run_mc_sigma_site.py",
   "outstanding_blockers": [
     "Cross-length (50 m vs 150 m) sensitivity was not run for this site.",
@@ -61,11 +61,13 @@
   "perturbation_model": {
     "base_seed": 20261115,
     "construction": "white noise smoothed by a Gaussian kernel (scipy.ndimage.gaussian_filter), renormalized to unit variance, scaled pointwise by the crop's _ERR raster magnitude",
+    "correlation_length_note": "Not calibrated. Barker et al. 2023 Sec. 3 identify effective resolution as the primary factor in the error; PGDA product 90 publishes LDEM_*_ADJ_EFFRES.TIF, a candidate basis for a physically motivated correlation length (not yet used).",
     "correlation_lengths_tested_m": [
       50.0,
       150.0
     ],
-    "error_interpretation": "UNVERIFIED MODELLING ASSUMPTION: _ERR raster values (metres) are treated as a Gaussian 1-sigma elevation-error magnitude per pixel. This has not been confirmed against PGDA/Barker et al. (2023) documentation.",
+    "error_interpretation": "RESOLVED (2026-11-16) against the primary source: Barker et al. 2023 (PSJ 4, 183; DOI 10.3847/PSJ/acf3e1), Section 3, accepted manuscript at https://ntrs.nasa.gov/citations/20230014419. The _ERR maps are RMS height errors estimated from an ensemble of 'clone' LDEMs (fractal terrain + LOLA range and geolocation errors, re-gridded as the nominal LDEM), and represent 'the uncertainty in the LDEM gridded height ... relative to the true average height ... within each pixel'. An RMS error from a zero-mean clone ensemble is treated here as a Gaussian 1-sigma per-pixel magnitude. Remaining approximations: the Gaussian shape and the spatial correlation (see correlation length).",
+    "error_interpretation_source": "Barker et al. 2023, PSJ 4, 183, Sec. 3 (NTRS 20230014419)",
     "kind": "spatially_correlated_gaussian_field",
     "selected_length_is_physically_calibrated": false,
     "selected_length_m": 50.0

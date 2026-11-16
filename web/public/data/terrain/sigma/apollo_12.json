@@ -17,15 +17,17 @@
     "mean_abs_diff_deg": 0.0011783638037741184,
     "mean_sigma_30_deg": 0.01584608107805252
   },
-  "created_utc": "2026-11-16T08:41:13.016900Z",
+  "created_utc": "2026-11-16T10:13:55.615043Z",
   "dem_source": {
     "resolution_m": 236.901,
     "source_key": "lola_gdr_ldem_128_pds",
     "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_128.lbl"
   },
+  "error_magnitude_caveat": "1 m is the accuracy of individual LOLA measurements, NOT of the gridded 237 m LDEM_128: it leaves out gridding/interpolation error between ground tracks, which Barker et al. 2023 (PSJ 4, 183, Sec. 3) show dominates gridded-DEM height error and grows with effective resolution. No published figure for LDEM_128's gridded error was found. For scale, the merged SLDEM2015 has a stated typical vertical accuracy of 3-4 m (Barker et al. 2016) -- a different product. See sensitivity_assumed_error for sigma at a larger assumed error.",
+  "error_magnitude_is_lower_bound": true,
   "error_model": "assumed_uniform",
-  "error_model_basis": "No per-pixel error raster is published for LDEM_128 (PDS LOLA GDR cylindrical/img + float_img contain only .img/.lbl/.xml; PGDA products 78 and 90 cover only 60S-pole). The DEM was therefore perturbed by a CONSTANT 1-sigma elevation error of 1 m, taken from LOLA's commonly quoted ~1 m absolute vertical accuracy (cited as Mazarico et al. 2013 in secondary text; the primary paper and LDEM_128's own accuracy were NOT read). The error is assumed Gaussian, 1-sigma, and uniform over the window.",
-  "git_commit": "5fe9cb05a397eefb214d6c8190ae6865d00c83de",
+  "error_model_basis": "No per-pixel error raster is published for LDEM_128 (PDS LOLA GDR cylindrical/img + float_img contain only .img/.lbl/.xml; PGDA products 78 and 90 cover only 60S-pole; SLDEM2015, PGDA product 54, publishes none either). The DEM was therefore perturbed by a CONSTANT 1-sigma elevation error of 1 m: LOLA's ~1 m absolute vertical accuracy from orbit-overlap analysis (Mazarico et al. 2013, as cited by Barker et al. 2016, Icarus 273, 346-355). The error is assumed Gaussian, 1-sigma, uniform over the window.",
+  "git_commit": "965eea264ff2d39d91f88ade06747cd872211e31",
   "height_order_m": [
     1.0,
     2.0,
@@ -46,10 +48,30 @@
   "producer": "lumen_pipeline.terrain.mc_sigma",
   "production_ready": false,
   "ray_range_km": 250.0,
+  "sensitivity_assumed_error": [
+    {
+      "assumed_error_m": 3.5,
+      "base_seed": 20260515,
+      "clone_count": 30,
+      "correlation_length_m": 50.0,
+      "max_sigma_deg": 0.16444051265716553,
+      "mean_sigma_deg": 0.06633830070495605,
+      "p95_sigma_deg": 0.13228543102741241
+    }
+  ],
   "shape": [
     4,
     3600
   ],
+  "sigma_stats": {
+    "assumed_error_m": 1.0,
+    "base_seed": 20260515,
+    "clone_count": 30,
+    "correlation_length_m": 50.0,
+    "max_sigma_deg": 0.06892218440771103,
+    "mean_sigma_deg": 0.01584608107805252,
+    "p95_sigma_deg": 0.044322483241558075
+  },
   "site_id": "apollo_12",
   "source": "monte_carlo",
   "status": "PRELIMINARY -- ASSUMED-ERROR sigma, not a measured uncertainty; see error_model",
@@ -57,7 +79,7 @@
   "validation_status": {
     "ddof": 1,
     "nan_pattern_matches_nominal_mask": true,
-    "nominal_reproduces_published_mask_max_abs_diff_deg": 0.06497971073258668,
+    "nominal_reproduces_published_mask_max_abs_diff_deg": 0.0,
     "note": "Re-running the production mask generator on the current DEM window reproduces this nominal exactly, but not the published mask bit for bit (difference above). Sigma is a spread, so this small nominal offset is not expected to matter; the published mask was not regenerated."
   },
   "version": "1.0.0",

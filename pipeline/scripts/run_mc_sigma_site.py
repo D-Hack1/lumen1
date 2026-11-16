@@ -209,8 +209,8 @@ def main() -> None:
         source="monte_carlo",
         clone_count=args.clones,
         notes=(
-            "PRELIMINARY Monte-Carlo terrain sigma. _ERR raster read as a 1-sigma magnitude "
-            f"(unverified); correlation length {args.length_m:g} m (not physically calibrated)."
+            "PRELIMINARY Monte-Carlo terrain sigma. _ERR raster (RMS height error, Barker et al. 2023 Sec. 3) used as a 1-sigma "
+            f"magnitude; correlation length {args.length_m:g} m (not physically calibrated)."
         ),
         extra=extra,
     )

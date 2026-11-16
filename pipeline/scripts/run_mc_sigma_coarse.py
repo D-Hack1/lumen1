@@ -14,6 +14,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import time
 from pathlib import Path
@@ -47,6 +48,7 @@ def main() -> None:
     ap.add_argument("--error-m", type=float, default=1.0)
     ap.add_argument("--seed", type=int, default=20260515)
     ap.add_argument("--mask-tol-deg", type=float, default=1e-3, help="max allowed |recomputed nominal - published mask|; the actual value is recorded in the sidecar")
+    ap.add_argument("--dry-run", action="store_true", help="sensitivity run: compute sigma for --error-m, store its statistics in the cache, publish nothing; a later publish run records it in the sidecar")
     args = ap.parse_args()
     site_id = args.site_id
     if site_id not in G.DEFAULT_SITE_IDS:
@@ -100,6 +102,17 @@ def main() -> None:
         sys.exit("sigma NaN pattern does not match the nominal mask; not publishing")
     print(f"[{site_id}] sigma mean={np.nanmean(sigma):.5f} max={np.nanmax(sigma):.5f} deg", flush=True)
     conv = evaluate_convergence(CloneEnsemble(correlation_length_m=args.length_m, base_seed=args.seed, clone_count=args.clones, elevations_deg=clones))
+    stats = {
+        "assumed_error_m": args.error_m, "correlation_length_m": args.length_m, "clone_count": args.clones, "base_seed": args.seed,
+        "mean_sigma_deg": float(np.nanmean(sigma)), "p95_sigma_deg": float(np.nanpercentile(sigma, 95)), "max_sigma_deg": float(np.nanmax(sigma)),
+    }
+    if args.dry_run:
+        out = cache / f"sensitivity_{args.error_m:g}m.json"
+        out.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
+        print(f"[{site_id}] sensitivity stats written to {out} (nothing published)", flush=True)
+        return
+    sensitivity = [json.loads(p.read_text("utf-8")) for p in sorted(cache.glob("sensitivity_*m.json"))]
+    sensitivity = [s for s in sensitivity if s["assumed_error_m"] != args.error_m and s["correlation_length_m"] == args.length_m and s["base_seed"] == args.seed]
 
     extra = {
         "preliminary": True,
@@ -109,10 +122,19 @@ def main() -> None:
         "assumed_error_m": args.error_m,
         "error_model_basis": (
             "No per-pixel error raster is published for LDEM_128 (PDS LOLA GDR cylindrical/img + float_img contain only .img/.lbl/.xml; "
-            "PGDA products 78 and 90 cover only 60S-pole). The DEM was therefore perturbed by a CONSTANT 1-sigma elevation error of "
-            f"{args.error_m:g} m, taken from LOLA's commonly quoted ~1 m absolute vertical accuracy (cited as Mazarico et al. 2013 in secondary text; "
-            "the primary paper and LDEM_128's own accuracy were NOT read). The error is assumed Gaussian, 1-sigma, and uniform over the window."
+            "PGDA products 78 and 90 cover only 60S-pole; SLDEM2015, PGDA product 54, publishes none either). The DEM was therefore perturbed by a "
+            f"CONSTANT 1-sigma elevation error of {args.error_m:g} m: LOLA's ~1 m absolute vertical accuracy from orbit-overlap analysis "
+            "(Mazarico et al. 2013, as cited by Barker et al. 2016, Icarus 273, 346-355). The error is assumed Gaussian, 1-sigma, uniform over the window."
         ),
+        "error_magnitude_is_lower_bound": True,
+        "error_magnitude_caveat": (
+            "1 m is the accuracy of individual LOLA measurements, NOT of the gridded 237 m LDEM_128: it leaves out gridding/interpolation error between "
+            "ground tracks, which Barker et al. 2023 (PSJ 4, 183, Sec. 3) show dominates gridded-DEM height error and grows with effective resolution. "
+            "No published figure for LDEM_128's gridded error was found. For scale, the merged SLDEM2015 has a stated typical vertical accuracy of "
+            "3-4 m (Barker et al. 2016) -- a different product. See sensitivity_assumed_error for sigma at a larger assumed error."
+        ),
+        "sensitivity_assumed_error": sensitivity,
+        "sigma_stats": stats,
         "perturbation_model": {
             "kind": "spatially_correlated_gaussian_field",
             "construction": "white noise smoothed by a Gaussian kernel, renormalized to unit variance, scaled by the constant assumed error",

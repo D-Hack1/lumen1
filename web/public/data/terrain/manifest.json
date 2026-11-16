@@ -1,20 +1,20 @@
 {
   "artifacts": {
     "apollo_11": {
-      "created_utc": "2026-11-15T16:56:27.340295Z",
+      "created_utc": "2026-11-16T09:37:49.007971Z",
       "files": {
         "mask_bin": {
           "path": "terrain/masks/apollo_11.bin",
-          "sha256": "24a5fb929018cddb2c2f4f346f77f3a86b4dd8344bfb44025a1380d1d31b013f",
+          "sha256": "65881f1428a79d982ca651e7ace0bf6592932b7e46830dda06040af6f9b68e7f",
           "version": "1.0.0"
         },
         "mask_json": {
           "path": "terrain/masks/apollo_11.json",
-          "sha256": "ebfa1c0fb12c516d7ca9a16c8d1e479e0564196bdf3edde669795dc8a7c23398",
+          "sha256": "c507fd47b41a4f9bb9e055fcd9a0e02901e3f3baa4fb52072f66dcdf4bf3c43a",
           "version": "1.0.0"
         }
       },
-      "git_commit": "776577ad189daf4e3ccf5a93ed49a1a3cbc9fe4d",
+      "git_commit": "965eea264ff2d39d91f88ade06747cd872211e31",
       "site_id": "apollo_11",
       "sources": {
         "near": {
@@ -39,20 +39,20 @@
       "version": "1.0.0"
     },
     "apollo_12": {
-      "created_utc": "2026-11-15T17:00:38.393507Z",
+      "created_utc": "2026-11-16T09:44:56.627467Z",
       "files": {
         "mask_bin": {
           "path": "terrain/masks/apollo_12.bin",
-          "sha256": "22abfcbcd23229be4731df0eabb2ea0afa71757af7d820f450cb483ade099dcc",
+          "sha256": "053de632485412187f2cd9eca6357e02193a5ab573425d9ad081e9ce7ea6cfd4",
           "version": "1.0.0"
         },
         "mask_json": {
           "path": "terrain/masks/apollo_12.json",
-          "sha256": "2fd2a49ffe539a3f66672401a2afa3a36f79cd27bfc1656321b2b6e32cf683c0",
+          "sha256": "5a973ad0f17af8cb2b338a1e3d8ad13090fd2ad131adfdf055982b02e7685b1d",
           "version": "1.0.0"
         }
       },
-      "git_commit": "4b9e995d754aa6537ba47bd82e2d2599f46480fa",
+      "git_commit": "965eea264ff2d39d91f88ade06747cd872211e31",
       "site_id": "apollo_12",
       "sources": {
         "near": {
