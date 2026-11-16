@@ -1,0 +1,143 @@
+# Owner: Nived
+# Frontend CI: typecheck + lint + vitest (incl. Python<->TypeScript parity, G4) + build, then the Playwright zero-scroll suite.
+name: Frontend CI
+
+on:
+  push:
+    paths:
+      - "web/**"
+      - "contracts/**"
+      - "pipeline/lumen_pipeline/common/constants.py" # the constants parity test reads this file
+      - ".github/workflows/ci-frontend.yml"
+  pull_request:
+    paths:
+      - "web/**"
+      - "contracts/**"
+      - "pipeline/lumen_pipeline/common/constants.py"
+      - ".github/workflows/ci-frontend.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    env:
+      # Parity tests must RUN in CI. Without this, a missing/un-hydrated ephem.bin makes them skip and CI would pass vacuously.
+      LUMEN_REQUIRE_PARITY: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: Hydrate and verify the ephemeris LFS artifact
+        working-directory: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          git lfs pull
+          ephem="web/public/data/ephem/ephem.bin"
+          test "$(stat --printf='%s' "$ephem")" -eq 3366144
+          if head -c 64 "$ephem" | grep -q '^version https://git-lfs.github.com/spec/v1'; then
+            echo "ephem.bin is still a Git LFS pointer after hydration" >&2
+            exit 1
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Unit + parity tests
+        run: npm test
+      - name: Build (includes PWA service worker)
+        run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: test
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Zero-scroll suite
+        run: npm run e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results
+          path: web/test-results
+
+  offline:
+    # N-12: the app and every data file must work in airplane mode (production build, real data, service worker).
+    runs-on: ubuntu-latest
+    needs: test
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Airplane-mode test
+        run: npm run e2e:offline
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-offline-results
+          path: web/test-results/offline
+
+  perf:
+    # G8 / G13: hot-path budgets on the real app (hover, slip drag, scan, quick answer, site switch, zero React commits).
+    # Shared runners are slower and noisier than a laptop, so budgets get a slack factor here; the numbers are printed in the log.
+    runs-on: ubuntu-latest
+    needs: test
+    defaults:
+      run:
+        working-directory: web
+    env:
+      LUMEN_PERF_SLACK: "3"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: G8 performance run
+        run: npm run e2e:perf
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-perf-results
+          path: web/test-results/perf

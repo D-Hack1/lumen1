@@ -1,0 +1,1824 @@
+{
+ "version": "1",
+ "generated": "by web/scripts/build-knowledge.mjs",
+ "count": 106,
+ "entries": [
+  {
+   "id": "term:sun-elevation",
+   "kind": "term",
+   "title": "Sun elevation",
+   "summary": "The angle of the Sun's centre above the local horizontal plane.",
+   "body": "The angle of the Sun's centre above the local horizontal plane. It shows how high the Sun is above the local horizon. Formula: elevation = angle(Sun direction, local horizontal) Caveat: Terrain timing uncertainty is reported separately through clearance and event bounds.",
+   "source": "PLAN_FINAL.md §8.10",
+   "anchor": "sun-elevation",
+   "metrics": [
+    "sunElevationDeg"
+   ]
+  },
+  {
+   "id": "term:sun-clearance-disk",
+   "kind": "term",
+   "title": "Sun clearance / disk fraction",
+   "summary": "Clearance is the Sun-centre elevation relative to the effective horizon; disk fraction is the visible fraction of the solar disk.",
+   "body": "Clearance is the Sun-centre elevation relative to the effective horizon; disk fraction is the visible fraction of the solar disk. It shows how far above a ridge the Sun is and how much of its disk is visible. Formula: C = el - m_eff(az); disk fraction from chord quadrature Caveat: Mask uncertainty affects both clearance and the timing of disk-fraction events.",
+   "source": "PLAN_FINAL_R3_DELTA.md D-7, D-8",
+   "anchor": "sun-clearance",
+   "metrics": [
+    "sunClearanceDeg",
+    "sunDiskPct"
+   ]
+  },
+  {
+   "id": "term:libration",
+   "kind": "term",
+   "title": "Libration",
+   "summary": "The apparent oscillation of the Moon's orientation that moves the sub-Earth point in lunar latitude and longitude.",
+   "body": "The apparent oscillation of the Moon's orientation that moves the sub-Earth point in lunar latitude and longitude. It changes Earth direction at a site and can produce Earth rises and sets near the pole. Formula: sub-Earth point oscillation, approximately +/-6.7 deg latitude and +/-7.9 deg longitude Caveat: Computed from the selected lunar ephemeris and frame; it is not a terrain uncertainty.",
+   "source": "PLAN_FINAL.md §8.10",
+   "anchor": "libration",
+   "metrics": [
+    "earthElevationDeg",
+    "dteMarginDeg"
+   ]
+  },
+  {
+   "id": "term:vertical-array-cosine-loss",
+   "kind": "term",
+   "title": "Vertical Array Cosine Loss",
+   "summary": "The reduction in a panel's received solar flux when its normal is not aligned with the Sun direction.",
+   "body": "The reduction in a panel's received solar flux when its normal is not aligned with the Sun direction. A vertical array produces less power when it faces away from the Sun. Formula: cos(i) = n_panel dot s_hat; upright panel = cos(el) cos(az - heading); loss = 1 - cos(i) Caveat: This generic model uses configured panel geometry and efficiency; it is not vehicle-specific performance data.",
+   "source": "PLAN_FINAL.md §5.6, §8.10",
+   "anchor": "vertical-array-cosine-loss",
+   "metrics": [
+    "powerW",
+    "energyPerDayWh"
+   ]
+  },
+  {
+   "id": "term:dte-margin",
+   "kind": "term",
+   "title": "DTE Margin",
+   "summary": "The Earth-centre elevation above the effective horizon at Earth's azimuth.",
+   "body": "The Earth-centre elevation above the effective horizon at Earth's azimuth. It measures how much terrain-clear sky is available in the Earth direction. Formula: DTE margin = Earth elevation - m_eff(Earth azimuth) Caveat: Terrain-mask uncertainty affects the horizon term and Earth-event timing.",
+   "source": "PLAN_FINAL.md §8.10",
+   "anchor": "dte-margin",
+   "metrics": [
+    "dteMarginDeg",
+    "earthElevationDeg"
+   ]
+  },
+  {
+   "id": "term:dsn-visibility",
+   "kind": "term",
+   "title": "DSN visibility",
+   "summary": "Geometric visibility of the Moon from a DSN complex when the Moon elevation meets that complex's configured mask.",
+   "body": "Geometric visibility of the Moon from a DSN complex when the Moon elevation meets that complex's configured mask. A ground station must be geometrically able to see the Moon to receive a link. Formula: Moon elevation at Goldstone, Canberra, or Madrid >= configured mask Caveat: This is geometric visibility only; it is not a link budget, data-rate, or signal-margin calculation.",
+   "source": "PLAN_FINAL.md §5.5, §8.10; contracts/data_dsn.md",
+   "anchor": "dsn-visibility",
+   "metrics": [
+    "linkPct"
+   ]
+  },
+  {
+   "id": "term:range-light-time",
+   "kind": "term",
+   "title": "Range and light time",
+   "summary": "Range is the topocentric Earth-to-site distance; one-way light time is that range divided by the speed of light.",
+   "body": "Range is the topocentric Earth-to-site distance; one-way light time is that range divided by the speed of light. It gives the distance and signal travel time between the site and Earth. Formula: range = norm(Earth - site); light time = range / c Caveat: The result follows the selected apparent ephemeris geometry; it does not represent communications-system delay.",
+   "source": "PLAN_FINAL.md §5.5, §8.10",
+   "anchor": "range-light-time",
+   "metrics": []
+  },
+  {
+   "id": "term:fidelity-tier",
+   "kind": "term",
+   "title": "Fidelity Tier A/B/C",
+   "summary": "A label for the terrain-data fidelity available at a site: curated terrain, regional snapped terrain, or smooth-Moon geometry without terrain.",
+   "body": "A label for the terrain-data fidelity available at a site: curated terrain, regional snapped terrain, or smooth-Moon geometry without terrain. It indicates how strongly terrain timing and horizon conclusions can be relied upon. Formula: Tier A/B/C as defined by the terrain coverage and evaluator path Caveat: Tier C has no terrain-mask uncertainty; its times are labelled as smooth-sphere estimates with terrain unavailable, not as terrain-bounded predictions.",
+   "source": "PLAN_FINAL.md §4.2, §8.10",
+   "anchor": "fidelity-tier",
+   "metrics": []
+  },
+  {
+   "id": "term:uncertainty",
+   "kind": "term",
+   "title": "Uncertainty (+/-)",
+   "summary": "A timing half-width derived from horizon-mask uncertainty, or from re-solving the event on shifted masks when available.",
+   "body": "A timing half-width derived from horizon-mask uncertainty, or from re-solving the event on shifted masks when available. It shows how far an event time may move when the local horizon is uncertain. Formula: fast: delta t = sigma_m(az_event) / abs(dC/dt); exact: half-spread of mask - sigma, nominal, and mask + sigma event times Caveat: Mask errors are treated as fully correlated in azimuth for shifted-mask passes; no sigma value is implied by this definition.",
+   "source": "PLAN_FINAL_R3_DELTA.md D-8",
+   "anchor": "uncertainty",
+   "metrics": [
+    "sunlitPct",
+    "linkPct",
+    "longestNightH"
+   ]
+  },
+  {
+   "id": "term:grazing-event",
+   "kind": "term",
+   "title": "Grazing event",
+   "summary": "An event where the body skims the effective horizon and its timing is poorly constrained.",
+   "body": "An event where the body skims the effective horizon and its timing is poorly constrained. A single timestamp is less useful than the reported timing range. Formula: grazing when abs(dC/dt) < 0.005 deg/h, delta t > 12 h, or an event disappears in a shifted-mask pass Caveat: The grazing status is itself an uncertainty warning, not an additional sigma value.",
+   "source": "PLAN_FINAL_R3_DELTA.md D-8",
+   "anchor": "grazing-event",
+   "metrics": []
+  },
+  {
+   "id": "term:shadow-exit",
+   "kind": "term",
+   "title": "Shadow exit",
+   "summary": "The next transition to a visible Sun disk after the Sun has been blocked by the effective horizon.",
+   "body": "The next transition to a visible Sun disk after the Sun has been blocked by the effective horizon. It marks when direct sunlight becomes available again under the selected definition. Formula: next time Sun disk fraction >= configured Sun threshold after a blocked state Caveat: Its time carries terrain-mask uncertainty when terrain sigma is available.",
+   "source": "PLAN_FINAL.md §8.10; contracts/frontend_state_api.md",
+   "anchor": "shadow-exit",
+   "metrics": [
+    "sunlitPct"
+   ]
+  },
+  {
+   "id": "term:longest-night",
+   "kind": "term",
+   "title": "Longest night",
+   "summary": "The longest continuous interval in which generated power is below the mission-profile minimum.",
+   "body": "The longest continuous interval in which generated power is below the mission-profile minimum. It is the longest interval the battery must support under the selected profile. Formula: maximum duration of a run with power below the profile minimum Caveat: Terrain and power-model inputs can change the interval; no battery endurance value is implied.",
+   "source": "PLAN_FINAL.md §8.10",
+   "anchor": "longest-night",
+   "metrics": [
+    "longestNightH",
+    "energyPerDayWh"
+   ]
+  },
+  {
+   "id": "term:ops-hours",
+   "kind": "term",
+   "title": "Ops hours",
+   "summary": "Time for which generated power is positive and the selected link condition is available.",
+   "body": "Time for which generated power is positive and the selected link condition is available. It identifies periods when power and communications are available together. Formula: power-positive AND link Caveat: It inherits the uncertainty and availability assumptions of the power and link inputs.",
+   "source": "PLAN_FINAL.md §8.10",
+   "anchor": "ops-hours",
+   "metrics": [
+    "opsHours",
+    "linkPct",
+    "energyPerDayWh"
+   ]
+  },
+  {
+   "id": "term:earth-referenced-azimuth",
+   "kind": "term",
+   "title": "Earth-referenced azimuth",
+   "summary": "At polar sites, azimuth measured in the site tangent frame from the projected +X_MOON_ME reference axis rather than from singular geographic north.",
+   "body": "At polar sites, azimuth measured in the site tangent frame from the projected +X_MOON_ME reference axis rather than from singular geographic north. It provides a stable direction convention where geographic north is not unique. Formula: azimuth = atan2(dot(v, e), dot(v, n_ref)); n_ref = normalize(a - (a dot u)u), a = +X_MOON_ME at abs(latitude) >= 60 deg Caveat: This is a coordinate convention, not an angular-accuracy claim.",
+   "source": "PLAN_FINAL.md §5.1, §8.10; contracts/data_masks.md",
+   "anchor": "earth-referenced-azimuth",
+   "metrics": []
+  },
+  {
+   "id": "term:slope-aspect-uphill",
+   "kind": "term",
+   "title": "Slope, aspect, and uphill azimuth",
+   "summary": "Slope is the angle between the fitted ground normal and local up; uphill azimuth is the direction of steepest ascent.",
+   "body": "Slope is the angle between the fitted ground normal and local up; uphill azimuth is the direction of steepest ascent. They describe how steep the local pad is and how its orientation can affect panels and nearby occlusion. Formula: slope = angle(g, u); uphill_az = (downhill_aspect + 180 deg) mod 360 deg Caveat: Values depend on the fitted DEM plane and its stated fit baseline.",
+   "source": "PLAN_FINAL_R3_DELTA.md D-9; contracts/data_tierb.md",
+   "anchor": "slope-aspect-uphill",
+   "metrics": [
+    "padSlopeDeg"
+   ]
+  },
+  {
+   "id": "term:slope-plane-occluder",
+   "kind": "term",
+   "title": "Slope-plane occluder",
+   "summary": "The fitted local plane is used only inside the DEM raycast start distance to model nearby rising ground.",
+   "body": "The fitted local plane is used only inside the DEM raycast start distance to model nearby rising ground. Nearby uphill ground can hide a low Sun without changing negative or downhill DEM horizons. Formula: N(az) = atan(tan(theta) cos(az - uphill_az) - h / d_min); N_plus = max(0, N); m_eff = max(m_dem, N_plus) only when N_plus > 0 Caveat: It uses the fitted pad plane and d_min metadata; it is not affected by off-nominal lander tilt.",
+   "source": "PLAN_FINAL_R3_DELTA.md D-9; contracts/data_masks.md",
+   "anchor": "slope-plane-occluder",
+   "metrics": [
+    "sunClearanceDeg",
+    "dteMarginDeg"
+   ]
+  },
+  {
+   "id": "term:mast-height",
+   "kind": "term",
+   "title": "Mast height",
+   "summary": "The observer or panel height above the local ground reference used when evaluating the horizon.",
+   "body": "The observer or panel height above the local ground reference used when evaluating the horizon. Raising the observer can expose more low-elevation sky. Formula: spherical-horizon dip is approximately sqrt(2h / R) Caveat: The result remains limited by terrain-mask resolution and local terrain modelling.",
+   "source": "PLAN_FINAL.md §8.10",
+   "anchor": "mast-height",
+   "metrics": [
+    "sunClearanceDeg",
+    "dteMarginDeg"
+   ]
+  },
+  {
+   "id": "term:distance-to-psr",
+   "kind": "term",
+   "title": "Distance to PSR",
+   "summary": "Ground distance to the nearest qualifying permanently shadowed region, a cold trap that may host ice.",
+   "body": "Ground distance to the nearest qualifying permanently shadowed region, a cold trap that may host ice. It provides geographic context between a site and nearby permanent shadow. Formula: distance to nearest qualifying PSR boundary Caveat: The value depends on whether the PSR source is published or derived and on the qualifying-region definition.",
+   "source": "PLAN_FINAL_R3_DELTA.md D-5; contracts/data_terrain_misc.md",
+   "anchor": "distance-to-psr",
+   "metrics": [
+    "psrDistanceKm"
+   ]
+  },
+  {
+   "id": "term:earth-twin",
+   "kind": "term",
+   "title": "Earth Twin",
+   "summary": "An educational terrestrial solar-path comparison for an Earth location at the same latitude as the lunar site.",
+   "body": "An educational terrestrial solar-path comparison for an Earth location at the same latitude as the lunar site. It contrasts lunar illumination with an Earth day at the same latitude. Formula: terrestrial solar position at matching latitude over one local solar day Caveat: It is labelled as an educational approximation and is not lunar ephemeris geometry.",
+   "source": "PLAN_FINAL.md §5.9, §8.10",
+   "anchor": "earth-twin",
+   "metrics": []
+  },
+  {
+   "id": "term:viability-index-verdict",
+   "kind": "term",
+   "title": "Viability Index and verdict",
+   "summary": "A profile-based summary that combines selected criteria and reports GO, MARGINAL, or NO-GO conservatively.",
+   "body": "A profile-based summary that combines selected criteria and reports GO, MARGINAL, or NO-GO conservatively. It summarizes whether the selected scenario meets the stated mission profile. Formula: Viability Index = weighted profile components; verdict uses conservative bounds for hard requirements Caveat: A GO requires conservative bounds; nominal-only results are provisional or marginal as specified by the evaluator.",
+   "source": "PLAN_FINAL.md §5.7, §8.10",
+   "anchor": "viability-index-verdict",
+   "metrics": [
+    "sunlitPct",
+    "linkPct",
+    "longestNightH",
+    "opsHours"
+   ]
+  },
+  {
+   "id": "term:moon-me",
+   "kind": "term",
+   "title": "MOON_ME",
+   "summary": "The DE421-consistent mean-Earth lunar body-fixed frame used for site coordinates and terrain products.",
+   "body": "The DE421-consistent mean-Earth lunar body-fixed frame used for site coordinates and terrain products. It keeps site, terrain, and ephemeris geometry in one stated lunar frame. Formula: body-fixed lunar reference frame Caveat: Frame selection is a provenance requirement, not a terrain-sigma value.",
+   "source": "PLAN_FINAL_R3_DELTA.md D-3; contracts/README.md",
+   "anchor": "moon-me",
+   "metrics": []
+  },
+  {
+   "id": "term:true-north-azimuth",
+   "kind": "term",
+   "title": "True-north azimuth",
+   "summary": "Azimuth referenced to geographic north where that direction is defined away from the lunar poles.",
+   "body": "Azimuth referenced to geographic north where that direction is defined away from the lunar poles. It supports conventional directional interpretation away from the polar singularity. Formula: conversion from the site tangent-frame azimuth to true north where defined Caveat: True north is not used as the polar reference convention.",
+   "source": "PLAN_FINAL.md §5.1; contracts/data_glossary.md",
+   "anchor": "true-north-azimuth",
+   "metrics": []
+  },
+  {
+   "id": "term:east-positive-longitude",
+   "kind": "term",
+   "title": "East-positive longitude",
+   "summary": "Lunar longitude increases eastward in the stated MOON_ME coordinate convention.",
+   "body": "Lunar longitude increases eastward in the stated MOON_ME coordinate convention. It fixes the sign convention for site coordinates and map interpretation. Formula: longitude measured positive east Caveat: This is a coordinate convention, not a positional-accuracy claim.",
+   "source": "contracts/README.md; contracts/data_glossary.md",
+   "anchor": "east-positive-longitude",
+   "metrics": []
+  },
+  {
+   "id": "validation:g1-de421-lunar-frame-validation",
+   "kind": "validation",
+   "title": "G1 - DE421 lunar frame validation",
+   "summary": "- Result: PASS for the checked thresholds. The comparison uses SpiceyPy 8.4.0 pxform and Skyfield 1.55 PlanetaryConstants at 2023-01-01T00:00:00Z, 2025-03-06T17:28:50Z, and 2030-12-31T23:00:00Z. - Frames: MOON_PA_DE421 to MOON_ME_DE421 and ",
+   "body": "- Result: PASS for the checked thresholds. The comparison uses SpiceyPy 8.4.0 pxform and Skyfield 1.55 PlanetaryConstants at 2023-01-01T00:00:00Z, 2025-03-06T17:28:50Z, and 2030-12-31T23:00:00Z. - Frames: MOON_PA_DE421 to MOON_ME_DE421 and the reverse. The DE421 mean-Earth frame is fixed to the principal-axis frame by the 3-2-1 Euler rotation in moon_080317.tf. - Maximum matrix absolute error: 3.480837840186268e-11 (limit < 1e-9). Maximum angular direction error: 3.57755385468222e-11 rad (limit < 1e-6 rad). - Maximum PA-to-ME angular residual: 4.239636467986046e-15 deg; maximum ME-to-PA residual: 4.412742011943044e-15 deg. Maximum orthogonality error: 6.661338147750939e-16 (limit <= 1e-9); minimum determinant: 0.9999999999999996. - PA-ME surface offset: 874.7474688514714 m (about 874.75 m). Round-trip vector error is 1.149714193796099e-9 m; R3 defines no separate round-trip tolerance. - Both implementations use the same DE421 kernel inputs but independently compute the transformations. Kernel filenames, sizes, SHA-256 identifiers, frame metadata, epoch results, and software versions are recorded in [the machine-readable G1 evidence](../pipeline/reports/g1_lunar_frames.json).",
+   "source": "docs/validation.md",
+   "anchor": "g1-de421-lunar-frame-validation",
+   "metrics": []
+  },
+  {
+   "id": "validation:g2-hourly-ephemeris-hermite-validation",
+   "kind": "validation",
+   "title": "G2 - Hourly ephemeris Hermite validation",
+   "summary": "- Epochs: 10000 (deterministic seed 421) - Sun maximum direction residual: 0.000006502 deg - Earth maximum direction residual: 0.000002091 deg - Gate: PASS (< 0.001 deg; measured 0.000006502 deg)",
+   "body": "- Epochs: 10000 (deterministic seed 421) - Sun maximum direction residual: 0.000006502 deg - Earth maximum direction residual: 0.000002091 deg - Gate: PASS (< 0.001 deg; measured 0.000006502 deg)",
+   "source": "docs/validation.md",
+   "anchor": "g2-hourly-ephemeris-hermite-validation",
+   "metrics": []
+  },
+  {
+   "id": "validation:g7-chandrayaan-3-touchdown-sun-elevation",
+   "kind": "validation",
+   "title": "G7 - Chandrayaan-3 touchdown Sun elevation",
+   "summary": "- Calculation input: 2023-08-23T12:33:00Z (minute precision), 69.373 degrees S, 32.319 degrees E, 0 m on the spherical lunar surface. - Calculation geometry: LT+S apparent Moon-centred Sun vector minus the site vector, evaluated in MOON_ME_",
+   "body": "- Calculation input: 2023-08-23T12:33:00Z (minute precision), 69.373 degrees S, 32.319 degrees E, 0 m on the spherical lunar surface. - Calculation geometry: LT+S apparent Moon-centred Sun vector minus the site vector, evaluated in MOON_ME_DE421; this is a Sun-centre elevation above the local spherical horizontal, with no terrain horizon applied. - Calculated Sun-centre elevation: 8.612140050356778 degrees. - Recorded, unverified comparison input: 8.75 +/- 0.25 degrees; the computed difference is 0.13785994964322157 degrees. This is not a numerical PASS criterion. - Result: BLOCKED. The R3 plan records the 8.75-degree comparison value but does not cite a primary source. Review of the ISRO mission and mission-detail pages did not locate a statement of 8.75 degrees, +/-0.25 degrees, or a Sun-centre/limb convention. - Coordinate provenance is deliberately distinct: the computation uses the catalog/model assumption 69.373 S, 32.319 E; NASA/LROC reports an observed approximate fix of 69.3741 S, 32.32 E; ISRO lists the planned target as 69.367621 S, 32.348126 E. - The reported 6-degree threshold and the 2-4 September operations interpretation are also source-unverified. The calculated crossing is retained as a model output, not a passed timeline validation.",
+   "source": "docs/validation.md",
+   "anchor": "g7-chandrayaan-3-touchdown-sun-elevation",
+   "metrics": []
+  },
+  {
+   "id": "validation:g3b-dsn-moon-elevation",
+   "kind": "validation",
+   "title": "G3b - DSN Moon elevation",
+   "summary": "- The locked direct-geometry check remains < 0.1 deg against Horizons. - The published dsn.bin stores elevations quantized in 0.5-degree steps. Its decoded samples are compared separately at the same Horizons epochs; the artifact tolerance ",
+   "body": "- The locked direct-geometry check remains < 0.1 deg against Horizons. - The published dsn.bin stores elevations quantized in 0.5-degree steps. Its decoded samples are compared separately at the same Horizons epochs; the artifact tolerance proposal is < 0.35 deg (the locked 0.1-degree geometry allowance plus the maximum 0.25-degree half-step quantization error). This proposal does not change the locked G3b criterion.",
+   "source": "docs/validation.md",
+   "anchor": "g3b-dsn-moon-elevation",
+   "metrics": []
+  },
+  {
+   "id": "validation:g7-im-2-touchdown-geometry",
+   "kind": "validation",
+   "title": "G7 - IM-2 touchdown geometry",
+   "summary": "- The G7 report deterministically evaluates Sun and Earth centre elevations at 2025-03-06T17:28:50Z, 84.7906 S, 29.1957 E using the catalog landing coordinate. These are calculation outputs, not independently sourced mission conditions. NAS",
+   "body": "- The G7 report deterministically evaluates Sun and Earth centre elevations at 2025-03-06T17:28:50Z, 84.7906 S, 29.1957 E using the catalog landing coordinate. These are calculation outputs, not independently sourced mission conditions. NASA confirms an approximate touchdown around 17:30 UTC, landing in a crater, the lander on its side, and the inability to recharge solar cells; it does not establish the catalog second, coordinates, or a numerical touchdown Sun/Earth elevation.",
+   "source": "docs/validation.md",
+   "anchor": "g7-im-2-touchdown-geometry",
+   "metrics": []
+  },
+  {
+   "id": "validation:aggregate-g0-g11-report",
+   "kind": "validation",
+   "title": "Aggregate G0-G11 report",
+   "summary": "web/public/data/validation/report.json is generated offline by lumen_pipeline.validation.report.write_validation_report(). It only marks a gate PASS when its required measured evidence artifact is available. In particular, G5 remains BLOCKE",
+   "body": "web/public/data/validation/report.json is generated offline by lumen_pipeline.validation.report.write_validation_report(). It only marks a gate PASS when its required measured evidence artifact is available. In particular, G5 remains BLOCKED without independent PGDA map-pixel references, G10 remains BLOCKED without terrain Monte Carlo sigma and Tier-B calibration artifacts, and G7 remains BLOCKED because its mission comparisons are unsupported. The R3 near-zone helper now preserves the distant DEM horizon whenever the near-zone contribution is zero, including negative and unavailable values.",
+   "source": "docs/validation.md",
+   "anchor": "aggregate-g0-g11-report",
+   "metrics": []
+  },
+  {
+   "id": "limitation:scope-from-plan-final-10-the-in-app-scope-statement",
+   "kind": "limitation",
+   "title": "Scope (from PLAN_FINAL §10 — the in-app scope statement)",
+   "summary": "LUMEN computes geometric Sun and Earth availability, DSN coverage and a generic power estimate. It does not compute link budgets, data rates, thermal survival or vehicle-specific array performance. DEM resolution bounds the near-field horiz",
+   "body": "LUMEN computes geometric Sun and Earth availability, DSN coverage and a generic power estimate. It does not compute link budgets, data rates, thermal survival or vehicle-specific array performance. DEM resolution bounds the near-field horizon and pad slope; LOLA errors propagate into horizons (quantified through σ); lander-scale rocks are not modelled; Tier C assumes a smooth Moon; DSN masks are simplified to one elevation threshold; Tier-B snap error is up to about 2.8 km in the 4 km band.",
+   "source": "docs/limitations.md",
+   "anchor": "scope-from-plan-final-10-the-in-app-scope-statement",
+   "metrics": []
+  },
+  {
+   "id": "limitation:validation",
+   "kind": "limitation",
+   "title": "Validation",
+   "summary": "- The validation report (web/public/data/validation/report.json, shown on the Methodology page) is NOT_READY: 4 of 14 gates pass (G1, G2, G3, G3b); G0, G4, G6, G8, G9 and G11 are pending; G5, G7 and G10 are blocked. A gate is PASS only when",
+   "body": "- The validation report (web/public/data/validation/report.json, shown on the Methodology page) is NOT_READY: 4 of 14 gates pass (G1, G2, G3, G3b); G0, G4, G6, G8, G9 and G11 are pending; G5, G7 and G10 are blocked. A gate is PASS only when a recorded check meets its criterion. - G7 (Chandrayaan-3 Sun elevation): the 8.75° ± 0.25° reference value has no primary source in the repository, so agreement with it is not independent validation. - G8 (performance on the demo laptop) has not been measured on the demo machine. Per-frame costs measured during development (tilt drag p95 0.9 ms; slip-drag preview p95 3.5 ms; hover/scrub below 1 ms) are well inside the budgets, but are not the gate evidence.",
+   "source": "docs/limitations.md",
+   "anchor": "validation",
+   "metrics": []
+  },
+  {
+   "id": "limitation:interface",
+   "kind": "limitation",
+   "title": "Interface",
+   "summary": "- The Windows Table, Pointing & Link and the Power/Barcode charts are on the Stand here page only. The earlier cockpit (Answer Strip, Definitions Bar, Scan, Mission Profile, Touchdown Pad, Quick Answer card) is in the repository but not mou",
+   "body": "- The Windows Table, Pointing & Link and the Power/Barcode charts are on the Stand here page only. The earlier cockpit (Answer Strip, Definitions Bar, Scan, Mission Profile, Touchdown Pad, Quick Answer card) is in the repository but not mounted in the live app. - The live pages show one 30-day window (14 days on Compare / Slip) that starts on the Start date in the header (default 8 Feb 2027). Any whole UTC day from 2 Jan 2023 to 31 Oct 2030 can be chosen — the published ephemeris and DSN files end on 31 Dec 2030. The date applies to every page and resets to the default on reload; there is no time-of-day or end-date control. - Persona (Planner / Educator) switching is not in the live pages; Educator wording exists in the unmounted cockpit. - Ask LUMEN answers only from the project's own written material (glossary, plan rationale, validation report, docs/ask_help.md); it is search and templates, not a language model, and says so when it has no answer.",
+   "source": "docs/limitations.md",
+   "anchor": "interface",
+   "metrics": []
+  },
+  {
+   "id": "help:are-the-numbers-on-the-pages-real",
+   "kind": "status",
+   "title": "Are the numbers on the pages real?",
+   "summary": "It depends on the mode LUMEN is running in. With real data, the pages wait for the ephemeris, Deep Space Network series and terrain masks and show numbers from the real calculation engine; Stand here says where each view comes from (\"Real engine · terrain mask\", or \"smooth Moon\" when a site or array height has no terrain data). Without real data the pages show the design's sample values and say so (\"Design preview · sample values\"). Sites with a validated terrain mask (IM-2 and Chandrayaan-3) use a default horizon uncertainty of 0.1° (badge \"Terrain mask · σ default\"), so they show ± values and [low, high] ranges; this default is a planning value from the plan, not a measured or calibrated uncertainty. Other sites show \"σ pending\" or the smooth-Moon label and no ±. The engine itself is checked against reference data (see the validation report).",
+   "body": "It depends on the mode LUMEN is running in. With real data, the pages wait for the ephemeris, Deep Space Network series and terrain masks and show numbers from the real calculation engine; Stand here says where each view comes from (\"Real engine · terrain mask\", or \"smooth Moon\" when a site or array height has no terrain data). Without real data the pages show the design's sample values and say so (\"Design preview · sample values\"). Sites with a validated terrain mask (IM-2 and Chandrayaan-3) use a default horizon uncertainty of 0.1° (badge \"Terrain mask · σ default\"), so they show ± values and [low, high] ranges; this default is a planning value from the plan, not a measured or calibrated uncertainty. Other sites show \"σ pending\" or the smooth-Moon label and no ±. The engine itself is checked against reference data (see the validation report).",
+   "source": "live pages (\"Design preview · sample values\" labels)",
+   "anchor": "are-the-numbers-on-the-pages-real",
+   "metrics": [],
+   "tags": [
+    "real",
+    "sample",
+    "fake",
+    "mock",
+    "placeholder",
+    "accurate",
+    "trust",
+    "preview",
+    "data"
+   ]
+  },
+  {
+   "id": "help:what-questions-can-lumen-answer",
+   "kind": "concept",
+   "title": "What questions can LUMEN answer?",
+   "summary": "LUMEN answers five kinds of question for the lunar south pole. A planner: is the Sun up here at a given time, how much of it, and for how long? A comms engineer: when can we talk to Earth, where do we point, and is a Deep Space Network station listening? A planner after a delay: we slipped N days, which sites and dates still meet our profile? Anyone with a coordinate: just give me the numbers for this latitude, longitude and time. An educator or visitor: why is the south pole so different from Apollo, and from Earth?",
+   "body": "LUMEN answers five kinds of question for the lunar south pole. A planner: is the Sun up here at a given time, how much of it, and for how long? A comms engineer: when can we talk to Earth, where do we point, and is a Deep Space Network station listening? A planner after a delay: we slipped N days, which sites and dates still meet our profile? Anyone with a coordinate: just give me the numbers for this latitude, longitude and time. An educator or visitor: why is the south pole so different from Apollo, and from Earth?",
+   "source": "PLAN_FINAL §1.3",
+   "anchor": "what-questions-can-lumen-answer",
+   "metrics": [],
+   "tags": [
+    "purpose",
+    "what is lumen",
+    "what does it do",
+    "who is it for",
+    "who",
+    "tool",
+    "audience",
+    "users",
+    "use cases",
+    "goal"
+   ]
+  },
+  {
+   "id": "help:how-do-i-move-between-pages",
+   "kind": "howto",
+   "title": "How do I move between pages?",
+   "summary": "Use the links in the header: Orbit, Stand here, Compare and Slip explorer. You can also press / to open Ask LUMEN and type \"go to compare\", \"go to orbit\", \"stand here\" or \"go to slip explorer\".",
+   "body": "Use the links in the header: Orbit, Stand here, Compare and Slip explorer. You can also press / to open Ask LUMEN and type \"go to compare\", \"go to orbit\", \"stand here\" or \"go to slip explorer\".",
+   "source": "live pages (header navigation)",
+   "anchor": "how-do-i-move-between-pages",
+   "metrics": [],
+   "tags": [
+    "navigate",
+    "navigation",
+    "menu",
+    "pages",
+    "views",
+    "switch",
+    "go to",
+    "open",
+    "tabs"
+   ]
+  },
+  {
+   "id": "help:how-do-i-use-the-orbit-page",
+   "kind": "howto",
+   "title": "How do I use the Orbit page?",
+   "summary": "Orbit shows the Moon from space. Drag to rotate it, scroll or use the + and − buttons to zoom, and use the reset button to return. Switch between the whole Moon and the south pole with the view buttons. The Sun orbits the Moon once a month and passes behind it, and Earth sits fixed over the near side because the Moon is tidally locked. Arrows at the edge point to the Sun or Earth when they leave the frame.",
+   "body": "Orbit shows the Moon from space. Drag to rotate it, scroll or use the + and − buttons to zoom, and use the reset button to return. Switch between the whole Moon and the south pole with the view buttons. The Sun orbits the Moon once a month and passes behind it, and Earth sits fixed over the near side because the Moon is tidally locked. Arrows at the edge point to the Sun or Earth when they leave the frame.",
+   "source": "live pages (Orbit)",
+   "anchor": "how-do-i-use-the-orbit-page",
+   "metrics": [],
+   "tags": [
+    "orbit",
+    "globe",
+    "moon",
+    "rotate",
+    "zoom",
+    "spin",
+    "drag",
+    "scroll",
+    "map",
+    "south pole",
+    "view"
+   ]
+  },
+  {
+   "id": "help:how-do-i-choose-a-landing-site",
+   "kind": "howto",
+   "title": "How do I choose a landing site?",
+   "summary": "Click a site in the Curated sites list on the Orbit page, or click one of the site buttons at the top of Stand here and Slip explorer. You can also press / and type the site's name, for example \"show IM-2\" or \"malapert\". The chosen site is shared by every page.",
+   "body": "Click a site in the Curated sites list on the Orbit page, or click one of the site buttons at the top of Stand here and Slip explorer. You can also press / and type the site's name, for example \"show IM-2\" or \"malapert\". The chosen site is shared by every page.",
+   "source": "live pages (Orbit, Stand here)",
+   "anchor": "how-do-i-choose-a-landing-site",
+   "metrics": [],
+   "tags": [
+    "select",
+    "pick",
+    "choose",
+    "site",
+    "landing site",
+    "location",
+    "change site",
+    "switch site",
+    "go to site"
+   ]
+  },
+  {
+   "id": "help:how-do-i-look-up-my-own-coordinates",
+   "kind": "howto",
+   "title": "How do I look up my own coordinates?",
+   "summary": "On the Orbit page, enter a latitude and longitude in \"Go to coordinates\" (decimal degrees, or add S, N, E or W) and choose \"Drop pin here\". You can also click anywhere on the Moon to drop a pin. The pin becomes a custom site you can stand on or compare. For a custom point the values are estimated from a simplified terrain model.",
+   "body": "On the Orbit page, enter a latitude and longitude in \"Go to coordinates\" (decimal degrees, or add S, N, E or W) and choose \"Drop pin here\". You can also click anywhere on the Moon to drop a pin. The pin becomes a custom site you can stand on or compare. For a custom point the values are estimated from a simplified terrain model.",
+   "source": "live pages (Orbit, \"Go to coordinates\")",
+   "anchor": "how-do-i-look-up-my-own-coordinates",
+   "metrics": [],
+   "tags": [
+    "coordinates",
+    "latitude",
+    "longitude",
+    "lat lon",
+    "pin",
+    "drop pin",
+    "custom",
+    "my own place",
+    "point"
+   ]
+  },
+  {
+   "id": "help:what-does-the-stand-here-page-show",
+   "kind": "howto",
+   "title": "What does the Stand here page show?",
+   "summary": "Stand here is the view from the surface of the chosen site: the terrain skyline all the way around, with the Sun's path (amber) and the Earth's path (sage) over a lunar month as dashed lines. Hover over the panorama for the bearing and the skyline height at that point. The panels below give the Sun's and Earth's elevation and how long until each sets, at the time you have scrubbed to.",
+   "body": "Stand here is the view from the surface of the chosen site: the terrain skyline all the way around, with the Sun's path (amber) and the Earth's path (sage) over a lunar month as dashed lines. Hover over the panorama for the bearing and the skyline height at that point. The panels below give the Sun's and Earth's elevation and how long until each sets, at the time you have scrubbed to.",
+   "source": "live pages (Stand here)",
+   "anchor": "what-does-the-stand-here-page-show",
+   "metrics": [],
+   "tags": [
+    "stand here",
+    "horizon",
+    "panorama",
+    "skyline",
+    "sun path",
+    "earth path",
+    "surface view",
+    "what you would see",
+    "sets in"
+   ]
+  },
+  {
+   "id": "help:how-do-i-scrub-or-play-through-time",
+   "kind": "howto",
+   "title": "How do I scrub or play through time?",
+   "summary": "Use the Play button to advance time, and drag the slider to scrub a full lunar month. On Orbit the Sun loops around the Moon as you scrub; on Stand here the Sun and Earth move along their dashed paths.",
+   "body": "Use the Play button to advance time, and drag the slider to scrub a full lunar month. On Orbit the Sun loops around the Moon as you scrub; on Stand here the Sun and Earth move along their dashed paths.",
+   "source": "live pages (Orbit timeline, Stand here)",
+   "anchor": "how-do-i-scrub-or-play-through-time",
+   "metrics": [],
+   "tags": [
+    "time",
+    "scrub",
+    "play",
+    "timeline",
+    "slider",
+    "clock",
+    "date",
+    "animate",
+    "month",
+    "advance",
+    "pause"
+   ]
+  },
+  {
+   "id": "help:what-does-the-array-height-mast-control-do",
+   "kind": "howto",
+   "title": "What does the array height (mast) control do?",
+   "summary": "It sets how high above the ground the solar array sits. A taller mast can see over nearby terrain, so the horizon line drops and more of the Sun and Earth can be visible. The page offers a few heights (0, 1, 2, 5 and 10 m).",
+   "body": "It sets how high above the ground the solar array sits. A taller mast can see over nearby terrain, so the horizon line drops and more of the Sun and Earth can be visible. The page offers a few heights (0, 1, 2, 5 and 10 m).",
+   "source": "live pages (Stand here, Orbit) and PLAN_FINAL §2",
+   "anchor": "what-does-the-array-height-mast-control-do",
+   "metrics": [],
+   "tags": [
+    "mast",
+    "array",
+    "height",
+    "solar array",
+    "panel height",
+    "raise",
+    "taller",
+    "1 m",
+    "2 m",
+    "5 m",
+    "10 m"
+   ]
+  },
+  {
+   "id": "help:how-do-i-compare-sites",
+   "kind": "howto",
+   "title": "How do I compare sites?",
+   "summary": "Open Compare and pick up to four sites with the chips. Every number is for the same 14-day window, shown side by side, and the best value in each row is marked. Picking a fifth site replaces the oldest, and at least one stays selected. Each site has a \"Stand here\" link to look at its horizon.",
+   "body": "Open Compare and pick up to four sites with the chips. Every number is for the same 14-day window, shown side by side, and the best value in each row is marked. Picking a fifth site replaces the oldest, and at least one stays selected. Each site has a \"Stand here\" link to look at its horizon.",
+   "source": "live pages (Compare)",
+   "anchor": "how-do-i-compare-sites",
+   "metrics": [],
+   "tags": [
+    "compare",
+    "comparison",
+    "versus",
+    "side by side",
+    "several sites",
+    "two sites",
+    "four sites",
+    "table",
+    "best"
+   ]
+  },
+  {
+   "id": "help:what-is-the-slip-explorer-and-how-do-i-use-it",
+   "kind": "howto",
+   "title": "What is the Slip explorer and how do I use it?",
+   "summary": "Slip explorer answers \"what if we slip?\". Each bar is a 14-day window that starts that many days after the base date, so you can see how a later landing changes sunlight and the link home. Slide or click a bar to pick a slip, compare it with landing on time (the dashed baseline), and use \"Jump to it\" for the best window. You can also press / and type \"slip 9 days\".",
+   "body": "Slip explorer answers \"what if we slip?\". Each bar is a 14-day window that starts that many days after the base date, so you can see how a later landing changes sunlight and the link home. Slide or click a bar to pick a slip, compare it with landing on time (the dashed baseline), and use \"Jump to it\" for the best window. You can also press / and type \"slip 9 days\".",
+   "source": "live pages (Slip explorer)",
+   "anchor": "what-is-the-slip-explorer-and-how-do-i-use-it",
+   "metrics": [],
+   "tags": [
+    "slip",
+    "delay",
+    "postpone",
+    "later",
+    "launch delay",
+    "what if",
+    "shift landing",
+    "push back",
+    "late"
+   ]
+  },
+  {
+   "id": "help:how-do-i-slip-the-landing-with-the-keyboard",
+   "kind": "howto",
+   "title": "How do I slip the landing with the keyboard?",
+   "summary": "Press / to open Ask LUMEN, then type for example \"slip 9 days\", \"delay 3 days\" or \"slip 0\" to go back to on time. The slip can be from 0 to 27 days; anything outside that is clamped and the box tells you.",
+   "body": "Press / to open Ask LUMEN, then type for example \"slip 9 days\", \"delay 3 days\" or \"slip 0\" to go back to on time. The slip can be from 0 to 27 days; anything outside that is clamped and the box tells you.",
+   "source": "Ask LUMEN",
+   "anchor": "how-do-i-slip-the-landing-with-the-keyboard",
+   "metrics": [],
+   "tags": [
+    "slip",
+    "keyboard",
+    "command",
+    "type",
+    "shortcut",
+    "delay days",
+    "move days",
+    "reset slip",
+    "back to on time",
+    "on time",
+    "undo slip",
+    "no delay",
+    "zero"
+   ]
+  },
+  {
+   "id": "help:how-do-i-use-ask-lumen",
+   "kind": "howto",
+   "title": "How do I use Ask LUMEN?",
+   "summary": "Press / anywhere (not while typing in a field) or use the Ask button in the header. Type a command (\"go to compare\", \"show IM-2\", \"slip 9 days\"), a term (\"what is libration\"), or a question (\"how is the sunlight percentage calculated?\", \"why is this ± so big?\"). It works offline. It is search and fixed explanations, not a chatbot: it only answers from LUMEN's own glossary, plan and validation notes, and it tells you when it has no answer. Esc closes it.",
+   "body": "Press / anywhere (not while typing in a field) or use the Ask button in the header. Type a command (\"go to compare\", \"show IM-2\", \"slip 9 days\"), a term (\"what is libration\"), or a question (\"how is the sunlight percentage calculated?\", \"why is this ± so big?\"). It works offline. It is search and fixed explanations, not a chatbot: it only answers from LUMEN's own glossary, plan and validation notes, and it tells you when it has no answer. Esc closes it.",
+   "source": "Ask LUMEN",
+   "anchor": "how-do-i-use-ask-lumen",
+   "metrics": [],
+   "tags": [
+    "ask",
+    "help",
+    "assistant",
+    "slash",
+    "search",
+    "commands",
+    "shortcut",
+    "keyboard",
+    "how to use"
+   ]
+  },
+  {
+   "id": "help:how-do-i-switch-between-light-and-dark-mode",
+   "kind": "howto",
+   "title": "How do I switch between light and dark mode?",
+   "summary": "Use the theme button in the header (\"Light mode\" or \"Dark mode\"). Your choice is remembered on this device.",
+   "body": "Use the theme button in the header (\"Light mode\" or \"Dark mode\"). Your choice is remembered on this device.",
+   "source": "live pages (header)",
+   "anchor": "how-do-i-switch-between-light-and-dark-mode",
+   "metrics": [],
+   "tags": [
+    "theme",
+    "light",
+    "dark",
+    "mode",
+    "colour",
+    "color",
+    "appearance",
+    "contrast"
+   ]
+  },
+  {
+   "id": "help:what-do-the-amber-and-sage-colours-mean",
+   "kind": "howto",
+   "title": "What do the amber and sage colours mean?",
+   "summary": "Amber is the Sun and sage (green) is the Earth: dashed lines trace their paths. On the timeline, the bars show Sunlight, Earth in view and DSN contact. Colour is paired with a label or pattern, so nothing relies on colour alone.",
+   "body": "Amber is the Sun and sage (green) is the Earth: dashed lines trace their paths. On the timeline, the bars show Sunlight, Earth in view and DSN contact. Colour is paired with a label or pattern, so nothing relies on colour alone.",
+   "source": "live pages (Stand here legend)",
+   "anchor": "what-do-the-amber-and-sage-colours-mean",
+   "metrics": [],
+   "tags": [
+    "colour",
+    "color",
+    "legend",
+    "amber",
+    "sage",
+    "green",
+    "orange",
+    "sun",
+    "earth",
+    "key"
+   ]
+  },
+  {
+   "id": "help:what-does-sets-in-9-d-6-h-mean",
+   "kind": "howto",
+   "title": "What does \"Sets in 9 d 6 h\" mean?",
+   "summary": "It is the time from the moment you have scrubbed to until the Sun (or Earth) next dips below the horizon at this site. Move the time slider and the countdown changes.",
+   "body": "It is the time from the moment you have scrubbed to until the Sun (or Earth) next dips below the horizon at this site. Move the time slider and the countdown changes.",
+   "source": "live pages (Stand here)",
+   "anchor": "what-does-sets-in-9-d-6-h-mean",
+   "metrics": [],
+   "tags": [
+    "sets in",
+    "countdown",
+    "rises",
+    "sunset",
+    "earthset",
+    "time until",
+    "how long"
+   ]
+  },
+  {
+   "id": "help:what-do-the-labels-good-marginal-and-no-dte-on-a-site-mean",
+   "kind": "howto",
+   "title": "What do the labels Good, Marginal and No DTE on a site mean?",
+   "summary": "They are a quick rating shown on each site (sample values for now): Good, Marginal, or \"No DTE\", meaning no direct-to-Earth contact (for example on the far side). The full rule for LUMEN's GO / MARGINAL / NO-GO verdict is described under \"How is the verdict decided?\".",
+   "body": "They are a quick rating shown on each site (sample values for now): Good, Marginal, or \"No DTE\", meaning no direct-to-Earth contact (for example on the far side). The full rule for LUMEN's GO / MARGINAL / NO-GO verdict is described under \"How is the verdict decided?\".",
+   "source": "live pages (site list) and glossary (DTE margin)",
+   "anchor": "what-do-the-labels-good-marginal-and-no-dte-on-a-site-mean",
+   "metrics": [],
+   "tags": [
+    "good",
+    "marginal",
+    "tag",
+    "badge",
+    "site rating",
+    "status",
+    "go no go"
+   ]
+  },
+  {
+   "id": "help:what-does-lumen-not-calculate",
+   "kind": "concept",
+   "title": "What does LUMEN not calculate?",
+   "summary": "LUMEN is about geometry: where the Sun and Earth are, whether terrain blocks them, and what that means for light and contact. It does not compute a link budget, data rate or signal margin, and it does not model thermal behaviour. Its power numbers use a generic panel model, not any specific lander's array.",
+   "body": "LUMEN is about geometry: where the Sun and Earth are, whether terrain blocks them, and what that means for light and contact. It does not compute a link budget, data rate or signal margin, and it does not model thermal behaviour. Its power numbers use a generic panel model, not any specific lander's array.",
+   "source": "PLAN_FINAL §5.5 and §9 (Cut)",
+   "anchor": "what-does-lumen-not-calculate",
+   "metrics": [],
+   "tags": [
+    "limits",
+    "scope",
+    "not included",
+    "limitations",
+    "out of scope",
+    "what it doesn't do",
+    "link budget",
+    "thermal",
+    "data rate"
+   ]
+  },
+  {
+   "id": "help:how-is-sun-elevation-calculated",
+   "kind": "method",
+   "title": "How is Sun elevation calculated?",
+   "summary": "Sun elevation is the angle of the Sun's centre above the local horizontal plane. The Sun's position comes from a precomputed ephemeris, interpolated smoothly in time (cubic Hermite, using stored position and velocity). LUMEN subtracts the site's position, normalises the direction, and rotates it into the site's own frame to read off the elevation and azimuth.",
+   "body": "Sun elevation is the angle of the Sun's centre above the local horizontal plane. The Sun's position comes from a precomputed ephemeris, interpolated smoothly in time (cubic Hermite, using stored position and velocity). LUMEN subtracts the site's position, normalises the direction, and rotates it into the site's own frame to read off the elevation and azimuth.",
+   "source": "PLAN_FINAL §5.2 and glossary (Sun elevation)",
+   "anchor": "how-is-sun-elevation-calculated",
+   "metrics": [],
+   "tags": [
+    "sun elevation",
+    "sun angle",
+    "how high",
+    "altitude",
+    "calculated",
+    "computed",
+    "how do you get",
+    "ephemeris",
+    "position"
+   ]
+  },
+  {
+   "id": "help:how-is-the-direction-azimuth-defined-at-the-pole",
+   "kind": "method",
+   "title": "How is the direction (azimuth) defined at the pole?",
+   "summary": "Near the pole \"east\" is undefined (every direction is south), so LUMEN does not use East = ẑ × up. Instead each site has a reference axis: toward 0°E (the mean direction to Earth) for sites poleward of 60°, otherwise the lunar north axis. Azimuth is measured from that reference. At polar sites this is shown as \"Earth-referenced azimuth\"; elsewhere it is true azimuth.",
+   "body": "Near the pole \"east\" is undefined (every direction is south), so LUMEN does not use East = ẑ × up. Instead each site has a reference axis: toward 0°E (the mean direction to Earth) for sites poleward of 60°, otherwise the lunar north axis. Azimuth is measured from that reference. At polar sites this is shown as \"Earth-referenced azimuth\"; elsewhere it is true azimuth.",
+   "source": "PLAN_FINAL §5.1",
+   "anchor": "how-is-the-direction-azimuth-defined-at-the-pole",
+   "metrics": [],
+   "tags": [
+    "azimuth",
+    "direction",
+    "compass",
+    "north",
+    "bearing",
+    "earth-referenced",
+    "pole",
+    "frame",
+    "singular"
+   ]
+  },
+  {
+   "id": "help:how-often-does-lumen-sample-time-and-how-exact-are-the-event-times",
+   "kind": "method",
+   "title": "How often does LUMEN sample time, and how exact are the event times?",
+   "summary": "Near the horizon (within about ±3° of clearance) it steps every 2 minutes; elsewhere every 60 minutes. The step is chosen from how fast the Sun or Earth is moving, so nothing is skipped. When something changes (a sunset, an Earthset, the disk crossing 0%, 50% or 100%), LUMEN narrows in on the exact moment to about 10 seconds.",
+   "body": "Near the horizon (within about ±3° of clearance) it steps every 2 minutes; elsewhere every 60 minutes. The step is chosen from how fast the Sun or Earth is moving, so nothing is skipped. When something changes (a sunset, an Earthset, the disk crossing 0%, 50% or 100%), LUMEN narrows in on the exact moment to about 10 seconds.",
+   "source": "PLAN_FINAL §5.3",
+   "anchor": "how-often-does-lumen-sample-time-and-how-exact-are-the-event-times",
+   "metrics": [],
+   "tags": [
+    "sampling",
+    "time step",
+    "resolution",
+    "accuracy",
+    "precision",
+    "events",
+    "bisect",
+    "minutes",
+    "how often"
+   ]
+  },
+  {
+   "id": "help:how-is-how-much-of-the-sun-is-visible-calculated",
+   "kind": "method",
+   "title": "How is \"how much of the Sun is visible\" calculated?",
+   "summary": "The Sun and Earth are not points: LUMEN slices each disk into chords (24 for the Sun, 32 for Earth), scales each chord's width for the viewing angle, and compares each chord against the terrain horizon in its own direction. The share of chords above the horizon is the visible fraction of the disk, from 0 to 1. This is why a Sun skimming a ridge can be partly visible.",
+   "body": "The Sun and Earth are not points: LUMEN slices each disk into chords (24 for the Sun, 32 for Earth), scales each chord's width for the viewing angle, and compares each chord against the terrain horizon in its own direction. The share of chords above the horizon is the visible fraction of the disk, from 0 to 1. This is why a Sun skimming a ridge can be partly visible.",
+   "source": "PLAN_FINAL §5.4",
+   "anchor": "how-is-how-much-of-the-sun-is-visible-calculated",
+   "metrics": [],
+   "tags": [
+    "disk",
+    "disk fraction",
+    "partial sun",
+    "visible",
+    "percent of sun",
+    "terrain blocking",
+    "horizon",
+    "grazing",
+    "chord"
+   ]
+  },
+  {
+   "id": "help:how-is-the-sunlit-percentage-calculated",
+   "kind": "method",
+   "title": "How is the sunlit percentage calculated?",
+   "summary": "A moment counts as sunlit when enough of the Sun's disk clears the terrain horizon; the threshold is a definition you can see and edit (for example \"Sun at least 50% of the disk\"). Sunlit % is the share of the chosen window that meets it. To show how sure we are, LUMEN evaluates the window three times — with the terrain horizon lowered by its uncertainty, as is, and raised by it — and reports the nominal value with a [low, high] range.",
+   "body": "A moment counts as sunlit when enough of the Sun's disk clears the terrain horizon; the threshold is a definition you can see and edit (for example \"Sun at least 50% of the disk\"). Sunlit % is the share of the chosen window that meets it. To show how sure we are, LUMEN evaluates the window three times — with the terrain horizon lowered by its uncertainty, as is, and raised by it — and reports the nominal value with a [low, high] range.",
+   "source": "PLAN_FINAL §5.4, §5.8 and glossary",
+   "anchor": "how-is-the-sunlit-percentage-calculated",
+   "metrics": [],
+   "tags": [
+    "sunlit",
+    "sunlight",
+    "percent",
+    "percentage",
+    "time in sun",
+    "light fraction",
+    "how much sun",
+    "availability",
+    "definition"
+   ]
+  },
+  {
+   "id": "help:how-is-the-link-to-earth-decided",
+   "kind": "method",
+   "title": "How is the link to Earth decided?",
+   "summary": "Earth counts as visible when at least 50% of its disk is above the terrain horizon and the margin (DTE margin) is at least a threshold (default 1°). With DSN awareness on, the link is up only when Earth is visible AND at least one Deep Space Network complex (Goldstone, Canberra or Madrid) sees the Moon above its own horizon mask (default 10°). LUMEN also reports Earth's azimuth and elevation, range, one-way light time and disk fraction.",
+   "body": "Earth counts as visible when at least 50% of its disk is above the terrain horizon and the margin (DTE margin) is at least a threshold (default 1°). With DSN awareness on, the link is up only when Earth is visible AND at least one Deep Space Network complex (Goldstone, Canberra or Madrid) sees the Moon above its own horizon mask (default 10°). LUMEN also reports Earth's azimuth and elevation, range, one-way light time and disk fraction.",
+   "source": "PLAN_FINAL §5.5",
+   "anchor": "how-is-the-link-to-earth-decided",
+   "metrics": [],
+   "tags": [
+    "link",
+    "contact",
+    "communications",
+    "comms",
+    "dsn",
+    "earth visible",
+    "radio",
+    "direct to earth",
+    "dte",
+    "deep space network"
+   ]
+  },
+  {
+   "id": "help:what-is-the-earth-moon-light-time-and-range",
+   "kind": "method",
+   "title": "What is the Earth–Moon light time and range?",
+   "summary": "Range is the distance from the site to Earth, and light time is that range divided by the speed of light — about 1.28 seconds one way on average.",
+   "body": "Range is the distance from the site to Earth, and light time is that range divided by the speed of light — about 1.28 seconds one way on average.",
+   "source": "PLAN_FINAL §2, §5.5",
+   "anchor": "what-is-the-earth-moon-light-time-and-range",
+   "metrics": [],
+   "tags": [
+    "range",
+    "distance",
+    "light time",
+    "delay",
+    "latency",
+    "how far",
+    "signal delay",
+    "speed of light",
+    "how long does the signal take",
+    "travel time",
+    "one way",
+    "seconds"
+   ]
+  },
+  {
+   "id": "help:how-is-the-longest-night-calculated",
+   "kind": "method",
+   "title": "How is the longest night calculated?",
+   "summary": "It is the longest continuous stretch in the window when the Sun is not available under the chosen definition. It matters because a lander's battery must carry it through; LUMEN can compare it with battery endurance (battery energy × usable depth of discharge ÷ load).",
+   "body": "It is the longest continuous stretch in the window when the Sun is not available under the chosen definition. It matters because a lander's battery must carry it through; LUMEN can compare it with battery endurance (battery energy × usable depth of discharge ÷ load).",
+   "source": "glossary (Longest night) and PLAN_FINAL §5.7",
+   "anchor": "how-is-the-longest-night-calculated",
+   "metrics": [],
+   "tags": [
+    "longest night",
+    "dark",
+    "darkness",
+    "longest dark stretch",
+    "battery",
+    "survive the night"
+   ]
+  },
+  {
+   "id": "help:how-is-the-verdict-go-marginal-no-go-decided",
+   "kind": "method",
+   "title": "How is the verdict (GO / MARGINAL / NO-GO) decided?",
+   "summary": "It checks the mission profile's hard requirements (for example minimum sunlit %, minimum link hours, maximum longest night, maximum pad slope). GO means every requirement passes even at the conservative bound. MARGINAL means one passes only at its nominal value or is within 10% of its limit. NO-GO means a requirement fails. The Viability Index is a weighted score of the same components, shown beside the verdict.",
+   "body": "It checks the mission profile's hard requirements (for example minimum sunlit %, minimum link hours, maximum longest night, maximum pad slope). GO means every requirement passes even at the conservative bound. MARGINAL means one passes only at its nominal value or is within 10% of its limit. NO-GO means a requirement fails. The Viability Index is a weighted score of the same components, shown beside the verdict.",
+   "source": "PLAN_FINAL §5.7",
+   "anchor": "how-is-the-verdict-go-marginal-no-go-decided",
+   "metrics": [],
+   "tags": [
+    "verdict",
+    "go",
+    "no go",
+    "marginal",
+    "rating",
+    "requirements",
+    "pass",
+    "fail",
+    "profile",
+    "viability",
+    "score"
+   ]
+  },
+  {
+   "id": "help:how-is-the-pad-slope-computed",
+   "kind": "method",
+   "title": "How is the pad slope computed?",
+   "summary": "LUMEN fits a plane by least squares to the terrain over a footprint of about 5–6 m. The slope is the angle between that plane's normal and straight up. The downhill aspect is the compass direction of the steepest descent, and uphill is exactly opposite (downhill + 180°). Where the terrain data is too coarse for that footprint the slope is badged \"under-resolved\".",
+   "body": "LUMEN fits a plane by least squares to the terrain over a footprint of about 5–6 m. The slope is the angle between that plane's normal and straight up. The downhill aspect is the compass direction of the steepest descent, and uphill is exactly opposite (downhill + 180°). Where the terrain data is too coarse for that footprint the slope is badged \"under-resolved\".",
+   "source": "PLAN_FINAL §5.6",
+   "anchor": "how-is-the-pad-slope-computed",
+   "metrics": [],
+   "tags": [
+    "slope",
+    "pad",
+    "tilt",
+    "ground",
+    "touchdown",
+    "uphill",
+    "downhill",
+    "aspect",
+    "terrain slope",
+    "steep"
+   ]
+  },
+  {
+   "id": "help:how-is-solar-power-estimated",
+   "kind": "method",
+   "title": "How is solar power estimated?",
+   "summary": "Power at a moment is the solar flux times the sum over panels of (area × efficiency × the cosine of the angle between the panel and the Sun, never below zero), times the visible fraction of the Sun's disk. The preset decides how many panels there are and where they point: four vertical side panels, one vertical panel at a heading, a horizontal deck, or a vertical Sun-tracking mast (an upper bound). These are generic geometries, not a specific lander.",
+   "body": "Power at a moment is the solar flux times the sum over panels of (area × efficiency × the cosine of the angle between the panel and the Sun, never below zero), times the visible fraction of the Sun's disk. The preset decides how many panels there are and where they point: four vertical side panels, one vertical panel at a heading, a horizontal deck, or a vertical Sun-tracking mast (an upper bound). These are generic geometries, not a specific lander.",
+   "source": "PLAN_FINAL §5.6",
+   "anchor": "how-is-solar-power-estimated",
+   "metrics": [],
+   "tags": [
+    "power",
+    "watts",
+    "energy",
+    "solar panel",
+    "array",
+    "cosine",
+    "panel angle",
+    "generation",
+    "output",
+    "preset"
+   ]
+  },
+  {
+   "id": "help:how-is-the-on-an-event-time-calculated",
+   "kind": "method",
+   "title": "How is the ± on an event time calculated?",
+   "summary": "Each event time carries a ± from the horizon's uncertainty: δt = σ ÷ |how fast the Sun's clearance above the horizon is changing| at that moment, where σ is the terrain uncertainty in that direction. So \"Sunset in 41 h ± 5 h\" means a horizon error of one σ would move the sunset by about 5 hours. If the clearance changes very slowly or the ± grows past about 12 hours, the event is labelled \"grazing — timing poorly constrained\" and a range is shown instead.",
+   "body": "Each event time carries a ± from the horizon's uncertainty: δt = σ ÷ |how fast the Sun's clearance above the horizon is changing| at that moment, where σ is the terrain uncertainty in that direction. So \"Sunset in 41 h ± 5 h\" means a horizon error of one σ would move the sunset by about 5 hours. If the clearance changes very slowly or the ± grows past about 12 hours, the event is labelled \"grazing — timing poorly constrained\" and a range is shown instead.",
+   "source": "PLAN_FINAL §5.8",
+   "anchor": "how-is-the-on-an-event-time-calculated",
+   "metrics": [],
+   "tags": [
+    "plus minus",
+    "±",
+    "uncertainty",
+    "error",
+    "margin",
+    "sunset time",
+    "sunrise time",
+    "how sure",
+    "confidence",
+    "sigma",
+    "bounds"
+   ]
+  },
+  {
+   "id": "help:what-are-the-fidelity-tiers-a-b-and-c",
+   "kind": "method",
+   "title": "What are the fidelity tiers A, B and C?",
+   "summary": "Tier C is a smooth sphere with no terrain (outside coverage, such as Apollo or SLIM sites), so its times are labelled \"smooth-sphere estimate; terrain unavailable\" and are not terrain-bounded predictions.",
+   "body": "Tier C is a smooth sphere with no terrain (outside coverage, such as Apollo or SLIM sites), so its times are labelled \"smooth-sphere estimate; terrain unavailable\" and are not terrain-bounded predictions.",
+   "source": "PLAN_FINAL §4.2",
+   "anchor": "what-are-the-fidelity-tiers-a-b-and-c",
+   "metrics": [],
+   "tags": [
+    "tier",
+    "tier a",
+    "tier b",
+    "tier c",
+    "fidelity",
+    "accuracy level",
+    "detail",
+    "terrain data",
+    "badge",
+    "resolution"
+   ]
+  },
+  {
+   "id": "help:why-does-the-sun-skim-the-horizon-at-the-poles",
+   "kind": "concept",
+   "title": "Why does the Sun skim the horizon at the poles?",
+   "summary": "The Moon's equator is tilted only about 1.54° to the ecliptic, so the Sun never climbs high at the poles: its maximum elevation is about (90° − latitude) + 1.54°. It circles the horizon about once per synodic month (29.53 days), which is why shadows are long and light comes and goes with every ridge.",
+   "body": "The Moon's equator is tilted only about 1.54° to the ecliptic, so the Sun never climbs high at the poles: its maximum elevation is about (90° − latitude) + 1.54°. It circles the horizon about once per synodic month (29.53 days), which is why shadows are long and light comes and goes with every ridge.",
+   "source": "PLAN_FINAL §2",
+   "anchor": "why-does-the-sun-skim-the-horizon-at-the-poles",
+   "metrics": [],
+   "tags": [
+    "sun low",
+    "horizon",
+    "polar",
+    "why low sun",
+    "grazing light",
+    "pole",
+    "month",
+    "orbit",
+    "tilt",
+    "1.54"
+   ]
+  },
+  {
+   "id": "help:why-is-the-timing-uncertainty-hours-not-minutes",
+   "kind": "concept",
+   "title": "Why is the timing uncertainty hours, not minutes?",
+   "summary": "Near the pole the Sun's elevation changes very slowly — about 0.044° per hour at 85°S and 0.009° per hour at 89°S near the horizon — so a small horizon error shifts the moment of sunset a lot. A 0.2° error can move a sunset by about 4–5 hours at 85°S and nearly a day close to 89°S. Where the Sun slides sideways behind a steep ridge edge the effect is much smaller.",
+   "body": "Near the pole the Sun's elevation changes very slowly — about 0.044° per hour at 85°S and 0.009° per hour at 89°S near the horizon — so a small horizon error shifts the moment of sunset a lot. A 0.2° error can move a sunset by about 4–5 hours at 85°S and nearly a day close to 89°S. Where the Sun slides sideways behind a steep ridge edge the effect is much smaller.",
+   "source": "PLAN_FINAL §5.8",
+   "anchor": "why-is-the-timing-uncertainty-hours-not-minutes",
+   "metrics": [],
+   "tags": [
+    "uncertainty hours",
+    "why so big",
+    "large error",
+    "slow sun",
+    "0.044",
+    "near horizon",
+    "rate",
+    "sensitive"
+   ]
+  },
+  {
+   "id": "help:why-does-the-earth-bob-up-and-down-near-the-horizon",
+   "kind": "concept",
+   "title": "Why does the Earth bob up and down near the horizon?",
+   "summary": "The Moon always shows nearly the same face to Earth (tidal locking), but it rocks slightly: optical libration is about ±6.7° in latitude and ±7.9° in longitude. Seen from near the pole, that makes Earth bob roughly ±7° near the horizon, so ridges can hide it and reveal it again.",
+   "body": "The Moon always shows nearly the same face to Earth (tidal locking), but it rocks slightly: optical libration is about ±6.7° in latitude and ±7.9° in longitude. Seen from near the pole, that makes Earth bob roughly ±7° near the horizon, so ridges can hide it and reveal it again.",
+   "source": "PLAN_FINAL §2",
+   "anchor": "why-does-the-earth-bob-up-and-down-near-the-horizon",
+   "metrics": [],
+   "tags": [
+    "libration",
+    "earth wobble",
+    "earth moves",
+    "earth bobbing",
+    "sub-earth point",
+    "oscillation",
+    "tidal lock"
+   ]
+  },
+  {
+   "id": "help:is-there-twilight-or-atmosphere-on-the-moon",
+   "kind": "concept",
+   "title": "Is there twilight or atmosphere on the Moon?",
+   "summary": "No. There is no atmosphere, so there is no refraction and no twilight: the Sun goes from visible to gone as it crosses the horizon, shadows are pitch black, and the sky is black. The Earth Twin comparison shows this against an Earth location at the same latitude.",
+   "body": "No. There is no atmosphere, so there is no refraction and no twilight: the Sun goes from visible to gone as it crosses the horizon, shadows are pitch black, and the sky is black. The Earth Twin comparison shows this against an Earth location at the same latitude.",
+   "source": "PLAN_FINAL §2, §5.9",
+   "anchor": "is-there-twilight-or-atmosphere-on-the-moon",
+   "metrics": [],
+   "tags": [
+    "atmosphere",
+    "twilight",
+    "air",
+    "refraction",
+    "sky",
+    "dusk",
+    "dawn",
+    "shadows",
+    "black sky",
+    "earth twin"
+   ]
+  },
+  {
+   "id": "help:what-is-the-earth-twin",
+   "kind": "concept",
+   "title": "What is the Earth Twin?",
+   "summary": "The Earth Twin draws the Sun's path for an Earth location at the same latitude (at 85°S that is Antarctica) over one day, using a standard terrestrial solar formula, labelled an educational approximation. The contrast is the lesson: a day lasts about 24 hours on Earth and about 29.5 days at the lunar pole, there is twilight on Earth and none on the Moon, and the sky and shadows differ.",
+   "body": "The Earth Twin draws the Sun's path for an Earth location at the same latitude (at 85°S that is Antarctica) over one day, using a standard terrestrial solar formula, labelled an educational approximation. The contrast is the lesson: a day lasts about 24 hours on Earth and about 29.5 days at the lunar pole, there is twilight on Earth and none on the Moon, and the sky and shadows differ.",
+   "source": "PLAN_FINAL §5.9 and glossary",
+   "anchor": "what-is-the-earth-twin",
+   "metrics": [],
+   "tags": [
+    "earth twin",
+    "compare to earth",
+    "terrestrial",
+    "antarctica",
+    "same latitude",
+    "educational",
+    "contrast",
+    "day length"
+   ]
+  },
+  {
+   "id": "help:why-does-a-taller-mast-change-the-result",
+   "kind": "decision",
+   "title": "Why does a taller mast change the result?",
+   "summary": "Raising the array lowers the effective horizon: for a height h the horizon dips by √(2h/R), about 0.06° at 1 m and 0.19° at 10 m, and from higher up the array can see over nearby terrain that blocks it at ground level. Near the pole a fraction of a degree can decide whether the Sun is visible, so LUMEN lets you change the height instead of fixing one.",
+   "body": "Raising the array lowers the effective horizon: for a height h the horizon dips by √(2h/R), about 0.06° at 1 m and 0.19° at 10 m, and from higher up the array can see over nearby terrain that blocks it at ground level. Near the pole a fraction of a degree can decide whether the Sun is visible, so LUMEN lets you change the height instead of fixing one.",
+   "source": "PLAN_FINAL §2 and glossary (Mast height)",
+   "anchor": "why-does-a-taller-mast-change-the-result",
+   "metrics": [],
+   "tags": [
+    "mast",
+    "height effect",
+    "raise array",
+    "horizon dip",
+    "why height matters",
+    "taller",
+    "lower horizon"
+   ]
+  },
+  {
+   "id": "help:why-is-the-slope-clamp-never-applied-to-the-terrain-horizon-itself",
+   "kind": "decision",
+   "title": "Why is the slope clamp never applied to the terrain horizon itself?",
+   "summary": "The slope-plane correction is only allowed to raise the horizon, never to flatten it. Sphere dip and legitimately negative horizons must survive, and at the pole the Sun lives within about ±1.5° of the horizon, so clamping the terrain itself would remove real sunlight. The correction is used where it matters (Tier B, or terrain coarser than about twice the footprint) and the badge shows when it is active.",
+   "body": "The slope-plane correction is only allowed to raise the horizon, never to flatten it. Sphere dip and legitimately negative horizons must survive, and at the pole the Sun lives within about ±1.5° of the horizon, so clamping the terrain itself would remove real sunlight. The correction is used where it matters (Tier B, or terrain coarser than about twice the footprint) and the badge shows when it is active.",
+   "source": "PLAN_FINAL §5.6",
+   "anchor": "why-is-the-slope-clamp-never-applied-to-the-terrain-horizon-itself",
+   "metrics": [],
+   "tags": [
+    "clamp",
+    "slope plane",
+    "occluder",
+    "negative horizon",
+    "sphere dip",
+    "why clamp",
+    "terrain mask",
+    "uphill"
+   ]
+  },
+  {
+   "id": "help:why-does-lumen-show-a-on-every-time-and-percentage",
+   "kind": "decision",
+   "title": "Why does LUMEN show a ± on every time and percentage?",
+   "summary": "Because near the pole a 0.2° horizon error can shift a sunrise or sunset by hours, a single number would sound more certain than it is. So every event time carries a ±, and every percentage carries a [low, high] range, with the source of the uncertainty (default, Monte-Carlo or calibrated) shown in the tooltip in the full design. Where no terrain uncertainty exists, LUMEN says so instead of inventing one.",
+   "body": "Because near the pole a 0.2° horizon error can shift a sunrise or sunset by hours, a single number would sound more certain than it is. So every event time carries a ±, and every percentage carries a [low, high] range, with the source of the uncertainty (default, Monte-Carlo or calibrated) shown in the tooltip in the full design. Where no terrain uncertainty exists, LUMEN says so instead of inventing one.",
+   "source": "PLAN_FINAL Revision 2 (R2-7) and §5.8",
+   "anchor": "why-does-lumen-show-a-on-every-time-and-percentage",
+   "metrics": [],
+   "tags": [
+    "why plus minus",
+    "why uncertainty",
+    "honest",
+    "error bars",
+    "why show bounds",
+    "trust",
+    "decision"
+   ]
+  },
+  {
+   "id": "help:why-does-the-sun-elevation-come-first-on-the-screen",
+   "kind": "decision",
+   "title": "Why does the Sun elevation come first on the screen?",
+   "summary": "The first thing every user should see is the Sun and Earth against the horizon; slope and tilt are the second layer. Sun elevation is the headline number because the problem asks for solar elevation to be shown prominently.",
+   "body": "The first thing every user should see is the Sun and Earth against the horizon; slope and tilt are the second layer. Sun elevation is the headline number because the problem asks for solar elevation to be shown prominently.",
+   "source": "PLAN_FINAL Revision 2 (R2-6, R2-12)",
+   "anchor": "why-does-the-sun-elevation-come-first-on-the-screen",
+   "metrics": [],
+   "tags": [
+    "hero",
+    "headline",
+    "why elevation",
+    "priority",
+    "first thing",
+    "main number"
+   ]
+  },
+  {
+   "id": "help:how-do-my-definitions-change-the-results",
+   "kind": "decision",
+   "title": "How do my definitions change the results?",
+   "summary": "Sunlit %, link %, longest night and operating hours all depend on definitions: how much of the Sun's disk must be above the horizon, the minimum Earth margin, whether a Deep Space Network station must also see the Moon, and (optionally) a minimum Sun elevation for operations. In LUMEN's full design, because results are meaningless without them, the definitions are kept visible and editable, and changing one recomputes the result. (The four current pages do not show the definitions editor yet.)",
+   "body": "Sunlit %, link %, longest night and operating hours all depend on definitions: how much of the Sun's disk must be above the horizon, the minimum Earth margin, whether a Deep Space Network station must also see the Moon, and (optionally) a minimum Sun elevation for operations. In LUMEN's full design, because results are meaningless without them, the definitions are kept visible and editable, and changing one recomputes the result. (The four current pages do not show the definitions editor yet.)",
+   "source": "PLAN_FINAL Revision 2 (R2-11) and §5.4–§5.5",
+   "anchor": "how-do-my-definitions-change-the-results",
+   "metrics": [],
+   "tags": [
+    "definitions",
+    "threshold",
+    "settings",
+    "disk threshold",
+    "min elevation",
+    "ops",
+    "change definition",
+    "what counts as sunlit",
+    "assumptions"
+   ]
+  },
+  {
+   "id": "help:how-do-i-get-back-to-landing-on-time",
+   "kind": "howto",
+   "title": "How do I get back to landing on time?",
+   "summary": "On the Slip explorer, choose the first bar (zero days) — the \"on time\" baseline is marked with a dashed line — or press / and type \"slip 0\" or \"reset slip\".",
+   "body": "On the Slip explorer, choose the first bar (zero days) — the \"on time\" baseline is marked with a dashed line — or press / and type \"slip 0\" or \"reset slip\".",
+   "source": "live pages (Slip explorer) and Ask LUMEN",
+   "anchor": "how-do-i-get-back-to-landing-on-time",
+   "metrics": [],
+   "tags": [
+    "on time",
+    "reset",
+    "undo",
+    "zero slip",
+    "no delay",
+    "back to start",
+    "clear slip",
+    "baseline",
+    "original date"
+   ]
+  },
+  {
+   "id": "help:how-does-lumen-work-and-how-are-the-results-calculated-overall",
+   "kind": "method",
+   "title": "How does LUMEN work, and how are the results calculated overall?",
+   "summary": "In short: the heavy work is done once, ahead of time, and the app only does light vector maths. Ahead of time, LUMEN computes the Sun's and Earth's positions from NASA ephemeris data (SPICE kernels) and turns terrain elevation maps into horizon masks — the height of the skyline in every compass direction — for each site. In the browser, for any site and time, it interpolates the Sun and Earth positions, rotates them into the site's frame, compares them with the horizon mask, works out how much of each disk is visible, finds the exact moments things change, and then adds up windows, percentages and a ± from the horizon's uncertainty. A verdict is the last step. Every browser calculation has a Python twin, and the two are checked against each other with golden test cases.",
+   "body": "In short: the heavy work is done once, ahead of time, and the app only does light vector maths. Ahead of time, LUMEN computes the Sun's and Earth's positions from NASA ephemeris data (SPICE kernels) and turns terrain elevation maps into horizon masks — the height of the skyline in every compass direction — for each site. In the browser, for any site and time, it interpolates the Sun and Earth positions, rotates them into the site's frame, compares them with the horizon mask, works out how much of each disk is visible, finds the exact moments things change, and then adds up windows, percentages and a ± from the horizon's uncertainty. A verdict is the last step. Every browser calculation has a Python twin, and the two are checked against each other with golden test cases.",
+   "source": "PLAN_FINAL §3, §4, §5",
+   "anchor": "how-does-lumen-work-and-how-are-the-results-calculated-overall",
+   "metrics": [],
+   "tags": [
+    "lumen",
+    "overview",
+    "pipeline",
+    "how does lumen work",
+    "how lumen works",
+    "explain lumen",
+    "process",
+    "steps",
+    "summary",
+    "behind the scenes",
+    "engine",
+    "whole thing",
+    "results",
+    "how are results calculated"
+   ]
+  },
+  {
+   "id": "help:where-does-lumen-s-data-come-from",
+   "kind": "concept",
+   "title": "Where does LUMEN's data come from?",
+   "summary": "Sun and Earth positions come from NASA's SPICE ephemeris kernels, evaluated in a Moon-fixed frame consistent with the LOLA terrain data. Terrain comes from LRO LOLA elevation models, turned into horizon masks per site. The Deep Space Network visibility comes from station kernels: it is the Moon's elevation as seen from each Deep Space Network complex. All of this is computed ahead of time and shipped as data files; the app does not fetch anything live.",
+   "body": "Sun and Earth positions come from NASA's SPICE ephemeris kernels, evaluated in a Moon-fixed frame consistent with the LOLA terrain data. Terrain comes from LRO LOLA elevation models, turned into horizon masks per site. The Deep Space Network visibility comes from station kernels: it is the Moon's elevation as seen from each Deep Space Network complex. All of this is computed ahead of time and shipped as data files; the app does not fetch anything live.",
+   "source": "PLAN_FINAL §3, §4",
+   "anchor": "where-does-lumen-s-data-come-from",
+   "metrics": [],
+   "tags": [
+    "data",
+    "sources",
+    "ephemeris",
+    "spice",
+    "naif",
+    "lola",
+    "dem",
+    "terrain",
+    "where from",
+    "kernels",
+    "dsn data",
+    "nasa"
+   ]
+  },
+  {
+   "id": "help:does-lumen-need-an-internet-connection",
+   "kind": "concept",
+   "title": "Does LUMEN need an internet connection?",
+   "summary": "No. After the first load there are no network calls: the data files are cached and the calculations run in your browser, so it keeps working offline. Links to outside tools such as QuickMap, Moon Trek or JPL Horizons open in a new tab and are never needed.",
+   "body": "No. After the first load there are no network calls: the data files are cached and the calculations run in your browser, so it keeps working offline. Links to outside tools such as QuickMap, Moon Trek or JPL Horizons open in a new tab and are never needed.",
+   "source": "PLAN_FINAL §3 (design rules)",
+   "anchor": "does-lumen-need-an-internet-connection",
+   "metrics": [],
+   "tags": [
+    "offline",
+    "internet",
+    "network",
+    "connection",
+    "online",
+    "wifi",
+    "pwa",
+    "install",
+    "live data",
+    "api"
+   ]
+  },
+  {
+   "id": "help:what-is-a-horizon-mask",
+   "kind": "method",
+   "title": "What is a horizon mask?",
+   "summary": "A horizon mask is the height of the skyline, in degrees above flat, for every compass direction around a site. A Tier A site has bins 0.1° wide for four array heights (1, 2, 5 and 10 m) out to 250 km; Tier B has 0.5° bins. To decide whether the Sun is visible, LUMEN compares the Sun's elevation with the mask's value in the Sun's direction.",
+   "body": "A horizon mask is the height of the skyline, in degrees above flat, for every compass direction around a site. A Tier A site has bins 0.1° wide for four array heights (1, 2, 5 and 10 m) out to 250 km; Tier B has 0.5° bins. To decide whether the Sun is visible, LUMEN compares the Sun's elevation with the mask's value in the Sun's direction.",
+   "source": "PLAN_FINAL §4 (P5), §4.2",
+   "anchor": "what-is-a-horizon-mask",
+   "metrics": [],
+   "tags": [
+    "horizon mask",
+    "mask",
+    "skyline",
+    "terrain mask",
+    "elevation bins",
+    "horizon profile",
+    "azimuth bins",
+    "silhouette"
+   ]
+  },
+  {
+   "id": "help:how-does-lumen-handle-shadows",
+   "kind": "concept",
+   "title": "How does LUMEN handle shadows?",
+   "summary": "LUMEN does not paint shadows on the ground. At each moment it asks one question: does the terrain horizon in the Sun's direction hide the Sun's disk, fully or partly? That is what \"in shadow\" means for a site. Shadows are long because the Sun is so low (a 10 m object casts a shadow of about 380 m when the Sun is 1.5° up) and pitch black because there is no atmosphere. The Orbit page's polar view uses NASA LOLA terrain with real cast shadows for the picture.",
+   "body": "LUMEN does not paint shadows on the ground. At each moment it asks one question: does the terrain horizon in the Sun's direction hide the Sun's disk, fully or partly? That is what \"in shadow\" means for a site. Shadows are long because the Sun is so low (a 10 m object casts a shadow of about 380 m when the Sun is 1.5° up) and pitch black because there is no atmosphere. The Orbit page's polar view uses NASA LOLA terrain with real cast shadows for the picture.",
+   "source": "PLAN_FINAL §2, §5.4 and live pages (Orbit)",
+   "anchor": "how-does-lumen-handle-shadows",
+   "metrics": [],
+   "tags": [
+    "shadow",
+    "shadows",
+    "cast shadow",
+    "dark",
+    "shade",
+    "how are shadows computed",
+    "how do shadows work",
+    "blocked",
+    "ridge",
+    "long shadows"
+   ]
+  },
+  {
+   "id": "help:how-is-earth-elevation-calculated",
+   "kind": "method",
+   "title": "How is Earth elevation calculated?",
+   "summary": "Earth elevation is worked out the same way as the Sun's: Earth's position from the ephemeris is interpolated, the site's position is subtracted, and the direction is rotated into the site's frame to give an elevation and azimuth. Earth is a disk about 1.9° across, and it moves as the Moon rocks (libration), so near the pole it bobs by about ±7° near the horizon. Earth counts as visible when at least half its disk is above the terrain horizon.",
+   "body": "Earth elevation is worked out the same way as the Sun's: Earth's position from the ephemeris is interpolated, the site's position is subtracted, and the direction is rotated into the site's frame to give an elevation and azimuth. Earth is a disk about 1.9° across, and it moves as the Moon rocks (libration), so near the pole it bobs by about ±7° near the horizon. Earth counts as visible when at least half its disk is above the terrain horizon.",
+   "source": "PLAN_FINAL §5.2, §5.5",
+   "anchor": "how-is-earth-elevation-calculated",
+   "metrics": [],
+   "tags": [
+    "earth elevation",
+    "earth angle",
+    "how high is earth",
+    "earth altitude",
+    "earth position",
+    "earth in the sky",
+    "elevation of earth"
+   ]
+  },
+  {
+   "id": "help:what-is-dte-direct-to-earth",
+   "kind": "concept",
+   "title": "What is DTE (direct-to-Earth)?",
+   "summary": "DTE means direct-to-Earth: a lander talking to Earth straight from the surface, with no relay. DTE margin is Earth-centre elevation above the effective horizon in Earth's direction. LUMEN needs it to be at least a threshold (default 1°) before it treats Earth as usable for contact.",
+   "body": "DTE means direct-to-Earth: a lander talking to Earth straight from the surface, with no relay. DTE margin is Earth-centre elevation above the effective horizon in Earth's direction. LUMEN needs it to be at least a threshold (default 1°) before it treats Earth as usable for contact.",
+   "source": "glossary (DTE margin) and PLAN_FINAL §5.5",
+   "anchor": "what-is-dte-direct-to-earth",
+   "metrics": [],
+   "tags": [
+    "dte",
+    "direct to earth",
+    "direct-to-earth",
+    "dte margin",
+    "earth contact",
+    "line of sight to earth",
+    "what is dte"
+   ]
+  },
+  {
+   "id": "help:what-is-the-deep-space-network-dsn-and-what-is-a-dsn-station",
+   "kind": "concept",
+   "title": "What is the Deep Space Network (DSN), and what is a DSN station?",
+   "summary": "The Deep Space Network is the set of large ground antennas that talk to spacecraft. LUMEN uses its three complexes — Goldstone, Canberra and Madrid — placed around the world so that one is usually facing the Moon. With DSN awareness on, the link only counts as up when Earth is visible from the site AND at least one of those complexes can see the Moon above its own horizon (default 10°).",
+   "body": "The Deep Space Network is the set of large ground antennas that talk to spacecraft. LUMEN uses its three complexes — Goldstone, Canberra and Madrid — placed around the world so that one is usually facing the Moon. With DSN awareness on, the link only counts as up when Earth is visible from the site AND at least one of those complexes can see the Moon above its own horizon (default 10°).",
+   "source": "PLAN_FINAL §4 (P3b), §5.5",
+   "anchor": "what-is-the-deep-space-network-dsn-and-what-is-a-dsn-station",
+   "metrics": [],
+   "tags": [
+    "dsn",
+    "deep space network",
+    "goldstone",
+    "canberra",
+    "madrid",
+    "ground station",
+    "antenna",
+    "station",
+    "dss"
+   ]
+  },
+  {
+   "id": "help:what-is-a-permanently-shadowed-region-psr",
+   "kind": "concept",
+   "title": "What is a permanently shadowed region (PSR)?",
+   "summary": "A permanently shadowed region is ground that never receives sunlight. LUMEN reports the distance (and bearing) to the nearest one as science context next to the engineering numbers, and can show them as a map layer. The regions shown are derived from the illumination data (pixels with 0% average illumination) and are tagged \"derived\".",
+   "body": "A permanently shadowed region is ground that never receives sunlight. LUMEN reports the distance (and bearing) to the nearest one as science context next to the engineering numbers, and can show them as a map layer. The regions shown are derived from the illumination data (pixels with 0% average illumination) and are tagged \"derived\".",
+   "source": "PLAN_FINAL §4 (P11, P15), Revision 2 (R2-5)",
+   "anchor": "what-is-a-permanently-shadowed-region-psr",
+   "metrics": [],
+   "tags": [
+    "psr",
+    "permanently shadowed",
+    "shadowed region",
+    "ice",
+    "cold trap",
+    "crater floor",
+    "never sunlit",
+    "distance to psr",
+    "science"
+   ]
+  },
+  {
+   "id": "help:how-was-lumen-checked-and-how-do-i-know-it-is-right",
+   "kind": "concept",
+   "title": "How was LUMEN checked, and how do I know it is right?",
+   "summary": "LUMEN has a set of validation gates (G0 to G11) with results in the validation report. Examples recorded so far: the interpolation of Sun and Earth positions agrees with direct evaluation to far better than 0.001° (gate G2), and the Chandrayaan-3 touchdown Sun elevation was calculated and compared with the planned value (gate G7 — the numerical comparison passes, but the plan's reference value has no primary source yet, so the report marks G7 as not yet independently sourced). The browser calculations are also checked against their Python twins with golden test cases.",
+   "body": "LUMEN has a set of validation gates (G0 to G11) with results in the validation report. Examples recorded so far: the interpolation of Sun and Earth positions agrees with direct evaluation to far better than 0.001° (gate G2), and the Chandrayaan-3 touchdown Sun elevation was calculated and compared with the planned value (gate G7 — the numerical comparison passes, but the plan's reference value has no primary source yet, so the report marks G7 as not yet independently sourced). The browser calculations are also checked against their Python twins with golden test cases.",
+   "source": "docs/validation.md and PLAN_FINAL §10",
+   "anchor": "how-was-lumen-checked-and-how-do-i-know-it-is-right",
+   "metrics": [],
+   "tags": [
+    "validation",
+    "validated",
+    "tested",
+    "checks",
+    "gates",
+    "accurate",
+    "correct",
+    "trust",
+    "verified",
+    "proof",
+    "golden",
+    "how do you know"
+   ]
+  },
+  {
+   "id": "help:what-are-numbers-for-this-window-on-the-stand-here-page",
+   "kind": "howto",
+   "title": "What are \"Numbers for this window\" on the Stand here page?",
+   "summary": "Below the panorama, Stand here lists the engine's numbers for the chosen site and array height over 30 days from 8 Feb 2027: Sun clearance and disk, Earth elevation and margin, sunlit %, link %, the longest night, the longest communications gap, operating hours and the distance to the nearest permanently shadowed region. Above them are the verdict, the reasons for it, and a badge saying what the numbers rest on (for example \"Terrain mask · σ pending\").",
+   "body": "Below the panorama, Stand here lists the engine's numbers for the chosen site and array height over 30 days from 8 Feb 2027: Sun clearance and disk, Earth elevation and margin, sunlit %, link %, the longest night, the longest communications gap, operating hours and the distance to the nearest permanently shadowed region. Above them are the verdict, the reasons for it, and a badge saying what the numbers rest on (for example \"Terrain mask · σ pending\").",
+   "source": "live pages (Stand here, \"Numbers for this window\")",
+   "anchor": "what-are-numbers-for-this-window-on-the-stand-here-page",
+   "metrics": [],
+   "tags": [
+    "numbers for this window",
+    "numbers",
+    "metrics",
+    "tiles",
+    "panel",
+    "results",
+    "verdict",
+    "summary",
+    "clearance",
+    "sunlit",
+    "link",
+    "longest night",
+    "comm gap",
+    "ops hours",
+    "psr"
+   ]
+  },
+  {
+   "id": "help:what-does-the-why-button-next-to-a-number-do",
+   "kind": "howto",
+   "title": "What does the \"Why?\" button next to a number do?",
+   "summary": "It opens Ask LUMEN on an explanation of that exact number, for the same site and array height you are looking at: what the quantity means, its value, whether it has a ± (and if not, why not), the definitions it used, and the engine's own verdict reasons. You can also press / and ask, for example, \"why is this ± so big?\".",
+   "body": "It opens Ask LUMEN on an explanation of that exact number, for the same site and array height you are looking at: what the quantity means, its value, whether it has a ± (and if not, why not), the definitions it used, and the engine's own verdict reasons. You can also press / and ask, for example, \"why is this ± so big?\".",
+   "source": "live pages (Stand here) and Ask LUMEN",
+   "anchor": "what-does-the-why-button-next-to-a-number-do",
+   "metrics": [],
+   "tags": [
+    "why button",
+    "why",
+    "explain this number",
+    "why this number",
+    "tile",
+    "button",
+    "what does why do",
+    "explain",
+    "understand a number"
+   ]
+  },
+  {
+   "id": "help:why-is-there-no-on-my-numbers-what-does-pending-mean",
+   "kind": "concept",
+   "title": "Why is there no ± on my numbers? (What does \"σ pending\" mean?)",
+   "summary": "\"Terrain mask · σ pending\" means the site uses a real terrain skyline, but the terrain uncertainty (σ) for it is not available yet. Without σ, LUMEN cannot compute the ± on event times or the [low, high] ranges on percentages, so it shows the nominal values and says why there is no ±, instead of inventing one. \"Terrain mask · σ default\" means a default uncertainty of 0.1° (the plan's Tier-A value) is in use, so the ± and ranges appear; the default is a planning assumption, not a measurement, and is replaced when Monte-Carlo or calibrated σ is available. Right now IM-2 and Chandrayaan-3 have the default; other sites do not have σ yet.",
+   "body": "\"Terrain mask · σ pending\" means the site uses a real terrain skyline, but the terrain uncertainty (σ) for it is not available yet. Without σ, LUMEN cannot compute the ± on event times or the [low, high] ranges on percentages, so it shows the nominal values and says why there is no ±, instead of inventing one. \"Terrain mask · σ default\" means a default uncertainty of 0.1° (the plan's Tier-A value) is in use, so the ± and ranges appear; the default is a planning assumption, not a measurement, and is replaced when Monte-Carlo or calibrated σ is available. Right now IM-2 and Chandrayaan-3 have the default; other sites do not have σ yet.",
+   "source": "engine results (tier badge and σ source) and PLAN_FINAL §5.8",
+   "anchor": "why-is-there-no-on-my-numbers-what-does-pending-mean",
+   "metrics": [],
+   "tags": [
+    "sigma pending",
+    "σ pending",
+    "terrain mask",
+    "no plus minus",
+    "uncertainty missing",
+    "badge",
+    "tier badge",
+    "no range",
+    "where did the range go"
+   ]
+  },
+  {
+   "id": "help:what-does-smooth-moon-mean-on-a-site",
+   "kind": "concept",
+   "title": "What does \"smooth Moon\" mean on a site?",
+   "summary": "\"Smooth Moon\" means there is no terrain data for that site or array height, so LUMEN treats the Moon as a smooth sphere with no skyline. The Sun and Earth are then blocked only by the curvature of the Moon. These are smooth-sphere estimates, not terrain-bounded sunrise, sunset, or visibility predictions. Stand here says so on the page.",
+   "body": "\"Smooth Moon\" means there is no terrain data for that site or array height, so LUMEN treats the Moon as a smooth sphere with no skyline. The Sun and Earth are then blocked only by the curvature of the Moon. These are smooth-sphere estimates, not terrain-bounded sunrise, sunset, or visibility predictions. Stand here says so on the page.",
+   "source": "live pages (Stand here) and PLAN_FINAL §4.2",
+   "anchor": "what-does-smooth-moon-mean-on-a-site",
+   "metrics": [],
+   "tags": [
+    "smooth moon",
+    "smooth-moon",
+    "no terrain",
+    "tier c",
+    "flat horizon",
+    "no skyline",
+    "sphere",
+    "no terrain data"
+   ]
+  },
+  {
+   "id": "help:what-is-the-methodology-page",
+   "kind": "howto",
+   "title": "What is the Methodology page?",
+   "summary": "Methodology is the reading page of LUMEN. It states what LUMEN does and does not compute, how a number is produced, the data sources with links, the definitions, how the ± is calculated and where σ comes from, and the glossary. Open it from the header, or press / and type \"go to methodology\".",
+   "body": "Methodology is the reading page of LUMEN. It states what LUMEN does and does not compute, how a number is produced, the data sources with links, the definitions, how the ± is calculated and where σ comes from, and the glossary. Open it from the header, or press / and type \"go to methodology\".",
+   "source": "live pages (Methodology)",
+   "anchor": "what-is-the-methodology-page",
+   "metrics": [],
+   "tags": [
+    "methodology",
+    "validation",
+    "glossary",
+    "scope",
+    "limitations",
+    "how it works page",
+    "about",
+    "documentation",
+    "report",
+    "gates",
+    "ai disclosure"
+   ]
+  },
+  {
+   "id": "help:what-is-the-details-section-on-stand-here",
+   "kind": "howto",
+   "title": "What is the Details section on Stand here?",
+   "summary": "Below the numbers, Stand here has a Details section with three views drawn from the same result as the numbers. Windows: every Sun, Earth, link and operating window in the 30 days with start and end times, duration, peak elevation and flags; click a row to jump the clock, and export the table as CSV or JSON. Pointing and link: where the Sun and Earth are at the clock time, Earth's range and one-way light time, and which Deep Space Network stations can see the Moon. Power and barcode: panel power and Sun and Earth clearance over the window with the uncertainty band, and the survival barcode by day.",
+   "body": "Below the numbers, Stand here has a Details section with three views drawn from the same result as the numbers. Windows: every Sun, Earth, link and operating window in the 30 days with start and end times, duration, peak elevation and flags; click a row to jump the clock, and export the table as CSV or JSON. Pointing and link: where the Sun and Earth are at the clock time, Earth's range and one-way light time, and which Deep Space Network stations can see the Moon. Power and barcode: panel power and Sun and Earth clearance over the window with the uncertainty band, and the survival barcode by day.",
+   "source": "live pages (Stand here, \"Details\")",
+   "anchor": "what-is-the-details-section-on-stand-here",
+   "metrics": [],
+   "tags": [
+    "details",
+    "windows table",
+    "pointing and link",
+    "power and barcode",
+    "tabs",
+    "export csv",
+    "dsn lanes",
+    "windows",
+    "survival barcode",
+    "power curve",
+    "clearance"
+   ]
+  },
+  {
+   "id": "help:how-do-i-export-the-windows-table",
+   "kind": "howto",
+   "title": "How do I export the windows table?",
+   "summary": "On Stand here, open Details, choose Windows, and use the Export CSV or JSON buttons above the table. The file includes a header with the site, tier, uncertainty source and definitions, and respects the type filter (All, Sun, Earth, Link, Ops) you have selected.",
+   "body": "On Stand here, open Details, choose Windows, and use the Export CSV or JSON buttons above the table. The file includes a header with the site, tier, uncertainty source and definitions, and respects the type filter (All, Sun, Earth, Link, Ops) you have selected.",
+   "source": "live pages (Stand here, Details, Windows)",
+   "anchor": "how-do-i-export-the-windows-table",
+   "metrics": [],
+   "tags": [
+    "export",
+    "csv",
+    "json",
+    "download",
+    "save",
+    "windows table",
+    "data",
+    "spreadsheet",
+    "copy numbers"
+   ]
+  },
+  {
+   "id": "help:what-do-the-validation-gates-mean-and-how-many-pass",
+   "kind": "status",
+   "title": "What do the validation gates mean, and how many pass?",
+   "summary": "LUMEN's checks are numbered gates (G0 to G11). Each gate's real status — PASS, FAIL, PENDING or BLOCKED — with its criterion and evidence is recorded in the validation report published with the project data (validation/report.json), together with the overall status. A gate is marked PASS only when a recorded check meets its criterion; a gate with no recorded result stays PENDING, and a gate that depends on missing inputs is BLOCKED. The counts change as new evidence is published, so read them in the validation report rather than relying on a number written here.",
+   "body": "LUMEN's checks are numbered gates (G0 to G11). Each gate's real status — PASS, FAIL, PENDING or BLOCKED — with its criterion and evidence is recorded in the validation report published with the project data (validation/report.json), together with the overall status. A gate is marked PASS only when a recorded check meets its criterion; a gate with no recorded result stays PENDING, and a gate that depends on missing inputs is BLOCKED. The counts change as new evidence is published, so read them in the validation report rather than relying on a number written here.",
+   "source": "validation report (validation/report.json)",
+   "anchor": "what-do-the-validation-gates-mean-and-how-many-pass",
+   "metrics": [],
+   "tags": [
+    "gates",
+    "validation gates",
+    "g0",
+    "g1",
+    "g2",
+    "g4",
+    "g7",
+    "pass",
+    "pending",
+    "blocked",
+    "how many pass",
+    "validated",
+    "checks",
+    "report status"
+   ]
+  },
+  {
+   "id": "help:can-i-click-a-chart-to-move-through-time",
+   "kind": "howto",
+   "title": "Can I click a chart to move through time?",
+   "summary": "Yes. On Stand here, hovering over the power chart or the barcode draws a dashed line on both, and clicking either one jumps the clock to that moment, so the panorama, the numbers panel and the charts all move together. Clicking a row of the Windows table jumps to the start of that window.",
+   "body": "Yes. On Stand here, hovering over the power chart or the barcode draws a dashed line on both, and clicking either one jumps the clock to that moment, so the panorama, the numbers panel and the charts all move together. Clicking a row of the Windows table jumps to the start of that window.",
+   "source": "live pages (Stand here, Details)",
+   "anchor": "can-i-click-a-chart-to-move-through-time",
+   "metrics": [],
+   "tags": [
+    "scrub",
+    "click chart",
+    "hover",
+    "crosshair",
+    "ghost line",
+    "move time",
+    "jump",
+    "timeline",
+    "power chart",
+    "barcode click"
+   ]
+  },
+  {
+   "id": "help:can-i-pick-a-different-date",
+   "kind": "howto",
+   "title": "Can I pick a different date?",
+   "summary": "Yes. The \"Start date\" box in the header sets the first day of every window (in UTC). It applies to all the pages: the Orbit clock, the Stand here numbers, Compare and the Slip explorer. You can choose any day from 2 January 2023 to 31 October 2030, because the ephemeris data ends on 31 December 2030 and the longest window needs room after the start. The default is 8 February 2027. The date resets to the default when you reload the page.",
+   "body": "Yes. The \"Start date\" box in the header sets the first day of every window (in UTC). It applies to all the pages: the Orbit clock, the Stand here numbers, Compare and the Slip explorer. You can choose any day from 2 January 2023 to 31 October 2030, because the ephemeris data ends on 31 December 2030 and the longest window needs room after the start. The default is 8 February 2027. The date resets to the default when you reload the page.",
+   "source": "live pages (header)",
+   "anchor": "can-i-pick-a-different-date",
+   "metrics": [],
+   "tags": [
+    "date",
+    "start date",
+    "date picker",
+    "change date",
+    "other date",
+    "different date",
+    "when",
+    "which dates",
+    "2028",
+    "2029",
+    "calendar",
+    "window start"
+   ]
+  },
+  {
+   "id": "decision:R2-1",
+   "kind": "decision",
+   "title": "Published Targets category restored (CLPS, commercial, international) with \"as published on [date]\" and no status/schedu",
+   "summary": "Why: PS asks for Apollo, CLPS, commercial and other countries' sites",
+   "body": "Published Targets category restored (CLPS, commercial, international) with \"as published on [date]\" and no status/schedule text; more historical sites (Apollo 15/17, Blue Ghost M1, SLIM, Chang'e-6) Why: PS asks for Apollo, CLPS, commercial and other countries' sites",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-1 (§7, §8.4)",
+   "anchor": "r2-1",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-2",
+   "kind": "decision",
+   "title": "Tier B extended to 80–90°S (2 km inside 85°S, 4 km for 80–85°S)",
+   "summary": "Why: Artemis regions lie within ~6° of the pole; Malapert/IM-1 at ~80°S",
+   "body": "Tier B extended to 80–90°S (2 km inside 85°S, 4 km for 80–85°S) Why: Artemis regions lie within ~6° of the pole; Malapert/IM-1 at ~80°S",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-2 (§4, §4.2)",
+   "anchor": "r2-2",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-3",
+   "kind": "decision",
+   "title": "Seasons: Season Strip (MVP) + 12-month Feasibility Calendar (Tier 1)",
+   "summary": "Why: PS: \"across different lunar days or seasons\"",
+   "body": "Seasons: Season Strip (MVP) + 12-month Feasibility Calendar (Tier 1) Why: PS: \"across different lunar days or seasons\"",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-3 (§8.6, §9)",
+   "anchor": "r2-3",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-4",
+   "kind": "decision",
+   "title": "Earth Twin overlay + lunar-vs-terrestrial contrast strip (Educator)",
+   "summary": "Why: PS: make lunar vs terrestrial differences apparent",
+   "body": "Earth Twin overlay + lunar-vs-terrestrial contrast strip (Educator) Why: PS: make lunar vs terrestrial differences apparent",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-4 (§8.8, §5.9)",
+   "anchor": "r2-4",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-5",
+   "kind": "decision",
+   "title": "Science context: distance to nearest permanently shadowed region (PSR) next to engineering metrics",
+   "summary": "Why: PS: balance science and engineering needs",
+   "body": "Science context: distance to nearest permanently shadowed region (PSR) next to engineering metrics Why: PS: balance science and engineering needs",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-5 (§4 P15, §5.7)",
+   "anchor": "r2-5",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-6",
+   "kind": "decision",
+   "title": "Sun elevation is the hero tile; 3D Horizon Dome promoted to Tier 1; deep-links to QuickMap / Moon Trek / Horizons",
+   "summary": "Why: PS: display solar elevation prominently; multiple visualisations; complement existing tools",
+   "body": "Sun elevation is the hero tile; 3D Horizon Dome promoted to Tier 1; deep-links to QuickMap / Moon Trek / Horizons Why: PS: display solar elevation prominently; multiple visualisations; complement existing tools",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-6 (§8.3, §8.10, §9)",
+   "anchor": "r2-6",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-7",
+   "kind": "decision",
+   "title": "Event-time uncertainty in MVP (\"Sunset in 41 h ± 5 h\") via horizon-σ ÷ clearance rate, plus ± bounds on percentages",
+   "summary": "Why: Near the pole a 0.2° horizon error can shift sunrise/sunset by hours",
+   "body": "Event-time uncertainty in MVP (\"Sunset in 41 h ± 5 h\") via horizon-σ ÷ clearance rate, plus ± bounds on percentages Why: Near the pole a 0.2° horizon error can shift sunrise/sunset by hours",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-7 (§5.8)",
+   "anchor": "r2-7",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-8",
+   "kind": "decision",
+   "title": "Windows Table (every Sun / Earth / link / overlap window with start, end, duration, ±) + CSV in MVP",
+   "summary": "Why: Planners need numbers they can paste into a plan",
+   "body": "Windows Table (every Sun / Earth / link / overlap window with start, end, duration, ±) + CSV in MVP Why: Planners need numbers they can paste into a plan",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-8 (§8.3, §9)",
+   "anchor": "r2-8",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-9",
+   "kind": "decision",
+   "title": "Pointing & Link readout: Earth az/el/range/light-time, Sun az/el, per-station DSN lanes",
+   "summary": "Why: Comms needs where to point and when a station listens",
+   "body": "Pointing & Link readout: Earth az/el/range/light-time, Sun az/el, per-station DSN lanes Why: Comms needs where to point and when a station listens",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-9 (§8.3)",
+   "anchor": "r2-9",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-10",
+   "kind": "decision",
+   "title": "Quick Answer card: lat/lon + UTC → one compact answer",
+   "summary": "Why: Single-point \"calculator\" use",
+   "body": "Quick Answer card: lat/lon + UTC → one compact answer Why: Single-point \"calculator\" use",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-10 (§8.5)",
+   "anchor": "r2-10",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-11",
+   "kind": "decision",
+   "title": "Definitions Bar under the Answer Strip: availability definitions visible and editable in place",
+   "summary": "Why: Results are meaningless without their definitions",
+   "body": "Definitions Bar under the Answer Strip: availability definitions visible and editable in place Why: Results are meaningless without their definitions",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-11 (§8.3)",
+   "anchor": "r2-11",
+   "metrics": []
+  },
+  {
+   "id": "decision:R2-12",
+   "kind": "decision",
+   "title": "Emphasis: first thing every user sees is Sun/Earth vs horizon; slope/tilt is the second layer",
+   "summary": "Why: Relevance to the PS core",
+   "body": "Emphasis: first thing every user sees is Sun/Earth vs horizon; slope/tilt is the second layer Why: Relevance to the PS core",
+   "source": "PLAN_FINAL, Revision 2 changelog R2-12 (§8.9, §12)",
+   "anchor": "r2-12",
+   "metrics": []
+  }
+ ]
+}

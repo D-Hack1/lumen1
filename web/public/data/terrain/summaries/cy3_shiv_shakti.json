@@ -1,0 +1,30 @@
+{
+  "dem_source": "polar_60m_lola_pgda_90",
+  "dispersion_available": false,
+  "files_present": {
+    "dispersion_bin": null,
+    "dispersion_json": null,
+    "mask_bin": "terrain/masks/cy3_shiv_shakti.bin",
+    "mask_json": "terrain/masks/cy3_shiv_shakti.json",
+    "pad_json": "terrain/pad/cy3_shiv_shakti.json",
+    "sigma_bin": null,
+    "sigma_json": null
+  },
+  "git_commit": "f14aa632d1d0d51615538d36f3eeb2bc39f45b96",
+  "mask_available": true,
+  "near_field_res_m": 60.0,
+  "pad_available": true,
+  "pad_headline": {
+    "downhill_aspect_deg": 10.641259650749362,
+    "slope_deg": 0.5137536572065533,
+    "under_resolved": true,
+    "uphill_az_deg": 190.64125965074936
+  },
+  "psr": null,
+  "run_timestamp_utc": "2026-11-15T16:17:01.690111Z",
+  "sigma_available": false,
+  "site_id": "cy3_shiv_shakti",
+  "tier": "Tier A",
+  "unavailable": {},
+  "version": "0.1.0"
+}

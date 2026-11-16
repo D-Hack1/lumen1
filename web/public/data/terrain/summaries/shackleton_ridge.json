@@ -1,0 +1,25 @@
+{
+  "dem_source": "polar_10m_lola_pgda_90",
+  "dispersion_available": false,
+  "files_present": {
+    "dispersion_bin": null,
+    "dispersion_json": null,
+    "mask_bin": "terrain/masks/shackleton_ridge.bin",
+    "mask_json": "terrain/masks/shackleton_ridge.json",
+    "pad_json": null,
+    "sigma_bin": null,
+    "sigma_json": null
+  },
+  "git_commit": "5c88d6ae5d06a4a7f4f122838044052605b75c57",
+  "mask_available": true,
+  "near_field_res_m": 10.0,
+  "pad_available": false,
+  "pad_headline": null,
+  "psr": null,
+  "run_timestamp_utc": "2026-11-14T16:03:29.633031Z",
+  "sigma_available": false,
+  "site_id": "shackleton_ridge",
+  "tier": "Tier A",
+  "unavailable": {},
+  "version": "0.1.0"
+}

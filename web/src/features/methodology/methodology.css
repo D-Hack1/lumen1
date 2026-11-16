@@ -1,0 +1,124 @@
+/* Owner: Ebin — the Methodology page, in the live pages' palette (variables come from orbit.css's .lm-theme-dark / .lm-theme-light). */
+.lm-meth {
+  max-width: 980px;
+}
+.lm-meth__toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.lm-meth__toc a {
+  font-size: 13px;
+  color: var(--amberT);
+  text-decoration: none;
+  border: 1px solid var(--line3);
+  border-radius: 999px;
+  padding: 4px 11px;
+}
+.lm-meth__toc a:hover {
+  border-color: var(--line6);
+}
+.lm-meth__sec {
+  scroll-margin-top: 80px;
+}
+.lm-meth__sec h2 {
+  margin: 0 0 10px;
+  font-family: 'DM Sans', Inter, sans-serif;
+  font-weight: 400;
+  font-size: 21px;
+}
+.lm-meth__sec p,
+.lm-meth__sec li {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg2);
+}
+.lm-meth__sec ul,
+.lm-meth__sec ol {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lm-meth__sec a {
+  color: var(--amberT);
+}
+.lm-meth__sec code {
+  font: 13px 'JetBrains Mono', monospace;
+  background: var(--sunk);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.lm-meth__err {
+  color: var(--badT);
+}
+.lm-meth__tablewrap {
+  overflow-x: auto;
+}
+.lm-meth__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.lm-meth__table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--mut);
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line5);
+  white-space: nowrap;
+}
+.lm-meth__table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line4);
+  vertical-align: top;
+  color: var(--fg2);
+}
+.lm-meth__table td[data-status='PASS'] {
+  color: var(--goodT);
+  white-space: nowrap;
+}
+.lm-meth__table td[data-status='PENDING'] {
+  color: var(--amberT);
+  white-space: nowrap;
+}
+.lm-meth__table td[data-status='FAIL'],
+.lm-meth__table td[data-status='BLOCKED'] {
+  color: var(--badT);
+  white-space: nowrap;
+}
+.lm-meth__ev {
+  font-size: 12.5px;
+  color: var(--mut);
+  max-width: 340px;
+}
+.lm-meth__gloss {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 28px;
+}
+@media (max-width: 800px) {
+  .lm-meth__gloss {
+    grid-template-columns: 1fr;
+  }
+}
+.lm-meth__gloss dt {
+  font-weight: 500;
+  color: var(--fg);
+}
+.lm-meth__gloss dd {
+  margin: 3px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--fg2);
+}
+.lm-meth__unit,
+.lm-meth__caveat {
+  color: var(--mut);
+}
+.lm-meth__formula {
+  font: 12.5px 'JetBrains Mono', monospace;
+  color: var(--mut);
+}

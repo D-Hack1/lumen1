@@ -1,0 +1,60 @@
+{
+  "schema": "mask",
+  "version": "1.0.0",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "producer": "web/src/mocks/make_mock.py",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "git_commit": "0000000000000000000000000000000000000000",
+  "site_id": "im2_athena",
+  "bin_width_deg": 0.1,
+  "azimuth_count": 3600,
+  "azimuth_zero": "projected_site_frame_reference",
+  "azimuth_direction": "toward_site_frame_e",
+  "azimuth_center": "i_plus_0.5_times_bin_width",
+  "heights_m": [
+    1.0,
+    2.0,
+    5.0,
+    10.0
+  ],
+  "ray_range_km": 250.0,
+  "near_field_resolution_m": 5,
+  "d_min_m": 15,
+  "z0_m": 0.0,
+  "median_filter_region_radius_m": 100.0,
+  "median_filter_kernel_px": 3,
+  "median_filter_status": "applied",
+  "plane_fit_kernel_px": 7,
+  "plane_fit_half_width_px": 3,
+  "slope_deg": 7.0,
+  "downhill_aspect_deg": 200.0,
+  "uphill_azimuth_deg": 20.0,
+  "global_max_deg": [
+    3.324127,
+    3.311963,
+    3.291169,
+    3.272984
+  ],
+  "global_min_deg": [
+    -0.469582,
+    -0.481746,
+    -0.50254,
+    -0.520724
+  ],
+  "range_extrema": {
+    "strategy": "finite_segment_tree",
+    "supports_circular_azimuth_ranges": true
+  },
+  "near_zone_model": "fitted_local_plane",
+  "dem_source": "MOCK-DEM",
+  "binary": {
+    "magic": "LUMENMSK",
+    "format_version": 1,
+    "byte_order": "little",
+    "float_encoding": "ieee754-binary32",
+    "layout": "header_then_elevation_then_distance",
+    "array_order": "c_contiguous_height_major"
+  },
+  "mock_nan_bins": []
+}

@@ -1,0 +1,35 @@
+{
+  "created_utc": "2023-01-01T00:00:00Z",
+  "days": 1096,
+  "definitions": "2 m; Sun disk >=50%; Earth disk >=50% and margin >=1 deg",
+  "dtype": "uint8",
+  "excluded_sites": {
+    "shackleton_ridge": "not published: preliminary terrain and unresolved target coordinates"
+  },
+  "fields": [
+    "sunlit_pct",
+    "link_pct"
+  ],
+  "offset": null,
+  "producer": "lumen_pipeline.catalog.sparklines",
+  "provenance": {
+    "blue_ghost_m1": "smooth-sphere estimate; terrain unavailable",
+    "cy3_shiv_shakti": "smooth-sphere estimate; terrain unavailable",
+    "im2_athena": "smooth-sphere estimate; terrain unavailable"
+  },
+  "scale": null,
+  "sha256": "6770730622b86021f34369dd5beb3584e8bb298578f7a309df9db75bfe5d5b81",
+  "shape": [
+    3,
+    2,
+    1096
+  ],
+  "sites": [
+    "cy3_shiv_shakti",
+    "im2_athena",
+    "blue_ghost_m1"
+  ],
+  "start_utc": "2023-01-01T00:00:00Z",
+  "units": "percent",
+  "version": "1"
+}

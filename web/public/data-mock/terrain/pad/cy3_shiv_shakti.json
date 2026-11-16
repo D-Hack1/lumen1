@@ -1,0 +1,40 @@
+{
+  "schema": "pad",
+  "version": "0.1.0",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "producer": "lumen_pipeline.terrain.pad (mock)",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "site_id": "cy3_shiv_shakti",
+  "ground_normal_me": [
+    0.330280236,
+    0.126610952,
+    -0.935352678
+  ],
+  "slope_deg": 4.0,
+  "downhill_aspect_deg": 120.0,
+  "uphill_az_deg": 300.0,
+  "z0_m": 0.0,
+  "d_min_m": 60,
+  "near_field_resolution_m": 20,
+  "under_resolved": true,
+  "plane_fit": {
+    "k": 3,
+    "window_px": [
+      7,
+      7
+    ],
+    "window_dim_m": [
+      140,
+      140
+    ],
+    "baseline_m": 120,
+    "dem_source": "MOCK-DEM"
+  },
+  "dispersion_slope_stats": {
+    "p50": 4.0,
+    "p95": 5.6,
+    "max": 6.0,
+    "pct_below_tolerance": 100.0
+  }
+}

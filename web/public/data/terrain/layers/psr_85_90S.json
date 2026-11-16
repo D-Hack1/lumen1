@@ -1,0 +1,50 @@
+{
+  "components": {
+    "min_qualifying_pixels": 28,
+    "qualifying_components": 2443,
+    "total_shadowed_components": 53720
+  },
+  "created_utc": "2026-11-15T00:36:25.909228Z",
+  "definition": "permanently shadowed region (a cold trap that may host ice)",
+  "extent": "85_90S",
+  "filename": "layers/psr_85_90S.png",
+  "git_commit": "c4e5c36c421c88b90e996df1ecbc79ec6e6a220d",
+  "height_px": 5058,
+  "layer_id": "psr",
+  "legend_stops": [
+    {
+      "class": "psr",
+      "hex": "#3182bd",
+      "label": "permanently shadowed region (a cold trap that may host ice)"
+    },
+    {
+      "class": "none",
+      "hex": null,
+      "label": "not a qualifying permanently shadowed region"
+    }
+  ],
+  "method": "Classification input: PGDA LPSR raster, decoded value > 0.5 treated as shadowed. 8-connected component labeling (scipy.ndimage.label, 3x3 structure). Area filter: components retained only if pixel count >= 28 (>= 0.1 km^2 at 60 m/px). Euclidean distance transform (scipy.ndimage.distance_transform_edt) computed in projected metres, then divided by the per-pixel polar-stereographic scale factor k(lat)=2/(1+sin|lat|) to give true ground-distance kilometres.",
+  "nodata_encoding": "fully transparent alpha channel (RGBA PNG); non-qualifying pixels are also transparent",
+  "producer": "lumen_pipeline.terrain.psr",
+  "projection": {
+    "central_meridian_deg": 0.0,
+    "latitude_of_origin_deg": -90.0,
+    "name": "south-polar stereographic",
+    "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+    "reference_radius_m": 1737400.0,
+    "scale_factor_at_pole": 1.0
+  },
+  "radius_m": 151713.0444184977,
+  "resolution_m": 60.0,
+  "source": {
+    "citation": "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030",
+    "format": "raster (not vector polygon/shapefile; see module docstring)",
+    "name": "Permanent shadow classification (LPSR), 85S-90S, 60 m/px",
+    "product_key": "psr_lpsr_85S_60m_pgda_69",
+    "source_classification": "published",
+    "source_page": "https://pgda.gsfc.nasa.gov/products/69",
+    "url": "https://pgda.gsfc.nasa.gov/data/MoonIllumination/LPSR_85S_060M_201608.TIF"
+  },
+  "version": "0.1.0",
+  "width_px": 5058
+}

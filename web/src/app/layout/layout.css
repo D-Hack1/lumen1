@@ -1,0 +1,242 @@
+/* Owner: Abhinav — viewport-locked shell + bento grids (FRONTEND_BUILD_GUIDE §4).
+   All sizes are CSS vars from tokens.ts. Rule: every grid track is min-height: 0, overflow hidden;
+   only [data-scroll="allowed"] containers scroll (site list, Windows Table body, Scan list, Methodology). */
+
+.app-root {
+  display: grid;
+  grid-template-rows: var(--slot-mission-bar) minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.app-stage {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+.app-view {
+  grid-area: 1 / 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  animation: lumen-fade-in var(--dur-view) var(--ease-out);
+}
+/* Outgoing view during the ≤ 150 ms crossfade: on top, fading out, never interactive (exit ≤ enter). */
+.app-view--leaving {
+  z-index: 1;
+  pointer-events: none;
+  animation: lumen-fade-out var(--dur-fast) var(--ease-out) forwards;
+}
+
+/* ---------- bento ---------- */
+.bento {
+  display: grid;
+  height: 100%;
+  min-height: 0;
+  padding: var(--slot-pad);
+  gap: var(--slot-gutter);
+  /* nominal column widths include their share of padding + gutter; centre takes the rest */
+  grid-template-columns:
+    calc(var(--col-left) - var(--slot-pad) - var(--slot-gutter) / 2)
+    minmax(0, 1fr)
+    calc(var(--col-right) - var(--slot-pad) - var(--slot-gutter) / 2);
+}
+
+.bento__col {
+  display: grid;
+  min-height: 0;
+  min-width: 0;
+  gap: var(--slot-gutter);
+  overflow: hidden;
+}
+.bento__col > * {
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Cockpit */
+.bento--cockpit .bento__col--left {
+  grid-template-rows: var(--slot-search) var(--slot-map) minmax(0, 1fr);
+}
+.bento--cockpit .bento__col--centre {
+  grid-template-rows:
+    var(--slot-answer) var(--slot-definitions) minmax(var(--slot-ribbon-min), 1fr)
+    var(--slot-analysis) var(--slot-barcode) var(--slot-slip);
+}
+.bento--cockpit .bento__col--right {
+  grid-template-rows: var(--slot-metric-deck) minmax(0, 1fr) var(--slot-accordion-header);
+}
+.bento--cockpit .bento__col--right.is-tabs {
+  grid-template-rows: var(--slot-right-tabs) minmax(0, 1fr) var(--slot-accordion-header);
+}
+
+/* Compare */
+.bento--compare .bento__col--left {
+  grid-template-rows: var(--slot-compare-rows) minmax(0, 1fr);
+}
+.bento--compare .bento__col--centre {
+  grid-template-rows: var(--slot-slip) var(--slot-compare-tabs) minmax(0, 1fr) var(--slot-delta-table);
+}
+.bento--compare .bento__col--right {
+  grid-template-rows: minmax(0, 1fr) var(--slot-compare-windows);
+}
+/* Compare Windows Table: caption line + Ebin's table filling the rest (slot is a whitelisted scroller) */
+.slot--compareWindows {
+  display: flex;
+  flex-direction: column;
+}
+.slot--compareWindows > :not(.cmp-win__cap) {
+  flex: 1;
+  min-height: 0;
+}
+.cmp-win__cap {
+  display: flex;
+  flex: none;
+  align-items: baseline;
+  gap: var(--sp-4);
+  min-width: 0;
+  padding: var(--sp-2) var(--sp-5) 0;
+  font-size: var(--fs-xs);
+}
+.cmp-win__title {
+  flex: none;
+  color: var(--c-text-muted);
+  font-weight: var(--fw-semibold);
+}
+.cmp-win__note {
+  min-width: 0;
+  color: var(--c-text-faint);
+}
+
+/* Map slot hosts a square map centred in the column */
+.slot--map {
+  display: grid;
+  place-items: center;
+}
+.slot--map > .map-square {
+  /* square at the budget, inside the slot's 1 px border */
+  width: calc(var(--slot-map) - 2px);
+  height: calc(var(--slot-map) - 2px);
+  max-width: 100%;
+  position: relative;
+}
+
+/* Right-column tabs (V4 / V4b) */
+.right-tabs {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.right-tabs .ui-seg {
+  width: 100%;
+}
+.right-tabs .ui-seg__opt {
+  flex: 1;
+}
+
+.compare-tabs {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Methodology reading view */
+.methodology {
+  height: 100%;
+  min-height: 0;
+  padding: var(--slot-pad);
+  display: grid;
+  justify-items: center;
+}
+.methodology > .slot {
+  width: min(100%, 880px);
+}
+
+/* ---------- slot ---------- */
+.slot {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--c-surface1);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-lg);
+}
+.slot[data-scroll='allowed'] {
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.slot__ph {
+  position: absolute;
+  inset: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px var(--sp-4);
+  padding: 0 var(--sp-4);
+  overflow: hidden;
+  border: 1px dashed var(--c-hairline-strong);
+  border-radius: var(--r-md);
+  color: var(--c-text-faint);
+  font-size: var(--fs-xs);
+  pointer-events: none;
+}
+.slot__ph-label {
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+.slot__ph-status {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.slot__ph-status--missing {
+  color: var(--c-marginal);
+}
+.slot__ph-status--stub {
+  color: var(--c-both);
+}
+.slot__ph-size {
+  font-size: var(--fs-2xs);
+}
+/* Short slots: a single line, no wrap */
+.slot--definitions .slot__ph,
+.slot--slip .slot__ph,
+.slot--compareSlip .slot__ph,
+.slot--profileBattery .slot__ph,
+.slot--barcode .slot__ph {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  inset: 2px;
+}
+
+/* Corner tag on slots that render a teammate stub (removed once the slot is 'live') */
+.slot__tag {
+  position: absolute;
+  right: 4px;
+  bottom: 3px;
+  z-index: 1;
+  padding: 0 4px;
+  border-radius: var(--r-sm);
+  background: var(--c-surface1);
+  color: var(--c-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  line-height: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+/* Short slots have no free corner — the tag would cover the component's own controls. */
+.slot--barcode .slot__tag,
+.slot--slip .slot__tag,
+.slot--compareSlip .slot__tag {
+  display: none;
+}

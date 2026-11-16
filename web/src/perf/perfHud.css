@@ -1,0 +1,48 @@
+/* Owner: Nived. Dev-only overlay; position: fixed so it can never affect the zero-scroll layout. */
+.perf-hud {
+  position: fixed;
+  right: var(--sp-4);
+  bottom: var(--sp-4);
+  z-index: 1000;
+  padding: var(--sp-3) var(--sp-4);
+  color: var(--c-text);
+  background: var(--c-surface2);
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.perf-hud table {
+  border-collapse: collapse;
+}
+.perf-hud th {
+  text-align: right;
+  color: var(--c-text-faint);
+  font-weight: var(--fw-regular);
+}
+.perf-hud th:first-child,
+.perf-hud td:first-child {
+  text-align: left;
+  padding-right: var(--sp-4);
+}
+.perf-hud td {
+  text-align: right;
+  padding: 1px var(--sp-2);
+}
+.perf-hud tr[data-status='over'] td {
+  color: var(--c-nogo);
+}
+.perf-hud tr[data-status='ok'] td:nth-child(4) {
+  color: var(--c-go);
+}
+.perf-hud tr[data-status='none'] td {
+  color: var(--c-text-faint);
+}
+.perf-hud__counters {
+  display: flex;
+  gap: var(--sp-5);
+  margin-top: var(--sp-2);
+  color: var(--c-text-muted);
+}

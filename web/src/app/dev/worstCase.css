@@ -1,0 +1,215 @@
+/* Owner: Abhinav — styles for the worst-case fixture stand-ins only (loaded with ?fixture=worst-case). */
+.fx-pad {
+  padding: var(--sp-4);
+}
+.fx-pad-x {
+  padding: var(--sp-3) var(--sp-4) 0;
+}
+.fx-fill {
+  height: 100%;
+}
+.fx-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-height: 0;
+}
+.fx-stack--tight {
+  gap: var(--sp-3);
+}
+.fx-strong {
+  color: var(--c-text);
+  font-weight: var(--fw-semibold);
+}
+.fx-faint {
+  color: var(--c-text-faint);
+  font-size: var(--fs-xs);
+  margin: 0;
+}
+.fx-line {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  height: 100%;
+  padding: 0 var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--c-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fx-line.truncate {
+  display: block;
+  line-height: calc(var(--slot-definitions) - 2px);
+}
+.fx-grid {
+  display: grid;
+  gap: var(--sp-2) var(--sp-5);
+  min-width: 0;
+}
+.fx-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-content: center;
+  height: 100%;
+  row-gap: var(--sp-1);
+  padding: var(--sp-2) var(--sp-4);
+}
+.fx-search-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: 5px var(--sp-3);
+}
+:root[data-density='d4'] .fx-search-block {
+  gap: var(--sp-2);
+}
+:root[data-density='d4'] .fx-search {
+  height: 24px;
+  line-height: 22px;
+}
+.fx-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.fx-cell {
+  min-width: 0;
+}
+.fx-cell__label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--c-text-faint);
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.fx-cell__value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-md);
+}
+.fx-hero {
+  font-size: var(--fs-2xl);
+  line-height: 1.1;
+}
+.fx-badges,
+.fx-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.fx-search {
+  height: 26px;
+  line-height: 24px;
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-md);
+  color: var(--c-text-faint);
+  font-size: var(--fs-sm);
+}
+.fx-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--c-surface2);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-md);
+  min-width: 0;
+}
+.fx-table {
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}
+.fx-table[data-scroll='allowed'] {
+  overflow: auto;
+}
+.fx-table table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--fs-xs);
+}
+.fx-table th {
+  position: sticky;
+  top: 0;
+  background: var(--c-surface1);
+  text-align: left;
+  color: var(--c-text-faint);
+  font-weight: var(--fw-medium);
+  padding: 3px var(--sp-3);
+  border-bottom: 1px solid var(--c-hairline);
+}
+.fx-table td {
+  padding: 2px var(--sp-3);
+  border-bottom: 1px solid var(--c-hairline);
+  max-width: 0;
+}
+.fx-barcode {
+  display: flex;
+  gap: 1px;
+  height: 100%;
+  padding: var(--sp-3);
+}
+.fx-barcode--row {
+  height: 22px;
+  padding: 0;
+  flex: none;
+}
+.fx-bar {
+  flex: 1;
+  border-radius: 1px;
+}
+.fx-bar--sun {
+  background: var(--c-sun);
+}
+.fx-bar--both {
+  background: var(--c-both);
+}
+.fx-bar--earth {
+  background:
+    radial-gradient(circle, var(--c-earth) 1.4px, transparent 1.8px) 0 0 / 6px 6px,
+    var(--c-blocked-bg);
+}
+.fx-bar--blocked {
+  background: repeating-linear-gradient(45deg, var(--c-blocked) 0 1.5px, transparent 1.5px 6px), var(--c-blocked-bg);
+}
+.fx-track {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--c-surface4);
+}
+.fx-row {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-4);
+  height: 40px;
+  padding: 0 var(--sp-4);
+  background: var(--c-surface2);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+}
+.fx-swatch {
+  display: grid;
+  place-items: center;
+  height: 20px;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--c-text-on-accent);
+}
+.fx-swatch--A {
+  background: var(--c-accent);
+}
+.fx-swatch--B {
+  background: var(--c-sun);
+}
+.fx-swatch--C {
+  background: var(--c-earth);
+}
+.fx-swatch--D {
+  background: var(--c-both);
+}

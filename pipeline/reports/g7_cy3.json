@@ -1,0 +1,199 @@
+{
+  "absolute_error_deg": 0.13785994964322157,
+  "calculation_assumptions": {
+    "landing_location": {
+      "basis": "PLAN_FINAL_R3_DELTA.md D-12 landing-coordinate input; the NASA/LROC observed fix and ISRO planned target are recorded separately.",
+      "height_m": 0.0,
+      "latitude_deg": -69.373,
+      "longitude_deg_east": 32.319,
+      "status": "SOURCE_UNVERIFIED"
+    },
+    "observation_geometry": {
+      "basis": "R3 D-3 and D-8 smooth-sphere geometry lock.",
+      "observer": "spherical lunar surface site at 0 m height",
+      "status": "VERIFIED_COMPUTATION_CONFIGURATION",
+      "terrain_horizon": "not applied",
+      "topocentric_direction": "LT+S apparent Moon-centred Sun vector minus site vector"
+    },
+    "reference_frame": {
+      "basis": "R3 D-3 locked MOON_ME_DE421 frame; ephemeris sidecar requires this frame.",
+      "status": "VERIFIED_COMPUTATION_CONFIGURATION",
+      "value": "MOON_ME_DE421"
+    },
+    "sun_elevation_definition": {
+      "basis": "Ephemeris.body_at subtracts the site vector from the interpolated Sun-centre vector before site-frame elevation conversion.",
+      "calculated_value": "Sun-centre apparent topocentric elevation above the local spherical horizontal",
+      "calculation_status": "VERIFIED_IMPLEMENTATION",
+      "reported_claim_limb_convention": "SOURCE_UNVERIFIED"
+    },
+    "touchdown_time": {
+      "basis": "PLAN_FINAL_R3_DELTA.md D-12; no primary seconds-level source located.",
+      "precision": "minute",
+      "status": "SOURCE_UNVERIFIED",
+      "value_utc": "2023-08-23T12:33:00Z"
+    }
+  },
+  "calculation_status": "COMPUTED",
+  "check": "CY-3 Sun elevation at touchdown",
+  "computed": {
+    "et_seconds": 746066048.1827785,
+    "sun_azimuth_deg": 96.10953233222143,
+    "sun_elevation_deg": 8.612140050356778
+  },
+  "coordinates": {
+    "coordinate_frame": "MOON_ME_DE421",
+    "height_m": 0.0,
+    "latitude_deg": -69.373,
+    "longitude_deg_east": 32.319,
+    "observed_landing_fix": {
+      "latitude_deg": -69.3741,
+      "longitude_deg_east": 32.32,
+      "source": "NASA/LROC image annotation",
+      "source_url": "https://lroc.im-ldi.com/images/1314",
+      "status": "OBSERVED_APPROXIMATE"
+    },
+    "planned_target": {
+      "latitude_deg": -69.367621,
+      "longitude_deg_east": 32.348126,
+      "source": "ISRO Chandrayaan-3 Details, Landing Site (Prime)",
+      "source_url": "https://www.isro.gov.in/Chandrayaan3_Details.html",
+      "status": "PLANNED_TARGET_NOT_LANDING_FIX"
+    },
+    "source": "catalog/model assumption",
+    "source_url": null,
+    "status": "SOURCE_UNVERIFIED"
+  },
+  "ephemeris": {
+    "aberration_correction": "LT+S",
+    "ephemeris_hash_matches_sidecar": true,
+    "interpolation": "cubic Hermite",
+    "kernel_hashes_match_sidecar": true,
+    "kernel_provenance": [
+      {
+        "filename": "naif0012.tls",
+        "sha256": "3c2c786080569f0336b7c090866acc0f0b38a935db51c15da54de1efc10bfa17"
+      },
+      {
+        "filename": "pck00011.tpc",
+        "sha256": "8fd7588e258d49362198381b039c6d577db7e6f9be35dacfe43220698669f1eb"
+      },
+      {
+        "filename": "de421.bsp",
+        "sha256": "08b20db2ae22488650641c5a9033e5bfda4b1c4b440cfeaf20f621cfa18ecdb3"
+      },
+      {
+        "filename": "moon_pa_de421_1900-2050.bpc",
+        "sha256": "656f90616403d75a75f0cd6c8830fc5b44f8cb4facb5ccb8915e752b397520cf"
+      },
+      {
+        "filename": "moon_080317.tf",
+        "sha256": "3a5bf575b1b946349b703719853c760db3b3902a6fce750bb721bb93c474cd00"
+      }
+    ],
+    "loaded_kernel_provenance": [
+      {
+        "filename": "naif0012.tls",
+        "sha256": "3c2c786080569f0336b7c090866acc0f0b38a935db51c15da54de1efc10bfa17"
+      },
+      {
+        "filename": "pck00011.tpc",
+        "sha256": "8fd7588e258d49362198381b039c6d577db7e6f9be35dacfe43220698669f1eb"
+      },
+      {
+        "filename": "de421.bsp",
+        "sha256": "08b20db2ae22488650641c5a9033e5bfda4b1c4b440cfeaf20f621cfa18ecdb3"
+      },
+      {
+        "filename": "moon_pa_de421_1900-2050.bpc",
+        "sha256": "656f90616403d75a75f0cd6c8830fc5b44f8cb4facb5ccb8915e752b397520cf"
+      },
+      {
+        "filename": "moon_080317.tf",
+        "sha256": "3a5bf575b1b946349b703719853c760db3b3902a6fce750bb721bb93c474cd00"
+      }
+    ],
+    "path": "web/public/data/ephem/ephem.bin",
+    "sha256": "765308c4598651c34ba0f1328b31f0b53947f1a9cab3b4df6defd44c0225a281",
+    "sidecar_path": "web/public/data/ephem/ephem.json",
+    "start_et_tdb": 725803268.1839136
+  },
+  "failure_reasons": {
+    "numerical": [
+      "unverified_mission_reference_not_a_pass_criterion"
+    ],
+    "provenance": [],
+    "timeline": [
+      "unverified_operations_threshold_not_a_pass_criterion"
+    ]
+  },
+  "id": "G7",
+  "im2_touchdown_conditions": {
+    "computed": {
+      "earth_azimuth_deg": 5.142977340540992,
+      "earth_elevation_deg": 11.193155868767695,
+      "et_seconds": 794554198.1854653,
+      "sun_azimuth_deg": 94.97724230472686,
+      "sun_elevation_deg": 2.4646206853404022
+    },
+    "coordinates": {
+      "coordinate_frame": "MOON_ME_DE421",
+      "height_m": 0.0,
+      "latitude_deg": -84.7906,
+      "longitude_deg_east": 29.1957,
+      "source": "catalog/model assumption",
+      "status": "SOURCE_UNVERIFIED"
+    },
+    "limitation": "The catalog records the documented IM-2 touchdown timestamp and landing coordinates, but this report has no independent primary source for a touchdown Sun or Earth condition.",
+    "status": "SOURCE_UNVERIFIED",
+    "timestamp_precision": "second",
+    "timestamp_utc": "2025-03-06T17:28:50Z"
+  },
+  "numerical_result": "NOT_EVALUATED",
+  "provenance_result": "PASS",
+  "qualitative_timeline_check": {
+    "criterion": "Recorded 6-degree crossing under an unverified operations threshold; not a pass criterion.",
+    "expected_window_end_exclusive_utc": "2023-09-05T00:00:00Z",
+    "expected_window_start_utc": "2023-09-02T00:00:00Z",
+    "status": "SOURCE_UNVERIFIED",
+    "sun_below_6_deg_utc": "2023-09-03T05:38:56Z"
+  },
+  "reference": {
+    "primary_source_status": "SOURCE_UNVERIFIED",
+    "recorded_tolerance_deg": 0.25,
+    "source": "PLAN_FINAL_R3_DELTA.md D-13 planned comparison input",
+    "source_metadata": {
+      "document_title": null,
+      "page_or_section": null,
+      "publication_date": null,
+      "quoted_numerical_claim": null,
+      "reported_sun_elevation_deg": 8.75,
+      "reported_uncertainty_deg": 0.25,
+      "research_note": "No ISRO mission document or primary mission publication located during the R3 source review states a Chandrayaan-3 landing Sun elevation of 8.75 degrees, an uncertainty of +/-0.25 degrees, or its limb convention. The value must not be used as a quantitative pass criterion.",
+      "source_url": null,
+      "sources_examined": [
+        {
+          "document_title": "Chandrayaan-3",
+          "page_or_section": "August 23, 2023 update",
+          "publication_date": "not stated; dated mission updates span 2023-07-06 to 2023-09-22",
+          "quoted_claim": "Chandrayaan-3 has successfully soft-landed on the moon.",
+          "supports_8_75_degree_claim": false,
+          "url": "https://www.isro.gov.in/Chandrayaan3.html"
+        },
+        {
+          "document_title": "Chandrayaan-3 Details",
+          "page_or_section": "Overall specifications, Landing Site (Prime)",
+          "publication_date": "not stated",
+          "quoted_claim": "4 km x 2.4 km 69.367621 S, 32.348126 E",
+          "supports_8_75_degree_claim": false,
+          "url": "https://www.isro.gov.in/Chandrayaan3_Details.html"
+        }
+      ],
+      "status": "SOURCE_UNVERIFIED"
+    },
+    "sun_elevation_deg": 8.75
+  },
+  "source_provenance_result": "BLOCKED",
+  "status": "BLOCKED",
+  "timestamp_precision": "minute",
+  "timestamp_utc": "2023-08-23T12:33:00Z"
+}

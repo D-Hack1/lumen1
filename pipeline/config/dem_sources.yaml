@@ -1,0 +1,566 @@
+
+# Owner: Shiva Shakthi
+# Verified DEM products and source-selection metadata.
+#
+# PGDA-90 elevations are stored in metres following the documented
+# kilometre-to-metre conversion. The height_relative convention is used
+# provisionally against the 1,737,400 m lunar reference sphere.
+# Formal vertical-datum confirmation remains outstanding.
+
+schema_version: "0.1.0"
+
+products:
+  polar_5m_lola_pgda_81:
+    name: "Polar 5 m LOLA 87-90S mosaic"
+    provider: "PGDA"
+    product_id: 81
+    source_page: "https://pgda.gsfc.nasa.gov/products/81"
+    resolution_m: 5.0
+    latitude_coverage: "87S-90S"
+    format: "GeoTIFF"
+    dem_url: "https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/87S/ldem_87s_5mpp.tif"
+    slope_url: "https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/87S/ldsm_87s_5mpp.tif"
+    error_url: null
+    frame: null
+    datum_reference: null
+    availability_status: "verified_product"
+    verification_status: "source_page_and_urls_provided"
+    notes: >
+      Do not classify as COG without verification. No _ERR URL is claimed.
+      The mosaic contains interpolated fill; nominal pixel spacing does not
+      establish uniform direct LOLA observation support.
+
+  site_specific_5m_lola_pgda_78:
+    name: "Site-specific 5 m LOLA products"
+    provider: "PGDA"
+    product_id: 78
+    source_page: "https://pgda.gsfc.nasa.gov/products/78"
+    resolution_m: 5.0
+    latitude_coverage: "site-specific"
+    format: "GeoTIFF"
+    dem_url: null
+    slope_url: null
+    error_url: null
+    frame: null
+    datum_reference: null
+    availability_status: "catalogue_product"
+    verification_status: "site_urls_pending_selection"
+    product_semantics:
+      surface_dem: true
+      slope: true
+      total_z_uncertainty: true
+      slope_uncertainty: true
+      clone_count: 100
+    notes: >
+      Register exact site product URLs only after confirming coverage of the
+      intended site. Product 78 supplies total Z uncertainty and clone
+      products; do not invent an _ERR URL. The inspected Site04 and Site07
+      products do not cover the current Shackleton Ridge coordinates.
+
+  polar_10m_lola_pgda_90:
+    name: "Polar 10 m LOLA 83-90S mosaic"
+    provider: "PGDA"
+    product_id: 90
+    source_page: "https://pgda.gsfc.nasa.gov/products/90"
+    resolution_m: 10.0
+    latitude_coverage: "83S-90S"
+    format: "GeoTIFF"
+    dem_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_83S_10MPP_ADJ.TIF"
+    error_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_83S_10MPP_ADJ_ERR.TIF"
+    slope_url: null
+    frame: "MOON_ME / DE421"
+    datum_reference: "1737400 m reference sphere"
+    unit: "m"
+    scale: 1.0
+    offset: 0.0
+    nodata: .nan
+    vertical_reference: "height_relative"
+    error_unit: "m"
+    error_scale: 1.0
+    error_offset: 0.0
+    error_nodata: .nan
+    error_vertical_reference: "height_relative"
+    format_metadata:
+      cog: true
+      elevation_unit: "m"
+      coordinate_system: "south-polar stereographic"
+    availability_status: "verified_product"
+    verification_status: "source_page_and_urls_provided"
+    notes: >
+      DEM and matching ERR grids were inspected. CRS, transform, dimensions,
+      resolution and nodata match. DEM history records kilometre-to-metre
+      conversion. Shackleton radial coverage and a 5 km DemReader window
+      were verified, including a successful matching ERR read. Error values
+      are uncertainty magnitudes; no sphere subtraction is applied to them.
+      Effective LOLA support is not uniform across the nominal 10 m grid.
+      Shackleton count-map inspection showed approximately 34 percent
+      directly supported pixels in the near-field crop. Direct GDAL/rasterio
+      inspection of LDEM_83S_10MPP_ADJ.TIF confirms its CRS is IAU
+      authority code 30100 ("Moon (2015) - Sphere / Ocentric"), ellipsoid
+      radius exactly 1737400 m, flattening 0 -- the same sphere this
+      datum_reference names. Its embedded GMT processing history tag
+      ("gmt grdmath ldem_83s_final_adj_10mpp_surf.grd 1000.0 MUL") confirms
+      the stored z values are a *_surf.grd grid multiplied by 1000 (the
+      kilometre-to-metre conversion), consistent with height relative to
+      that same sphere. This is strong supporting evidence, not yet a
+      literal textual confirmation from the product's cited reference
+      (Barker et al. 2023, Planet. Sci. J. 4, 183, DOI 10.3847/PSJ/acf3e1):
+      that paper was not reachable from this environment to read directly.
+      Formal vertical-datum confirmation remains outstanding pending that
+      reading (or an equivalent authoritative source).
+
+  polar_20m_lola_pgda_90:
+    name: "Polar 20 m LOLA 80-90S mosaic"
+    provider: "PGDA"
+    product_id: 90
+    source_page: "https://pgda.gsfc.nasa.gov/products/90"
+    resolution_m: 20.0
+    latitude_coverage: "80S-90S"
+    format: "GeoTIFF"
+    dem_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_20MPP_ADJ.TIF"
+    error_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_20MPP_ADJ_ERR.TIF"
+    slope_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDSM_80S_20MPP_ADJ.TIF"
+    frame: "MOON_ME / DE421"
+    datum_reference: "1737400 m reference sphere"
+    unit: "m"
+    scale: 1.0
+    offset: 0.0
+    nodata: .nan
+    vertical_reference: "height_relative"
+    error_unit: "m"
+    error_scale: 1.0
+    error_offset: 0.0
+    error_nodata: .nan
+    error_vertical_reference: "height_relative"
+    format_metadata:
+      cog: true
+      elevation_unit: "m"
+      slope_unit: "deg"
+      coordinate_system: "south-polar stereographic"
+    availability_status: "verified_product"
+    verification_status: "source_page_and_urls_provided"
+    notes: >
+      DEM and matching ERR grids were inspected. CRS, transform, dimensions,
+      resolution and nodata match. DEM history records kilometre-to-metre
+      conversion. ERR values are metre-scale uncertainty magnitudes.
+      Shackleton radial geometric coverage was verified. Actual 1 km
+      DemReader fallback-window read succeeded for both DEM and ERR with
+      100 percent valid pixels. Direct GDAL/rasterio inspection of
+      LDEM_80S_20MPP_ADJ.TIF confirms its CRS is IAU authority code 30100
+      ("Moon (2015) - Sphere / Ocentric"), ellipsoid radius exactly
+      1737400 m, flattening 0. Its embedded GMT processing history tag
+      ("gmt grdmath ldem_80s_final_adj_20mpp_surf.grd 1000.0 MUL") matches
+      the same conversion pattern confirmed for the 10 m and 240 m tiers
+      of this product family, supporting (not yet formally confirming via
+      Barker et al. 2023, Planet. Sci. J. 4, 183, DOI 10.3847/PSJ/acf3e1,
+      which was not reachable from this environment) that stored z values
+      are height relative to the same 1737400 m sphere. A full-window DEM
+      pixel-data read for this product (beyond the 1 km fallback window)
+      is currently blocked: GDAL's /vsicurl/ range-request reads for the
+      production crop window fail with a reproducible HTTP 403 after a
+      small number of successful 206 Partial Content reads (observed:
+      3 successful range reads then 403, repeatable). A lightweight
+      metadata-only open (no pixel data) succeeds in under 1 second.
+      Formal vertical-datum confirmation remains outstanding pending
+      reading the cited paper (or an equivalent authoritative source).
+
+  polar_60m_lola_pgda_90:
+    name: "Regional 60 m LOLA 60-90S mosaic"
+    provider: "PGDA"
+    product_id: 90
+    source_page: "https://pgda.gsfc.nasa.gov/products/90"
+    resolution_m: 60.0
+    latitude_coverage: "60S-90S"
+    format: "GeoTIFF"
+    dem_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_60S_60MPP_ADJ.TIF"
+    error_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_60S_60MPP_ADJ_ERR.TIF"
+    slope_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDSM_60S_60MPP_ADJ.TIF"
+    frame: "MOON_ME / DE421"
+    datum_reference: "1737400 m reference sphere"
+    unit: "m"
+    scale: 1.0
+    offset: 0.0
+    nodata: .nan
+    vertical_reference: "height_relative"
+    error_unit: "m"
+    error_scale: 1.0
+    error_offset: 0.0
+    error_nodata: .nan
+    error_vertical_reference: "height_relative"
+    format_metadata:
+      cog: true
+      elevation_unit: "m"
+      slope_unit: "deg"
+      coordinate_system: "south-polar stereographic"
+    availability_status: "verified_product"
+    verification_status: "source_page_and_urls_provided"
+    notes: >
+      CRS, resolution, source bounds and matching DEM/ERR grid metadata
+      were inspected. CY-3 5-80 km radial geometric coverage was verified,
+      and sampled DEM pixels were valid. The product describes mean value
+      per bin. Actual DemReader near (168x167 px) and mid (2668x2667 px)
+      window reads succeeded against a verified-identical whole-file copy
+      (SHA-256 b03b5b3b3bf6a0eb8e871be7a7c04bcfa1f7d9c01c885db10655c9f26afc1f6a,
+      fetched via a single sequential download rather than many /vsicurl/
+      range requests, which are currently rate-limited for this product
+      family); the resulting CY-3 Tier-A mask passed structural
+      validation. Direct
+      GDAL/rasterio inspection of LDEM_60S_60MPP_ADJ.TIF confirms its CRS
+      ellipsoid radius is exactly 1737400 m (south-polar stereographic,
+      R=1737400). Its embedded GMT processing history tag ("gmt grdmath
+      ldem_60s_final_adj_60mpp_surf.grd 1000.0 MUL") matches the same
+      conversion pattern confirmed for the 10/20/240 m tiers of this
+      product family, supporting (not yet formally confirming via Barker
+      et al. 2023, Planet. Sci. J. 4, 183, DOI 10.3847/PSJ/acf3e1, which
+      was not reachable from this environment) that stored z values are
+      height relative to the same 1737400 m sphere. Formal vertical-datum
+      confirmation remains outstanding pending reading the cited paper
+      (or an equivalent authoritative source).
+
+  regional_240m_lola_pgda_90:
+    name: "Regional 240 m LOLA 60-90S mosaic"
+    provider: "PGDA"
+    product_id: 90
+    source_page: "https://pgda.gsfc.nasa.gov/products/90"
+    resolution_m: 240.0
+    latitude_coverage: "60S-90S"
+    format: "GeoTIFF"
+    dem_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_60S_240MPP_ADJ.TIF"
+    error_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_60S_240MPP_ADJ_ERR.TIF"
+    slope_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDSM_60S_240MPP_ADJ.TIF"
+    frame: "MOON_ME / DE421"
+    datum_reference: "1737400 m reference sphere"
+    unit: "m"
+    scale: 1.0
+    offset: 0.0
+    nodata: .nan
+    vertical_reference: "height_relative"
+    error_unit: "m"
+    error_scale: 1.0
+    error_offset: 0.0
+    error_nodata: .nan
+    error_vertical_reference: "height_relative"
+    format_metadata:
+      cog: true
+      elevation_unit: "m"
+      slope_unit: "deg"
+      slope_scale: 1.0
+      slope_offset: 0.0
+      slope_nodata: .nan
+      coordinate_system: "south-polar stereographic"
+    availability_status: "verified_product"
+    verification_status: "source_page_and_urls_provided"
+    notes: >
+      DEM and matching ERR grids were inspected. CRS, transform, dimensions,
+      resolution and nodata match. DEM history records kilometre-to-metre
+      conversion. ERR values are metre-scale uncertainty magnitudes.
+      S-7: slope_url (LDSM_60S_240MPP_ADJ.TIF) was independently opened and
+      inspected: 7760x7760 px, 240 m, same south-polar stereographic CRS as
+      the DEM, float32, nodata=NaN, GDAL-reported scale=1.0/offset=0.0 (raw
+      values are already degrees). Its own embedded CF-1.7 "z" variable tag
+      (GMT-generated) reports actual_range {0.00059, 86.24}, confirming the
+      declared slope_unit "deg" from the product's own metadata, not an
+      assumption. A native-resolution 400x400 px window near the pole showed
+      100% finite coverage and 0 negative values (min 0.02 deg); a prior
+      16x-decimated sample showed small negative artifacts (down to -0.68
+      deg), confirmed to be an averaging-resampling artifact of that
+      decimation and not present in native pixels. Full extent (+-931.2 km)
+      covers 59.3S-90S, sufficient for both the 80_90S and 85_90S S-7 layer
+      extents.
+      Shackleton radial geometric coverage was verified. Actual 1 km
+      DemReader fallback-window read succeeded for both DEM and ERR with
+      100 percent valid pixels. Direct GDAL/rasterio inspection of
+      LDEM_60S_240MPP_ADJ.TIF confirms its CRS is IAU authority code 30100
+      ("Moon (2015) - Sphere / Ocentric"), ellipsoid radius exactly
+      1737400 m, flattening 0. Its embedded GMT processing history tag
+      ("gmt grdmath ldem_60s_final_adj_240mpp_surf.grd 1000.0 MUL") matches
+      the same conversion pattern confirmed for the 10 m and 20 m tiers of
+      this product family, supporting (not yet formally confirming via
+      Barker et al. 2023, Planet. Sci. J. 4, 183, DOI 10.3847/PSJ/acf3e1,
+      which was not reachable from this environment) that stored z values
+      are height relative to the same 1737400 m sphere. Formal
+      vertical-datum confirmation remains outstanding pending reading the
+      cited paper (or an equivalent authoritative source).
+
+  chandrayaan3_lroc_vikramsite_dtm:
+    name: "LROC pre-landing Vikram-site DTM"
+    provider: "LROC"
+    resolution_m: 3.0
+    latitude_coverage: "Vikram landing site"
+    format: "GeoTIFF"
+    dem_url: "https://pds.mcp.nasa.gov/data/store/img/lunar_reconnaissance_orbiter/pds4/lroc/lro-l-lroc-5-rdr/LROLRC_2001/DATA/SDP/NAC_DTM/VIKRAMSITE1/NAC_DTM_VIKRAMSITE1.TIF"
+    error_url: null
+    slope_url: null
+    source_page: "https://data.lroc.im-ldi.com/lroc/view_rdr/NAC_DTM_VIKRAMSITE1"
+    frame: null
+    datum_reference: null
+    availability_status: "candidate"
+    verification_status: "frame_and_datum_pending"
+    notes: >
+      PDS labels establish the lunar polar stereographic map geometry and
+      elevation band, but do not establish the elevation unit or vertical
+      reference. Remote pixel reads were blocked by read failures and HTTP
+      rate limiting. Do not activate until data access, confidence coverage,
+      frame and vertical reference are verified.
+
+  chandrayaan3_lola_30m_pgda_90:
+    name: "LOLA 30 m product covering 75S-90S"
+    provider: "PGDA"
+    product_id: 90
+    source_page: "https://pgda.gsfc.nasa.gov/products/90"
+    resolution_m: 30.0
+    latitude_coverage: "75S-90S"
+    format: "GeoTIFF"
+    dem_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_75S_30MPP_ADJ.TIF"
+    error_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_75S_30MPP_ADJ_ERR.TIF"
+    slope_url: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDSM_75S_30MPP_ADJ.TIF"
+    frame: "MOON_ME / DE421"
+    datum_reference: null
+    format_metadata:
+      cog: true
+      elevation_unit: "m"
+      slope_unit: "deg"
+      coordinate_system: "south-polar stereographic"
+    availability_status: "verified_product"
+    verification_status: "source_page_and_urls_provided"
+    notes: >
+      Product footprint does not reach the CY-3 landing site, approximately
+      632 km from the lunar south pole. Do not use for CY-3 crop selection.
+
+# S-7 regional layer products (owner: Shiva Shakthi).
+#
+# These are classification/fraction rasters (illumination, Earth visibility,
+# permanent-shadow), not elevation data, so they are kept in a separate
+# section with their own schema rather than forced into the elevation-centric
+# `products` block above (which assumes a `vertical_reference` and sphere
+# subtraction that do not apply here). Every entry below was independently
+# opened live via rasterio/vsicurl and inspected (CRS, transform, dtype,
+# nodata, GDAL-reported per-band scale/offset) before being recorded; no
+# value here is assumed from the product's filename or webpage prose alone.
+#
+# Source: PGDA "Lunar Polar Illumination" (Mazarico), product page
+# https://pgda.gsfc.nasa.gov/products/69 . Required citation: Mazarico, E.,
+# et al. (2011), "Illumination conditions of the lunar polar regions using
+# LOLA topography", Icarus, Vol. 211, pp. 1066-1081,
+# doi:10.1016/j.icarus.2010.10.030 . Per the page text: all three families
+# below (average solar illumination, Earth visibility, permanent shadow)
+# are computed from LOLA topography over an entire lunar nutation cycle
+# (~18.6 years) at an hourly timestep, in south-polar-stereographic
+# projection with reference radius 1737.4 km and true scale at the pole
+# (same CRS/radius convention as the elevation products above). The page's
+# "New (2025/03/20)" note states the linked `_COG.TIF` files are meant to be
+# GeoTIFF/COG conversions of the IMG products; at verification time
+# (2026-11-15) every `_COG.TIF` URL returned HTTP 200 with
+# Content-Type: text/html (an error/placeholder page, confirmed via HEAD
+# request), not a TIFF. The plain (non-COG) `.TIF` URLs used below returned
+# real image/tiff content and were opened successfully; this discrepancy is
+# recorded here rather than silently worked around.
+regional_layer_products:
+  avg_illumination_65S_240m_pgda_69:
+    name: "Average solar illumination, 65S-90S, 240 m/px"
+    provider: "PGDA"
+    product_id: 69
+    source_page: "https://pgda.gsfc.nasa.gov/products/69"
+    url: "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_65S_240M_201608.TIF"
+    resolution_m: 240.0
+    latitude_coverage: "65S-90S"
+    format: "GeoTIFF"
+    crs: "south-polar stereographic, R=1737400 m, true scale at pole (+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m)"
+    dtype: "int16"
+    scale: 4.0e-05
+    offset: 0.0
+    nodata: -32768
+    value_meaning: "fraction of time illuminated by the Sun, in [0, 1], averaged hourly over an 18.6-year lunar nutation cycle (centred ~2016-08 per filename)"
+    citation: "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    availability_status: "verified_product"
+    verification_status: "live_opened_and_inspected"
+    notes: >
+      Opened live via /vsicurl/: 6420x6420 px, transform origin
+      (-770400, 770400), confirming 65S-90S coverage via the polar
+      stereographic radius formula rho=2R*tan(colat/2) (rho=770400 m ->
+      colat=25.06 deg -> lat=-64.94 deg =~ -65). GDAL-reported per-band
+      scale=4e-05, offset=0.0 (read via rasterio dataset.scales/.offsets,
+      not the filename or page prose). A 200x200 px native-resolution
+      window near the pole was 100% finite after nodata masking, with
+      decoded (raw*scale+offset) values in [0, ~0.935], consistent with a
+      0-1 fraction. No embedded unit tag was present, so the "fraction in
+      [0,1]" interpretation rests on the scale/offset bounding to <=~1.0
+      and the page's description of these as the solar-illumination
+      analogue of Mazarico et al. (2011)'s published percentages; this
+      inference is documented, not a bare assumption, but is weaker than
+      the slope raster's embedded CF tag and should be revisited if a PDS
+      label is obtained.
+
+  avg_illumination_85S_60m_pgda_69:
+    name: "Average solar illumination, 85S-90S, 60 m/px"
+    provider: "PGDA"
+    product_id: 69
+    source_page: "https://pgda.gsfc.nasa.gov/products/69"
+    url: "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_85S_060M_201608.TIF"
+    resolution_m: 60.0
+    latitude_coverage: "85S-90S"
+    format: "GeoTIFF"
+    crs: "south-polar stereographic, R=1737400 m, true scale at pole (+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m)"
+    dtype: "int16"
+    scale: 4.0e-05
+    offset: 0.0
+    nodata: -32768
+    value_meaning: "fraction of time illuminated by the Sun, in [0, 1], averaged hourly over an 18.6-year lunar nutation cycle (centred ~2016-08 per filename)"
+    citation: "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    availability_status: "verified_product"
+    verification_status: "live_opened_and_inspected"
+    notes: >
+      Opened live via /vsicurl/: 5058x5058 px, transform origin
+      (-151740, 151740), confirming 85S-90S coverage (rho=151740 m ->
+      colat=5.004 deg -> lat=-84.996 deg =~ -85). Extent matches the S-7
+      85_90S layer window almost exactly (151734 m by the same formula), so
+      this product is used uncropped for that extent. Same scale/offset
+      and value-range verification method as the 65S-240m entry above.
+
+  earth_visibility_65S_240m_pgda_69:
+    name: "Average Earth visibility, 65S-90S, 240 m/px"
+    provider: "PGDA"
+    product_id: 69
+    source_page: "https://pgda.gsfc.nasa.gov/products/69"
+    url: "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_65S_240M_201608_EARTH.TIF"
+    resolution_m: 240.0
+    latitude_coverage: "65S-90S"
+    format: "GeoTIFF"
+    crs: "south-polar stereographic, R=1737400 m, true scale at pole (+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m)"
+    dtype: "int16"
+    scale: 4.0e-05
+    offset: 0.0
+    nodata: -32768
+    value_meaning: "fraction of time any part of the Earth disc is above the local LOLA-topography horizon, in [0, 1], averaged hourly over an 18.6-year lunar nutation cycle"
+    citation: "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    availability_status: "verified_product"
+    verification_status: "live_opened_and_inspected"
+    notes: >
+      Same grid/CRS as avg_illumination_65S_240m_pgda_69 (identical
+      transform and size), confirmed by direct inspection. Page text
+      states Earth is counted visible "if any part of its disc is not
+      obscured", noted here as a known limitation (slightly optimistic vs.
+      a DSN-station-only link study). This product already accounts for
+      local LOLA-DEM topographic horizon occlusion (it is the Earth-disc
+      analogue of the solar-illumination computation, both run over the
+      same LOLA elevation grid per the page text), so it satisfies the S-7
+      contract's "local terrain occlusion" requirement without needing a
+      separate ephemeris + per-pixel horizon raycast in this pipeline.
+
+  earth_visibility_85S_60m_pgda_69:
+    name: "Average Earth visibility, 85S-90S, 60 m/px"
+    provider: "PGDA"
+    product_id: 69
+    source_page: "https://pgda.gsfc.nasa.gov/products/69"
+    url: "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_85S_060M_201608_EARTH.TIF"
+    resolution_m: 60.0
+    latitude_coverage: "85S-90S"
+    format: "GeoTIFF"
+    crs: "south-polar stereographic, R=1737400 m, true scale at pole (+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m)"
+    dtype: "int16"
+    scale: 4.0e-05
+    offset: 0.0
+    nodata: -32768
+    value_meaning: "fraction of time any part of the Earth disc is above the local LOLA-topography horizon, in [0, 1], averaged hourly over an 18.6-year lunar nutation cycle"
+    citation: "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    availability_status: "verified_product"
+    verification_status: "live_opened_and_inspected"
+    notes: >
+      Same grid/CRS as avg_illumination_85S_60m_pgda_69. Same Earth-disc
+      visibility definition and local-topography-horizon caveat as the
+      65S-240m Earth-visibility entry above.
+
+  psr_lpsr_65S_240m_pgda_69:
+    name: "Permanent shadow classification (LPSR), 65S-90S, 240 m/px"
+    provider: "PGDA"
+    product_id: 69
+    source_page: "https://pgda.gsfc.nasa.gov/products/69"
+    url: "https://pgda.gsfc.nasa.gov/data/MoonIllumination/LPSR_65S_240M_201608.TIF"
+    resolution_m: 240.0
+    latitude_coverage: "65S-90S"
+    format: "GeoTIFF"
+    crs: "south-polar stereographic, R=1737400 m, true scale at pole (+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m)"
+    dtype: "int16"
+    scale: 2.5e-05
+    offset: 0.5
+    nodata: -32768
+    value_meaning: "binary permanent-shadow classification; decoded (raw*scale+offset) is 0.0 (not permanently shadowed) or 1.0 (permanently shadowed)"
+    citation: "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    availability_status: "verified_product"
+    verification_status: "live_opened_and_inspected"
+    notes: >
+      Opened live: same grid/CRS as the illumination product. GDAL-reported
+      scale=2.5e-05, offset=0.5 decode raw -20000 -> 0.0 and raw +20000 ->
+      1.0 exactly (verified numerically), i.e. a clean binary mask, not a
+      continuous percentage. A small number of raw=0 pixels (-> decoded
+      0.5) were seen in a sample window; treated as an edge/indeterminate
+      case, excluded from both classes by the psr.py threshold (classified
+      only when decoded value > 0.5). This is a directly published PGDA
+      permanent-shadow product (raster, not vector polygon/shapefile), used
+      here as the contract's "preferred" published source per §4.2; the
+      8-connected-component + area-filter + distance-transform processing
+      required by the contract is still applied on top of this
+      classification. If a true vector PSR polygon/shapefile is later
+      required, none has been identified or verified as of this writing.
+
+  psr_lpsr_85S_60m_pgda_69:
+    name: "Permanent shadow classification (LPSR), 85S-90S, 60 m/px"
+    provider: "PGDA"
+    product_id: 69
+    source_page: "https://pgda.gsfc.nasa.gov/products/69"
+    url: "https://pgda.gsfc.nasa.gov/data/MoonIllumination/LPSR_85S_060M_201608.TIF"
+    resolution_m: 60.0
+    latitude_coverage: "85S-90S"
+    format: "GeoTIFF"
+    crs: "south-polar stereographic, R=1737400 m, true scale at pole (+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m)"
+    dtype: "int16"
+    scale: 2.5e-05
+    offset: 0.5
+    nodata: -32768
+    value_meaning: "binary permanent-shadow classification; decoded (raw*scale+offset) is 0.0 (not permanently shadowed) or 1.0 (permanently shadowed)"
+    citation: "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    availability_status: "verified_product"
+    verification_status: "live_opened_and_inspected"
+    notes: >
+      Same grid/CRS as psr_lpsr_65S_240m_pgda_69. Same scale/offset decode
+      (verified for this file independently). A small number of raw=0
+      (-> 0.5) pixels seen in a sample window are treated as
+      edge/indeterminate, excluded from both classes.
+
+selection_ladders:
+  cy3_shiv_shakti:
+    site_id: "cy3_shiv_shakti"
+    order:
+      - chandrayaan3_lroc_vikramsite_dtm
+      - polar_60m_lola_pgda_90
+      - regional_240m_lola_pgda_90
+    active_source: null
+    rule: >
+      Full PLAN_FINAL §4.1 near-field source ladder, all three items wired
+      into the near crop in strict order: (1) use the LROC DTM only after
+      its pixel data, confidence map, frame and vertical reference pass
+      verification; (2) otherwise the 60 m PGDA-90 source, the finest
+      verified LOLA product covering 69.37°S, which also serves as the
+      regional mid-field source; (3) otherwise the 60-90S 240 m product,
+      the plan's explicitly "guaranteed" near-field fallback of last resort,
+      selected only when both (1) and (2) are unavailable or unverified.
+      Under present conditions (DTM unverified, 60 m verified and reachable)
+      item (2) is selected and item (3) is never reached. Do not select the
+      30 m 75S product; its footprint does not cover CY-3. Record the
+      actual source used for each crop.
+
+  shackleton_ridge:
+    site_id: "shackleton_ridge"
+    order:
+      - polar_10m_lola_pgda_90
+      - polar_20m_lola_pgda_90
+      - regional_240m_lola_pgda_90
+    active_source: null
+    rule: >
+      Use the first source that passes frame, datum, coverage and processing
+      verification for the relevant crop. The 10 m DEM and matching ERR
+      window have been read successfully. The 20 m and 240 m fallback DEM
+      and ERR windows have also been read successfully. Formal vertical-datum
+      confirmation remains outstanding. Record the actual source used for
+      each crop; do not report a preferred source as active unless it was
+      obtained and processed.

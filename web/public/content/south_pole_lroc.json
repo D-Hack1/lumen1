@@ -1,0 +1,31 @@
+{
+  "file": "moon/moon.jpeg",
+  "crs": "+proj=stere +a=1737400 +b=1737400 +lat_0=-90 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m",
+  "sizePx": [
+    780,
+    780
+  ],
+  "metresPerPixel": 2387.358974358974,
+  "poleAtPixel": [
+    390.0,
+    390.0
+  ],
+  "xMinMaxM": [
+    -931069.9999999999,
+    931069.9999999999
+  ],
+  "yMinMaxM": [
+    -931069.9999999999,
+    931069.9999999999
+  ],
+  "radiusM": {
+    "60S": 931069.8538596651,
+    "80S": 304005.6080198807,
+    "85S": 151713.0444184977
+  },
+  "note": "Exported from LROC QuickMap (PNG+VRT, south-polar stereographic, lon_0=0, from the VRT GeoTransform). Image y grows downward. Black = no data (alpha 0). A mosaic seam is visible left of the pole. Resolution is ~2.4 km/px, so the 80S extent is only ~255 px across.",
+  "credit": "NASA/GSFC/Arizona State University (LROC) via LROC QuickMap",
+  "layerName": "TODO: confirm the layer name shown in QuickMap before publishing",
+  "sourceUrl": "https://quickmap.lroc.im-ldi.com/",
+  "license": "NASA imagery, credit required; confirm layer-specific terms"
+}

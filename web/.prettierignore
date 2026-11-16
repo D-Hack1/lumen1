@@ -1,0 +1,8 @@
+node_modules
+dist
+package-lock.json
+public/data
+public/data-mock
+e2e/screens
+playwright-report
+test-results

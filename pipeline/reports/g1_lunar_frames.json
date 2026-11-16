@@ -1,0 +1,210 @@
+{
+  "criteria": {
+    "determinant": {
+      "criterion": "positive",
+      "separate_deviation_tolerance": null
+    },
+    "direction_max_angular_error_rad": {
+      "operator": "<",
+      "value": 1e-06
+    },
+    "matrix_max_abs_error": {
+      "operator": "<",
+      "value": 1e-09
+    },
+    "orthogonality_error_max_abs": {
+      "basis": "existing G1 matrix-integrity check",
+      "operator": "<=",
+      "value": 1e-09
+    },
+    "round_trip_vector_error_m": {
+      "basis": "R3 defines no separate round-trip vector tolerance",
+      "tolerance": null
+    }
+  },
+  "epoch_results": [
+    {
+      "determinant_deviation_max_abs": 4.440892098500626e-16,
+      "et_seconds": 725803268.1839136,
+      "me_to_pa": {
+        "determinant_deviation": 4.440892098500626e-16,
+        "matrix_max_abs_error": 2.220446049250313e-16,
+        "max_angular_residual_deg": 2.8213949438873553e-15,
+        "max_angular_residual_rad": 4.9242631269955014e-17,
+        "orthogonality_error_max_abs": 5.551115123125783e-16,
+        "rms_angular_residual_deg": 2.3927001205041456e-15
+      },
+      "minimum_determinant": 0.9999999999999996,
+      "orthogonality_error_max_abs": 5.551115123125783e-16,
+      "pa_me_max_surface_offset_m": 874.7474688514714,
+      "pa_to_me": {
+        "determinant_deviation": 4.440892098500626e-16,
+        "matrix_max_abs_error": 2.220446049250313e-16,
+        "max_angular_residual_deg": 2.925992781483108e-15,
+        "max_angular_residual_rad": 5.106820792646721e-17,
+        "orthogonality_error_max_abs": 4.440892098500626e-16,
+        "rms_angular_residual_deg": 2.3955137865811213e-15
+      },
+      "round_trip_vector_error_m": 9.244808393330656e-10,
+      "utc": "2023-01-01T00:00:00Z"
+    },
+    {
+      "determinant_deviation_max_abs": 2.220446049250313e-16,
+      "et_seconds": 794554198.1854653,
+      "me_to_pa": {
+        "determinant_deviation": 1.1102230246251565e-16,
+        "matrix_max_abs_error": 1.1102230246251565e-16,
+        "max_angular_residual_deg": 2.7956345993390876e-15,
+        "max_angular_residual_rad": 4.879302844113957e-17,
+        "orthogonality_error_max_abs": 2.220446049250313e-16,
+        "rms_angular_residual_deg": 2.2350441601457544e-15
+      },
+      "minimum_determinant": 0.9999999999999998,
+      "orthogonality_error_max_abs": 2.220446049250313e-16,
+      "pa_me_max_surface_offset_m": 874.7474688514714,
+      "pa_to_me": {
+        "determinant_deviation": 1.1102230246251565e-16,
+        "matrix_max_abs_error": 1.1102230246251565e-16,
+        "max_angular_residual_deg": 2.7264423927726632e-15,
+        "max_angular_residual_rad": 4.7585396619835425e-17,
+        "orthogonality_error_max_abs": 2.220446049250313e-16,
+        "rms_angular_residual_deg": 2.2364078774831586e-15
+      },
+      "round_trip_vector_error_m": 4.657518532481214e-10,
+      "utc": "2025-03-06T17:28:50Z"
+    },
+    {
+      "determinant_deviation_max_abs": 2.220446049250313e-16,
+      "et_seconds": 978260468.1839103,
+      "me_to_pa": {
+        "determinant_deviation": 2.220446049250313e-16,
+        "matrix_max_abs_error": 3.3306690738754696e-16,
+        "max_angular_residual_deg": 4.412742011943044e-15,
+        "max_angular_residual_rad": 7.701687714948505e-17,
+        "orthogonality_error_max_abs": 6.661338147750939e-16,
+        "rms_angular_residual_deg": 2.6675389494072035e-15
+      },
+      "minimum_determinant": 0.9999999999999998,
+      "orthogonality_error_max_abs": 6.661338147750939e-16,
+      "pa_me_max_surface_offset_m": 874.7474688514714,
+      "pa_to_me": {
+        "determinant_deviation": 2.220446049250313e-16,
+        "matrix_max_abs_error": 3.3306690738754696e-16,
+        "max_angular_residual_deg": 4.239636467986046e-15,
+        "max_angular_residual_rad": 7.399561545397967e-17,
+        "orthogonality_error_max_abs": 6.661338147750939e-16,
+        "rms_angular_residual_deg": 2.669403170349889e-15
+      },
+      "round_trip_vector_error_m": 1.149714193796099e-09,
+      "utc": "2030-12-31T23:00:00Z"
+    }
+  ],
+  "epochs_utc": [
+    "2023-01-01T00:00:00Z",
+    "2025-03-06T17:28:50Z",
+    "2030-12-31T23:00:00Z"
+  ],
+  "frames": {
+    "aliases": {
+      "MOON_ME": {
+        "center_id": 301,
+        "class": 4,
+        "class_id": 31001,
+        "frame_id": 31001,
+        "name": "MOON_ME"
+      },
+      "MOON_PA": {
+        "center_id": 301,
+        "class": 4,
+        "class_id": 31000,
+        "frame_id": 31000,
+        "name": "MOON_PA"
+      }
+    },
+    "mean_earth": {
+      "center_id": 301,
+      "class": 4,
+      "class_id": 31007,
+      "definition": "fixed Euler rotation: axes 3-2-1; angles 67.92, 78.56, 0.30 arcseconds",
+      "frame_id": 31007,
+      "name": "MOON_ME_DE421",
+      "relative_to": "MOON_PA_DE421"
+    },
+    "principal_axis": {
+      "center_id": 301,
+      "class": 2,
+      "class_id": 31006,
+      "frame_id": 31006,
+      "name": "MOON_PA_DE421"
+    }
+  },
+  "id": "G1",
+  "kernels": [
+    {
+      "filename": "naif0012.tls",
+      "sha256": "3c2c786080569f0336b7c090866acc0f0b38a935db51c15da54de1efc10bfa17",
+      "size_bytes": 5232
+    },
+    {
+      "filename": "pck00011.tpc",
+      "sha256": "8fd7588e258d49362198381b039c6d577db7e6f9be35dacfe43220698669f1eb",
+      "size_bytes": 135542
+    },
+    {
+      "filename": "de421.bsp",
+      "sha256": "08b20db2ae22488650641c5a9033e5bfda4b1c4b440cfeaf20f621cfa18ecdb3",
+      "size_bytes": 16790528
+    },
+    {
+      "filename": "moon_pa_de421_1900-2050.bpc",
+      "sha256": "656f90616403d75a75f0cd6c8830fc5b44f8cb4facb5ccb8915e752b397520cf",
+      "size_bytes": 1770496
+    },
+    {
+      "filename": "moon_080317.tf",
+      "sha256": "3a5bf575b1b946349b703719853c760db3b3902a6fce750bb721bb93c474cd00",
+      "size_bytes": 22042
+    }
+  ],
+  "metrics": {
+    "determinant_deviation_max_abs": 4.440892098500626e-16,
+    "max_angular_residual_deg": 4.412742011943044e-15,
+    "max_direction_error_deg": 2.0497873685405026e-09,
+    "max_direction_error_rad": 3.57755385468222e-11,
+    "max_matrix_error": 3.480837840186268e-11,
+    "me_to_pa": {
+      "determinant_deviation": 4.440892098500626e-16,
+      "matrix_max_abs_error": 3.3306690738754696e-16,
+      "max_angular_residual_deg": 4.412742011943044e-15,
+      "max_angular_residual_rad": 7.701687714948505e-17,
+      "orthogonality_error_max_abs": 6.661338147750939e-16,
+      "rms_angular_residual_deg": 2.4383191144083034e-15
+    },
+    "minimum_determinant": 0.9999999999999996,
+    "orthogonality_error_max_abs": 6.661338147750939e-16,
+    "pa_me_surface_offset_m": 874.7474688514714,
+    "pa_to_me": {
+      "determinant_deviation": 4.440892098500626e-16,
+      "matrix_max_abs_error": 3.3306690738754696e-16,
+      "max_angular_residual_deg": 4.239636467986046e-15,
+      "max_angular_residual_rad": 7.399561545397967e-17,
+      "orthogonality_error_max_abs": 6.661338147750939e-16,
+      "rms_angular_residual_deg": 2.4403360275477766e-15
+    },
+    "rms_angular_residual_deg": 2.439327779433973e-15,
+    "round_trip_vector_error_m": 1.149714193796099e-09,
+    "site_transform_error_m": 2.3798309528663596e-05
+  },
+  "reference": {
+    "comparison": "SPICE pxform vs Skyfield PlanetaryConstants rotations",
+    "independent_implementation": "Skyfield",
+    "shared_input_data": "same SHA-256-identified DE421 kernels; independent library calculations",
+    "software": {
+      "skyfield": "1.55",
+      "spiceypy": "8.4.0"
+    },
+    "time_alignment": "UTC converted to SPICE ET, then to Skyfield TDB using that ET"
+  },
+  "schema_version": 1,
+  "status": "PASS"
+}

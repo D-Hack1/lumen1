@@ -1,0 +1,32 @@
+{
+  "schema": "site_summary",
+  "version": "0.1.0",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "site_id": "im2_athena",
+  "run_timestamp_utc": "2026-01-01T00:00:00Z",
+  "tier": "Tier A",
+  "near_field_res_m": 5,
+  "dem_source": "MOCK-DEM",
+  "files_present": {
+    "mask_bin": "masks/im2_athena.bin",
+    "mask_json": "masks/im2_athena.json",
+    "sigma_bin": "sigma/im2_athena.bin",
+    "sigma_json": "sigma/im2_athena.json",
+    "pad_json": "pad/im2_athena.json",
+    "dispersion_bin": "dispersion/im2_athena.bin",
+    "dispersion_json": "dispersion/im2_athena.json"
+  },
+  "pad_headline": {
+    "slope_deg": 7.0,
+    "downhill_aspect_deg": 200.0,
+    "uphill_az_deg": 20.0,
+    "under_resolved": false
+  },
+  "psr": {
+    "distance_km": 4.2,
+    "bearing_deg": 312.0,
+    "nearest_psr_area_km2": 2.8,
+    "source_classification": "derived"
+  }
+}

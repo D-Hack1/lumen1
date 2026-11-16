@@ -1,0 +1,17 @@
+{
+  "sun_sdo.webp": {
+    "credit": "NASA/SDO and the HMI science team",
+    "source": "SDO/HMI Intensitygram (Quick-Look Continuum), 2026-11-14 11:15 UTC",
+    "sourceUrl": "https://sdo.gsfc.nasa.gov/data/",
+    "imageUrl": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIIC.jpg",
+    "license": "NASA media, credit required"
+  },
+  "earth_epic.webp": {
+    "credit": "NASA EPIC team / DSCOVR (NOAA-NASA-USAF)",
+    "source": "EPIC natural colour, epic_1b_20261111001752, 2026-11-11 00:13 UTC",
+    "sourceUrl": "https://epic.gsfc.nasa.gov/",
+    "imageUrl": "https://epic.gsfc.nasa.gov/archive/natural/2026/11/11/jpg/epic_1b_20261111001752.jpg",
+    "license": "NASA media, credit required"
+  },
+  "note": "Both cropped to the disk edge (disk fills the square) and resized to 512 px; no colour edits. The Horizon Lens draws them at true angular size."
+}

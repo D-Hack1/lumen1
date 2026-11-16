@@ -1,0 +1,59 @@
+{
+  "created_utc": "2026-11-15T00:35:45.692990Z",
+  "extent": "85_90S",
+  "filename": "layers/average_illumination_85_90S.png",
+  "git_commit": "c4e5c36c421c88b90e996df1ecbc79ec6e6a220d",
+  "height_px": 5058,
+  "layer_id": "average_illumination",
+  "legend_stops": [
+    {
+      "hex": "#ffffcc",
+      "label": "0%",
+      "value_pct": 0.0
+    },
+    {
+      "hex": "#a1dab4",
+      "label": "25%",
+      "value_pct": 25.0
+    },
+    {
+      "hex": "#41b6c4",
+      "label": "50%",
+      "value_pct": 50.0
+    },
+    {
+      "hex": "#2c7fb8",
+      "label": "75%",
+      "value_pct": 75.0
+    },
+    {
+      "hex": "#253494",
+      "label": "100%",
+      "value_pct": 100.0
+    }
+  ],
+  "method": "Direct centred-window crop (no resampling) from the native-resolution PGDA average-solar-illumination raster at full resolution; pixel values are the raw int16 * scale + offset fraction in [0,1], rendered as a continuous percentage ramp. Multi-year average: an 18.6-year lunar nutation cycle at hourly timestep (PGDA products/69, Mazarico et al. 2011).",
+  "nodata_encoding": "fully transparent alpha channel (RGBA PNG); never encoded as a visible class or value",
+  "producer": "lumen_pipeline.terrain.layers",
+  "projection": {
+    "central_meridian_deg": 0.0,
+    "latitude_of_origin_deg": -90.0,
+    "name": "south-polar stereographic",
+    "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+    "reference_radius_m": 1737400.0,
+    "scale_factor_at_pole": 1.0
+  },
+  "radius_m": 151713.0444184977,
+  "resolution_m": 60.0,
+  "source": {
+    "citation": "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030",
+    "name": "Average solar illumination, 85S-90S, 60 m/px",
+    "product_key": "avg_illumination_85S_60m_pgda_69",
+    "source_page": "https://pgda.gsfc.nasa.gov/products/69",
+    "url": "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_85S_060M_201608.TIF",
+    "value_meaning": "fraction of time illuminated by the Sun, in [0, 1], averaged hourly over an 18.6-year lunar nutation cycle (centred ~2016-08 per filename)"
+  },
+  "temporal_coverage": "18.6-year lunar nutation cycle, hourly timestep",
+  "version": "0.1.0",
+  "width_px": 5058
+}

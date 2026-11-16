@@ -1,0 +1,50 @@
+{
+  "schema": "regions",
+  "version": "0.1.0",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "regions": [
+    {
+      "region_id": "mock_region_1",
+      "name": "MOCK region 1",
+      "centroid_lat_deg": -89.3,
+      "centroid_lon_deg": 60.0,
+      "svg_path": "M -1.62 -10.61 a 20.0 20.0 0 1 0 40.0 0 a 20.0 20.0 0 1 0 -40.0 0 Z",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "units": "km",
+        "y_flipped": true,
+        "half_extent_km": 304.0056080198807,
+        "status": "DRAFT: shared with layers"
+      }
+    },
+    {
+      "region_id": "mock_region_2",
+      "name": "MOCK region 2",
+      "centroid_lat_deg": -86.9,
+      "centroid_lon_deg": 200.0,
+      "svg_path": "M -57.16 88.35 a 25.0 25.0 0 1 0 50.0 0 a 25.0 25.0 0 1 0 -50.0 0 Z",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "units": "km",
+        "y_flipped": true,
+        "half_extent_km": 304.0056080198807,
+        "status": "DRAFT: shared with layers"
+      }
+    },
+    {
+      "region_id": "mock_region_3",
+      "name": "MOCK region 3",
+      "centroid_lat_deg": -85.4,
+      "centroid_lon_deg": 310.0,
+      "svg_path": "M -136.91 -89.71 a 30.0 30.0 0 1 0 60.0 0 a 30.0 30.0 0 1 0 -60.0 0 Z",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "units": "km",
+        "y_flipped": true,
+        "half_extent_km": 304.0056080198807,
+        "status": "DRAFT: shared with layers"
+      }
+    }
+  ]
+}

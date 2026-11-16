@@ -1,0 +1,33 @@
+{
+  "schema": "sigma",
+  "version": "1.0.0",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "producer": "web/src/mocks/make_mock.py",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "git_commit": "0000000000000000000000000000000000000000",
+  "site_id": "shackleton_ridge",
+  "bin_width_deg": 0.1,
+  "azimuth_count": 3600,
+  "shape": [
+    4,
+    3600
+  ],
+  "height_order_m": [
+    1.0,
+    2.0,
+    5.0,
+    10.0
+  ],
+  "source": "default",
+  "unit": "deg",
+  "notes": "mock default sigma ~0.1 deg",
+  "binary": {
+    "magic": "LUMENSGM",
+    "format_version": 1,
+    "byte_order": "little",
+    "float_encoding": "ieee754-binary32",
+    "layout": "header_then_sigma",
+    "array_order": "c_contiguous_height_major"
+  }
+}

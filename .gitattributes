@@ -1,0 +1,7 @@
+# Owner: Gowri — Git LFS patterns for generated binary data (set at H0 per WORK_DISTRIBUTION §1.9)
+web/public/data/**/*.bin filter=lfs diff=lfs merge=lfs -text
+web/public/data/**/*.png filter=lfs diff=lfs merge=lfs -text
+web/public/data-mock/**/*.bin filter=lfs diff=lfs merge=lfs -text
+web/public/data-mock/**/*.png filter=lfs diff=lfs merge=lfs -text
+pipeline/kernels/** filter=lfs diff=lfs merge=lfs -text
+*.svg -filter -diff -merge -text

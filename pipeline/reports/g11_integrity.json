@@ -1,0 +1,66 @@
+{
+  "gate": "G11",
+  "description": "Windows Table, barcode and CSV integrity on real engine results",
+  "command": "LUMEN_G11_OUT=<file> npx vitest run src/engine/__tests__/g11Integrity.test.ts",
+  "recorded_utc": "2026-11-15T15:18:25Z",
+  "git_commit": "19e4cf35b18f1397c0bbcfd60c8aa5e26ab08c7f",
+  "working_tree_dirty": true,
+  "node": "v22.13.0",
+  "totals": {
+    "tests": 6,
+    "passed": 6,
+    "failed": 0
+  },
+  "tally": {
+    "cases": 6,
+    "windows": 182,
+    "windowsMatched": 182,
+    "metricsRows": 70,
+    "metricsMatched": 70,
+    "barcodeCells": 388330,
+    "barcodeAgree": 388330,
+    "barcodeSkippedAtEdges": 488,
+    "jsonLossless": 6
+  },
+  "detail": [
+    {
+      "site": "im2_athena",
+      "heightM": 2,
+      "windows": 39,
+      "barcodeCells": 64701
+    },
+    {
+      "site": "im2_athena",
+      "heightM": 10,
+      "windows": 39,
+      "barcodeCells": 64701
+    },
+    {
+      "site": "cy3_shiv_shakti",
+      "heightM": 2,
+      "windows": 52,
+      "barcodeCells": 64661
+    },
+    {
+      "site": "cy3_shiv_shakti",
+      "heightM": 10,
+      "windows": 52,
+      "barcodeCells": 64661
+    },
+    {
+      "site": "shackleton_ridge",
+      "heightM": 2,
+      "windows": 0,
+      "barcodeCells": 64803
+    },
+    {
+      "site": "shackleton_ridge",
+      "heightM": 10,
+      "windows": 0,
+      "barcodeCells": 64803
+    }
+  ],
+  "window_start_utc": "2027-02-08T00:00:00.000Z",
+  "duration_days": 30,
+  "method": "CSV and JSON exports are parsed back and compared with the engine result field by field; barcode cells (hourly series) are compared with the Windows Table (strictly inside a window = up, outside every window = down; cells within one step of a window edge are skipped and counted)."
+}

@@ -1,0 +1,22 @@
+{
+  "clipped_nodes": 0,
+  "created_utc": "2026-11-15T16:28:04.524535Z",
+  "dem_source": "polar_60m_lola_pgda_90",
+  "dtype": "uint8",
+  "latitude_deg": -69.373,
+  "longitude_deg_east": 32.319,
+  "method": "R3 7x7 plane-fit slope evaluated at each node (pad.fit_ground_plane)",
+  "near_field_resolution_m": 60.0,
+  "nodes": [
+    11,
+    11
+  ],
+  "order": "row-major [north row j][east column i]; j increases north, i increases east; node (5, 5) is the site",
+  "producer": "lumen_pipeline.terrain.dispersion",
+  "site_id": "cy3_shiv_shakti",
+  "slope_deg_max": 2.565492776233313,
+  "slope_deg_min": 0.06515576121174796,
+  "spacing_m": 50.0,
+  "unit_deg": 0.1,
+  "version": "0.1.0"
+}

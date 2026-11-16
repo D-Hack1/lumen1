@@ -1,0 +1,109 @@
+/* Owner: Nived — Scan panel + Delta table. Tokens only. Only the Scan list body scrolls internally (whitelisted). */
+.scan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--sp-3);
+}
+.scan__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.scan__stage {
+  margin-left: auto;
+  color: var(--c-text-faint);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+.scan__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.rt {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--fs-sm);
+}
+.rt th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: var(--sp-1) var(--sp-2);
+  text-align: left;
+  color: var(--c-text-faint);
+  background: var(--c-surface1);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.rt td {
+  padding: var(--sp-1) var(--sp-2);
+  border-top: 1px solid var(--c-hairline);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rt .rt__rank {
+  width: 26px;
+  color: var(--c-text-faint);
+}
+.rt .rt__site {
+  width: 31%;
+}
+.rt .rt__verdict {
+  width: 86px;
+}
+.rt .rt__num {
+  width: 15%;
+}
+.rt .rt__act {
+  width: 64px;
+  padding-left: 0;
+}
+.rt tr[data-provisional='true'] td {
+  color: var(--c-text-muted);
+}
+.scan__load {
+  height: 22px;
+  padding: 0 var(--sp-2);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--c-text);
+  background: var(--c-surface3);
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+}
+.delta {
+  height: 100%;
+  min-height: 0;
+  padding: var(--sp-2) var(--sp-3);
+}
+.delta__empty {
+  color: var(--c-text-faint);
+  font-size: var(--fs-sm);
+  padding: var(--sp-3);
+}
+.delta__v[data-tone='good'] {
+  color: var(--c-go);
+}
+.delta__v[data-tone='bad'] {
+  color: var(--c-nogo);
+}
+.delta__v[data-tone='flat'] {
+  color: var(--c-text-muted);
+}

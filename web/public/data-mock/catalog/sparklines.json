@@ -1,0 +1,30 @@
+{
+  "version": "1",
+  "shape": [
+    4,
+    2,
+    400
+  ],
+  "dtype": "uint8",
+  "fields": [
+    "sunlit_pct",
+    "link_pct"
+  ],
+  "units": "percent",
+  "scale": null,
+  "offset": null,
+  "producer": "web/src/mocks/make_mock.py",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "sha256": "affc74e6994f2426763a47caa6e18f4af517f54c9255f1caf6625501be70d08b",
+  "mock": true,
+  "note": "DRAFT extras: sites/start_utc/days are not yet in data_catalog.md; layout [site][series][day]",
+  "start_utc": "2025-01-01T00:00:00Z",
+  "days": 400,
+  "sites": [
+    "im2_athena",
+    "cy3_shiv_shakti",
+    "shackleton_ridge",
+    "blue_ghost_m1"
+  ],
+  "definitions": "mock defaults (2 m, 50% disk, Earth >=1 deg + DSN >=10 deg)"
+}

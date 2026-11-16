@@ -1,0 +1,259 @@
+{
+  "schema": "catalog",
+  "version": 1,
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "coordinate_frame": "MOON_ME_DE421",
+  "sites": [
+    {
+      "id": "im2_athena",
+      "name": "IM-2 Athena (Mons Mouton)",
+      "category": "historical_landing",
+      "agency": "NASA CLPS / Intuitive Machines",
+      "program": "MOCK",
+      "latitude_deg": -84.7906,
+      "longitude_deg_east": 29.1957,
+      "coordinate_frame": "MOON_ME_DE421",
+      "landing_coords": {
+        "lat": -84.7906,
+        "lon": 29.1957,
+        "source": "mock"
+      },
+      "target_coords": null,
+      "coord_note": "mock coordinate",
+      "notes": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+      "touchdown_utc": "2025-03-06T17:28:50Z",
+      "touchdown_precision": "second",
+      "last_contact_utc": null,
+      "reference_axis": "+X_ME",
+      "rotation_matrix": [
+        [
+          -0.0,
+          0.9990125213061966,
+          0.04442952029266446
+        ],
+        [
+          0.9968538879214051,
+          -0.0035215338175812135,
+          0.07918285758641631
+        ],
+        [
+          0.07926112625984477,
+          0.04428974004222553,
+          -0.9958695159462474
+        ]
+      ],
+      "tier": "A",
+      "terrain": {
+        "status": "ready",
+        "near_field_res_m": 5,
+        "mask": "masks/im2_athena.json",
+        "sigma": {
+          "source": "default",
+          "default_deg": 0.1,
+          "file": "sigma/im2_athena.json"
+        },
+        "pad": {
+          "file": "pad/im2_athena.json",
+          "slope_deg": 7.0,
+          "downhill_aspect_deg": 200.0
+        },
+        "dispersion_file": "dispersion/im2_athena.json",
+        "psr": {
+          "distance_km": 4.2,
+          "bearing_deg": 312.0,
+          "nearest_psr_area_km2": 2.8,
+          "source": "derived"
+        }
+      },
+      "source_url": "https://example.invalid/mock",
+      "source_type": "mock",
+      "verification_status": "mock",
+      "verified_by": null
+    },
+    {
+      "id": "cy3_shiv_shakti",
+      "name": "Chandrayaan-3 Statio Shiv Shakti",
+      "category": "historical_landing",
+      "agency": "ISRO",
+      "program": "MOCK",
+      "latitude_deg": -69.373,
+      "longitude_deg_east": 32.319,
+      "coordinate_frame": "MOON_ME_DE421",
+      "landing_coords": {
+        "lat": -69.373,
+        "lon": 32.319,
+        "source": "mock"
+      },
+      "target_coords": {
+        "lat": -69.367621,
+        "lon": 32.348126,
+        "source": "mock"
+      },
+      "coord_note": "mock; landing and target ~350 m apart",
+      "notes": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+      "touchdown_utc": "2023-08-23T12:33:00Z",
+      "touchdown_precision": "minute",
+      "last_contact_utc": null,
+      "reference_axis": "+X_ME",
+      "rotation_matrix": [
+        [
+          -0.0,
+          0.9803456779039375,
+          0.1972874851962721
+        ],
+        [
+          0.9546567618290611,
+          -0.058734199762732704,
+          0.2918574324431071
+        ],
+        [
+          0.29770869502594544,
+          0.18834183176687194,
+          -0.9358936303408887
+        ]
+      ],
+      "tier": "A",
+      "terrain": {
+        "status": "ready",
+        "near_field_res_m": 20,
+        "mask": "masks/cy3_shiv_shakti.json",
+        "sigma": {
+          "source": "default",
+          "default_deg": 0.1,
+          "file": "sigma/cy3_shiv_shakti.json"
+        },
+        "pad": {
+          "file": "pad/cy3_shiv_shakti.json",
+          "slope_deg": 4.0,
+          "downhill_aspect_deg": 120.0
+        },
+        "dispersion_file": "dispersion/cy3_shiv_shakti.json",
+        "psr": null
+      },
+      "source_url": "https://example.invalid/mock",
+      "source_type": "mock",
+      "verification_status": "mock",
+      "verified_by": null
+    },
+    {
+      "id": "shackleton_ridge",
+      "name": "Shackleton connecting ridge",
+      "category": "published_target",
+      "agency": "NASA CLPS",
+      "program": "MOCK",
+      "latitude_deg": -89.54,
+      "longitude_deg_east": 129.0,
+      "coordinate_frame": "MOON_ME_DE421",
+      "landing_coords": {
+        "lat": -89.54,
+        "lon": 129.0,
+        "source": "mock"
+      },
+      "target_coords": null,
+      "coord_note": "mock coordinate",
+      "notes": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+      "touchdown_utc": null,
+      "touchdown_precision": null,
+      "last_contact_utc": null,
+      "reference_axis": "+X_ME",
+      "rotation_matrix": [
+        [
+          -0.0,
+          0.9999805351270227,
+          0.00623934027549719
+        ],
+        [
+          0.9999872362746323,
+          3.152397750993308e-05,
+          -0.005052355298445896
+        ],
+        [
+          -0.005052453643814296,
+          0.0062392606382714365,
+          -0.9999677716500991
+        ]
+      ],
+      "tier": "A",
+      "terrain": {
+        "status": "ready",
+        "near_field_res_m": 5,
+        "mask": "masks/shackleton_ridge.json",
+        "sigma": {
+          "source": "default",
+          "default_deg": 0.1,
+          "file": "sigma/shackleton_ridge.json"
+        },
+        "pad": {
+          "file": "pad/shackleton_ridge.json",
+          "slope_deg": 9.0,
+          "downhill_aspect_deg": 330.0
+        },
+        "dispersion_file": "dispersion/shackleton_ridge.json",
+        "psr": {
+          "distance_km": 0.9,
+          "bearing_deg": 20.0,
+          "nearest_psr_area_km2": 210.0,
+          "source": "derived"
+        }
+      },
+      "source_url": "https://example.invalid/mock",
+      "source_type": "mock",
+      "verification_status": "mock",
+      "verified_by": null
+    },
+    {
+      "id": "blue_ghost_m1",
+      "name": "Blue Ghost Mission 1 (Mare Crisium)",
+      "category": "historical_landing",
+      "agency": "NASA CLPS / Firefly",
+      "program": "MOCK",
+      "latitude_deg": 18.56,
+      "longitude_deg_east": 61.81,
+      "coordinate_frame": "MOON_ME_DE421",
+      "landing_coords": {
+        "lat": 18.56,
+        "lon": 61.81,
+        "source": "mock"
+      },
+      "target_coords": null,
+      "coord_note": "mock coordinate",
+      "notes": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+      "touchdown_utc": "2025-03-02T08:34:00Z",
+      "touchdown_precision": "minute",
+      "last_contact_utc": null,
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          -0.8813859143088522,
+          0.472396941202998,
+          0.0
+        ],
+        [
+          -0.15036279583917211,
+          -0.28054298986621573,
+          0.9479908546311784
+        ],
+        [
+          0.44782798001618457,
+          0.8355457861655312,
+          0.3182975644513294
+        ]
+      ],
+      "tier": "C",
+      "terrain": {
+        "status": "pending",
+        "near_field_res_m": null,
+        "mask": null,
+        "sigma": null,
+        "pad": null,
+        "dispersion_file": null,
+        "psr": null
+      },
+      "source_url": "https://example.invalid/mock",
+      "source_type": "mock",
+      "verification_status": "mock",
+      "verified_by": null
+    }
+  ]
+}

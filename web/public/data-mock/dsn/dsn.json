@@ -1,0 +1,31 @@
+{
+  "version": "1",
+  "shape": [
+    140257,
+    3
+  ],
+  "dtype": "int16",
+  "fields": [
+    "DSS-14",
+    "DSS-43",
+    "DSS-63"
+  ],
+  "units": "deg",
+  "scale": 0.5,
+  "offset": 0.0,
+  "producer": "web/src/mocks/make_mock.py",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "sha256": "c03a8d2593b61172ba0275984337ea087a1d3b7157622cf2f44b39b7df6239d1",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "start_utc": "2023-01-01T00:00:00Z",
+  "cadence_s": 1800,
+  "mode": "geometric_only",
+  "frame": "MOON_ME",
+  "station_complexes": {
+    "DSS-14": "Goldstone",
+    "DSS-43": "Canberra",
+    "DSS-63": "Madrid"
+  },
+  "mock_cadence_note": "mock is 1800 s; real is 600 s. Read cadence_s."
+}

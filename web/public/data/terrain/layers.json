@@ -1,0 +1,421 @@
+{
+  "layers": [
+    {
+      "extent": "80_90S",
+      "filename": "layers/slope_hazard_80_90S.png",
+      "layer_id": "slope_hazard",
+      "legend_stops": [
+        {
+          "class": "safe",
+          "hex": "#ffffb2",
+          "label": "Safe [0, 5)deg",
+          "range_deg": [
+            0.0,
+            5.0
+          ]
+        },
+        {
+          "class": "caution",
+          "hex": "#fecc5c",
+          "label": "Caution [5, 10)deg",
+          "range_deg": [
+            5.0,
+            10.0
+          ]
+        },
+        {
+          "class": "critical",
+          "hex": "#fd8d3c",
+          "label": "Critical [10, 15]deg",
+          "range_deg": [
+            10.0,
+            15.0
+          ]
+        },
+        {
+          "class": "exceeded",
+          "hex": "#e31a1c",
+          "label": "Exceeded [15, 90)deg",
+          "range_deg": [
+            15.0,
+            90.0
+          ]
+        }
+      ],
+      "name": "Slope Hazard",
+      "projection": {
+        "central_meridian_deg": 0.0,
+        "centre_px": [
+          1267.0,
+          1267.0
+        ],
+        "half_extent_km": 304.0056080198807,
+        "lat_limit_deg": -80.0,
+        "latitude_of_origin_deg": -90.0,
+        "metres_per_px": 240.0,
+        "name": "south-polar stereographic",
+        "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+        "reference_radius_m": 1737400.0,
+        "scale_factor_at_pole": 1.0,
+        "size_px": [
+          2534,
+          2534
+        ]
+      },
+      "source_citation": "PGDA products/90 (LOLA 20 m/px polar DEM family); see pipeline/config/dem_sources.yaml notes"
+    },
+    {
+      "extent": "80_90S",
+      "filename": "layers/average_illumination_80_90S.png",
+      "layer_id": "average_illumination",
+      "legend_stops": [
+        {
+          "hex": "#ffffcc",
+          "label": "0%",
+          "value_pct": 0.0
+        },
+        {
+          "hex": "#a1dab4",
+          "label": "25%",
+          "value_pct": 25.0
+        },
+        {
+          "hex": "#41b6c4",
+          "label": "50%",
+          "value_pct": 50.0
+        },
+        {
+          "hex": "#2c7fb8",
+          "label": "75%",
+          "value_pct": 75.0
+        },
+        {
+          "hex": "#253494",
+          "label": "100%",
+          "value_pct": 100.0
+        }
+      ],
+      "name": "Average Illumination",
+      "projection": {
+        "central_meridian_deg": 0.0,
+        "centre_px": [
+          1267.0,
+          1267.0
+        ],
+        "half_extent_km": 304.0056080198807,
+        "lat_limit_deg": -80.0,
+        "latitude_of_origin_deg": -90.0,
+        "metres_per_px": 240.0,
+        "name": "south-polar stereographic",
+        "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+        "reference_radius_m": 1737400.0,
+        "scale_factor_at_pole": 1.0,
+        "size_px": [
+          2534,
+          2534
+        ]
+      },
+      "source_citation": "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    },
+    {
+      "extent": "80_90S",
+      "filename": "layers/earth_visibility_80_90S.png",
+      "layer_id": "earth_visibility",
+      "legend_stops": [
+        {
+          "hex": "#ffffcc",
+          "label": "0%",
+          "value_pct": 0.0
+        },
+        {
+          "hex": "#a1dab4",
+          "label": "25%",
+          "value_pct": 25.0
+        },
+        {
+          "hex": "#41b6c4",
+          "label": "50%",
+          "value_pct": 50.0
+        },
+        {
+          "hex": "#2c7fb8",
+          "label": "75%",
+          "value_pct": 75.0
+        },
+        {
+          "hex": "#253494",
+          "label": "100%",
+          "value_pct": 100.0
+        }
+      ],
+      "name": "Earth Visibility",
+      "projection": {
+        "central_meridian_deg": 0.0,
+        "centre_px": [
+          1267.0,
+          1267.0
+        ],
+        "half_extent_km": 304.0056080198807,
+        "lat_limit_deg": -80.0,
+        "latitude_of_origin_deg": -90.0,
+        "metres_per_px": 240.0,
+        "name": "south-polar stereographic",
+        "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+        "reference_radius_m": 1737400.0,
+        "scale_factor_at_pole": 1.0,
+        "size_px": [
+          2534,
+          2534
+        ]
+      },
+      "source_citation": "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    },
+    {
+      "extent": "85_90S",
+      "filename": "layers/slope_hazard_85_90S.png",
+      "layer_id": "slope_hazard",
+      "legend_stops": [
+        {
+          "class": "safe",
+          "hex": "#ffffb2",
+          "label": "Safe [0, 5)deg",
+          "range_deg": [
+            0.0,
+            5.0
+          ]
+        },
+        {
+          "class": "caution",
+          "hex": "#fecc5c",
+          "label": "Caution [5, 10)deg",
+          "range_deg": [
+            5.0,
+            10.0
+          ]
+        },
+        {
+          "class": "critical",
+          "hex": "#fd8d3c",
+          "label": "Critical [10, 15]deg",
+          "range_deg": [
+            10.0,
+            15.0
+          ]
+        },
+        {
+          "class": "exceeded",
+          "hex": "#e31a1c",
+          "label": "Exceeded [15, 90)deg",
+          "range_deg": [
+            15.0,
+            90.0
+          ]
+        }
+      ],
+      "name": "Slope Hazard",
+      "projection": {
+        "central_meridian_deg": 0.0,
+        "centre_px": [
+          633.0,
+          633.0
+        ],
+        "half_extent_km": 151.7130444184977,
+        "lat_limit_deg": -85.0,
+        "latitude_of_origin_deg": -90.0,
+        "metres_per_px": 240.0,
+        "name": "south-polar stereographic",
+        "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+        "reference_radius_m": 1737400.0,
+        "scale_factor_at_pole": 1.0,
+        "size_px": [
+          1266,
+          1266
+        ]
+      },
+      "source_citation": "PGDA products/90 (LOLA 20 m/px polar DEM family); see pipeline/config/dem_sources.yaml notes"
+    },
+    {
+      "extent": "85_90S",
+      "filename": "layers/average_illumination_85_90S.png",
+      "layer_id": "average_illumination",
+      "legend_stops": [
+        {
+          "hex": "#ffffcc",
+          "label": "0%",
+          "value_pct": 0.0
+        },
+        {
+          "hex": "#a1dab4",
+          "label": "25%",
+          "value_pct": 25.0
+        },
+        {
+          "hex": "#41b6c4",
+          "label": "50%",
+          "value_pct": 50.0
+        },
+        {
+          "hex": "#2c7fb8",
+          "label": "75%",
+          "value_pct": 75.0
+        },
+        {
+          "hex": "#253494",
+          "label": "100%",
+          "value_pct": 100.0
+        }
+      ],
+      "name": "Average Illumination",
+      "projection": {
+        "central_meridian_deg": 0.0,
+        "centre_px": [
+          2529.0,
+          2529.0
+        ],
+        "half_extent_km": 151.7130444184977,
+        "lat_limit_deg": -85.0,
+        "latitude_of_origin_deg": -90.0,
+        "metres_per_px": 60.0,
+        "name": "south-polar stereographic",
+        "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+        "reference_radius_m": 1737400.0,
+        "scale_factor_at_pole": 1.0,
+        "size_px": [
+          5058,
+          5058
+        ]
+      },
+      "source_citation": "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    },
+    {
+      "extent": "85_90S",
+      "filename": "layers/earth_visibility_85_90S.png",
+      "layer_id": "earth_visibility",
+      "legend_stops": [
+        {
+          "hex": "#ffffcc",
+          "label": "0%",
+          "value_pct": 0.0
+        },
+        {
+          "hex": "#a1dab4",
+          "label": "25%",
+          "value_pct": 25.0
+        },
+        {
+          "hex": "#41b6c4",
+          "label": "50%",
+          "value_pct": 50.0
+        },
+        {
+          "hex": "#2c7fb8",
+          "label": "75%",
+          "value_pct": 75.0
+        },
+        {
+          "hex": "#253494",
+          "label": "100%",
+          "value_pct": 100.0
+        }
+      ],
+      "name": "Earth Visibility",
+      "projection": {
+        "central_meridian_deg": 0.0,
+        "centre_px": [
+          2529.0,
+          2529.0
+        ],
+        "half_extent_km": 151.7130444184977,
+        "lat_limit_deg": -85.0,
+        "latitude_of_origin_deg": -90.0,
+        "metres_per_px": 60.0,
+        "name": "south-polar stereographic",
+        "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+        "reference_radius_m": 1737400.0,
+        "scale_factor_at_pole": 1.0,
+        "size_px": [
+          5058,
+          5058
+        ]
+      },
+      "source_citation": "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    },
+    {
+      "extent": "80_90S",
+      "filename": "layers/psr_80_90S.png",
+      "layer_id": "psr",
+      "legend_stops": [
+        {
+          "class": "psr",
+          "hex": "#3182bd",
+          "label": "permanently shadowed region (a cold trap that may host ice)"
+        },
+        {
+          "class": "none",
+          "hex": null,
+          "label": "not a qualifying permanently shadowed region"
+        }
+      ],
+      "name": "Psr",
+      "projection": {
+        "central_meridian_deg": 0.0,
+        "centre_px": [
+          1267.0,
+          1267.0
+        ],
+        "half_extent_km": 304.0056080198807,
+        "lat_limit_deg": -80.0,
+        "latitude_of_origin_deg": -90.0,
+        "metres_per_px": 240.0,
+        "name": "south-polar stereographic",
+        "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+        "reference_radius_m": 1737400.0,
+        "scale_factor_at_pole": 1.0,
+        "size_px": [
+          2534,
+          2534
+        ]
+      },
+      "source_citation": "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    },
+    {
+      "extent": "85_90S",
+      "filename": "layers/psr_85_90S.png",
+      "layer_id": "psr",
+      "legend_stops": [
+        {
+          "class": "psr",
+          "hex": "#3182bd",
+          "label": "permanently shadowed region (a cold trap that may host ice)"
+        },
+        {
+          "class": "none",
+          "hex": null,
+          "label": "not a qualifying permanently shadowed region"
+        }
+      ],
+      "name": "Psr",
+      "projection": {
+        "central_meridian_deg": 0.0,
+        "centre_px": [
+          2529.0,
+          2529.0
+        ],
+        "half_extent_km": 151.7130444184977,
+        "lat_limit_deg": -85.0,
+        "latitude_of_origin_deg": -90.0,
+        "metres_per_px": 60.0,
+        "name": "south-polar stereographic",
+        "proj4": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400 +units=m +no_defs",
+        "reference_radius_m": 1737400.0,
+        "scale_factor_at_pole": 1.0,
+        "size_px": [
+          5058,
+          5058
+        ]
+      },
+      "source_citation": "Mazarico, E., et al. (2011), Icarus, Vol. 211, pp. 1066-1081, doi:10.1016/j.icarus.2010.10.030"
+    }
+  ],
+  "version": "0.1.0"
+}

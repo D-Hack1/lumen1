@@ -1,0 +1,60 @@
+{
+  "aberration_correction": "LT+S",
+  "body_order": [
+    "sun",
+    "earth"
+  ],
+  "cadence_s": 3600,
+  "count": 70128,
+  "created_utc": "2026-11-14T07:28:08.634720Z",
+  "dtype": "float32",
+  "end_utc": "2030-12-31T23:00:00Z",
+  "fields": [
+    "sun_position_km",
+    "sun_velocity_km_s",
+    "earth_position_km",
+    "earth_velocity_km_s"
+  ],
+  "frame": "MOON_ME",
+  "kernel_provenance": [
+    {
+      "filename": "naif0012.tls",
+      "sha256": "3c2c786080569f0336b7c090866acc0f0b38a935db51c15da54de1efc10bfa17"
+    },
+    {
+      "filename": "pck00011.tpc",
+      "sha256": "8fd7588e258d49362198381b039c6d577db7e6f9be35dacfe43220698669f1eb"
+    },
+    {
+      "filename": "de421.bsp",
+      "sha256": "08b20db2ae22488650641c5a9033e5bfda4b1c4b440cfeaf20f621cfa18ecdb3"
+    },
+    {
+      "filename": "moon_pa_de421_1900-2050.bpc",
+      "sha256": "656f90616403d75a75f0cd6c8830fc5b44f8cb4facb5ccb8915e752b397520cf"
+    },
+    {
+      "filename": "moon_080317.tf",
+      "sha256": "3a5bf575b1b946349b703719853c760db3b3902a6fce750bb721bb93c474cd00"
+    }
+  ],
+  "offset": null,
+  "producer": "lumen_pipeline.ephem.ephemeris",
+  "scale": null,
+  "sha256": "765308c4598651c34ba0f1328b31f0b53947f1a9cab3b4df6defd44c0225a281",
+  "shape": [
+    70128,
+    12
+  ],
+  "spice_frame": "MOON_ME_DE421",
+  "start_et_tdb": 725803268.1839136,
+  "start_utc": "2023-01-01T00:00:00Z",
+  "step_seconds": 3600,
+  "units": [
+    "km",
+    "km/s",
+    "km",
+    "km/s"
+  ],
+  "version": "1"
+}

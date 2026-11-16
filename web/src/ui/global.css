@@ -1,0 +1,142 @@
+/* Owner: Abhinav — global base styles. Token values come from tokens.ts (injected as CSS vars). */
+
+/* Metrics-approximated fallbacks so the swap from system font to Plex causes minimal layout shift. */
+@font-face {
+  font-family: 'Plex Sans Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica');
+  size-adjust: 101%;
+  ascent-override: 101%;
+  descent-override: 27%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Plex Mono Fallback';
+  src: local('Consolas'), local('Menlo'), local('Courier New');
+  size-adjust: 109%;
+  ascent-override: 94%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  overflow: hidden; /* viewport lock: the page itself never scrolls */
+}
+
+body {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 1px;
+  border-radius: var(--r-sm);
+}
+
+/* Every number: tabular monospace so live values never jitter. */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-feature-settings:
+    'tnum' 1,
+    'zero' 1;
+  letter-spacing: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* ---------- Fast Lane (§1.3): no transitions or animations on hot-path elements, ever. ---------- */
+[data-hotpath],
+[data-hotpath] * {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* ---------- Motion primitives (transform + opacity only) ---------- */
+:root {
+  --motion-shift: 6px;
+  --motion-scale-from: 0.96;
+}
+@keyframes lumen-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes lumen-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes lumen-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(var(--motion-scale-from));
+  }
+}
+@keyframes lumen-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-shift));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 80ms;
+    --dur-base: 80ms;
+    --dur-popover: 80ms;
+    --dur-drawer: 80ms;
+    --dur-view: 80ms;
+    --dur-row: 80ms;
+    --dur-spotlight: 80ms;
+    --dur-tooltip: 80ms;
+    --delay-tooltip: 0ms;
+    --motion-shift: 0px;
+    --motion-scale-from: 1;
+  }
+  .motion-slide {
+    transition: none !important;
+  }
+}

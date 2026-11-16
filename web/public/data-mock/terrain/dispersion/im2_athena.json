@@ -1,0 +1,20 @@
+{
+  "schema": "dispersion",
+  "version": "0.1.0",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "producer": "mock",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "git_commit": "0000000000000000000000000000000000000000",
+  "site_id": "im2_athena",
+  "bin_width_deg": 0.5,
+  "observer_height_m": 1.0,
+  "nodes": [
+    11,
+    11
+  ],
+  "spacing_m": 50,
+  "dtype": "uint8",
+  "unit_deg": 0.1,
+  "layout": "DRAFT: slope only, row-major [row j][col i], j north; horizon bins/aspect not mocked"
+}

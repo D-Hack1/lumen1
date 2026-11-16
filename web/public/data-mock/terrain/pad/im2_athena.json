@@ -1,0 +1,40 @@
+{
+  "schema": "pad",
+  "version": "0.1.0",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "producer": "lumen_pipeline.terrain.pad (mock)",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "site_id": "im2_athena",
+  "ground_normal_me": [
+    0.192829757,
+    0.085196936,
+    -0.977526556
+  ],
+  "slope_deg": 7.0,
+  "downhill_aspect_deg": 200.0,
+  "uphill_az_deg": 20.0,
+  "z0_m": 0.0,
+  "d_min_m": 15,
+  "near_field_resolution_m": 5,
+  "under_resolved": false,
+  "plane_fit": {
+    "k": 3,
+    "window_px": [
+      7,
+      7
+    ],
+    "window_dim_m": [
+      35,
+      35
+    ],
+    "baseline_m": 30,
+    "dem_source": "MOCK-DEM"
+  },
+  "dispersion_slope_stats": {
+    "p50": 7.0,
+    "p95": 8.7,
+    "max": 9.0,
+    "pct_below_tolerance": 100.0
+  }
+}

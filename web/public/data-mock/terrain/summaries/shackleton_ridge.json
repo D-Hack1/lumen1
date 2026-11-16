@@ -1,0 +1,32 @@
+{
+  "schema": "site_summary",
+  "version": "0.1.0",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "site_id": "shackleton_ridge",
+  "run_timestamp_utc": "2026-01-01T00:00:00Z",
+  "tier": "Tier A",
+  "near_field_res_m": 5,
+  "dem_source": "MOCK-DEM",
+  "files_present": {
+    "mask_bin": "masks/shackleton_ridge.bin",
+    "mask_json": "masks/shackleton_ridge.json",
+    "sigma_bin": "sigma/shackleton_ridge.bin",
+    "sigma_json": "sigma/shackleton_ridge.json",
+    "pad_json": "pad/shackleton_ridge.json",
+    "dispersion_bin": "dispersion/shackleton_ridge.bin",
+    "dispersion_json": "dispersion/shackleton_ridge.json"
+  },
+  "pad_headline": {
+    "slope_deg": 9.0,
+    "downhill_aspect_deg": 330.0,
+    "uphill_az_deg": 150.0,
+    "under_resolved": false
+  },
+  "psr": {
+    "distance_km": 0.9,
+    "bearing_deg": 20.0,
+    "nearest_psr_area_km2": 210.0,
+    "source_classification": "derived"
+  }
+}

@@ -1,0 +1,262 @@
+/* Owner: Abhinav — Definitions Bar + ✎ popover. Tokens only. Fits the `definitions` slot (28 / 26 / 24 px). */
+
+.def-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  height: 100%;
+  min-width: 0;
+  padding: 0 var(--sp-2) 0 var(--sp-4);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+.def-bar__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: none;
+  color: var(--c-text-faint);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.def-bar__rules {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c-text);
+  text-align: left;
+}
+.def-bar__rules:hover .def-bar__rule {
+  color: var(--c-text);
+  text-decoration: underline dotted var(--c-hairline-strong);
+  text-underline-offset: 3px;
+}
+.def-bar__rule {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--c-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.def-bar__sep {
+  flex: none;
+  color: var(--c-text-faint);
+}
+.def-bar__preset {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  flex: none;
+  height: 18px;
+  padding: 0 var(--sp-1) 0 var(--sp-3);
+  border: 1px solid var(--c-sun);
+  border-radius: var(--r-pill);
+  color: var(--c-sun);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-medium);
+}
+.def-bar[data-preset='custom'] .def-bar__preset {
+  border-color: var(--c-hairline-strong);
+  border-style: dashed;
+  color: var(--c-text-muted);
+}
+.def-bar__reset,
+.def-bar__edit,
+.def-editor__close {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  line-height: 1;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.def-bar__reset {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  font-size: var(--fs-sm);
+}
+.def-bar__reset:hover {
+  background: var(--c-surface3);
+}
+.def-bar__edit {
+  width: 22px;
+  height: 20px;
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-md);
+  color: var(--c-text-muted);
+  font-size: var(--fs-md);
+}
+.def-bar__edit:hover,
+.def-bar__edit[aria-expanded='true'] {
+  background: var(--c-surface3);
+  color: var(--c-text);
+}
+.def-bar__reset:active,
+.def-bar__edit:active,
+.def-editor__close:active {
+  transform: scale(0.94);
+}
+:root[data-density='d4'] .def-bar {
+  gap: var(--sp-3);
+}
+:root[data-density='d4'] .def-bar__edit {
+  width: 20px;
+  height: 18px;
+}
+:root[data-density='d4'] .def-bar__label {
+  display: none;
+}
+
+/* ---------- popover ---------- */
+.ui-popover.def-popover {
+  width: min(520px, calc(100vw - 8px));
+  max-width: min(520px, calc(100vw - 8px));
+  padding: var(--sp-5) var(--sp-6);
+}
+.def-editor__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.def-editor__title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+}
+.def-editor__close {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-md);
+  color: var(--c-text-faint);
+  font-size: var(--fs-lg);
+}
+.def-editor__close:hover {
+  background: var(--c-surface3);
+  color: var(--c-text);
+}
+.def-editor__intro {
+  margin: var(--sp-2) 0 var(--sp-5);
+  color: var(--c-text-muted);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-body);
+}
+.def-editor__preset {
+  margin-bottom: var(--sp-5);
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--c-hairline);
+}
+.def-preset-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  min-height: 28px;
+  padding: 0 var(--sp-5);
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-md);
+  background: var(--c-surface3);
+  color: var(--c-text);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  text-align: left;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.def-preset-btn:hover {
+  background: var(--c-surface4);
+}
+.def-preset-btn:active {
+  transform: scale(0.985);
+}
+.def-preset-btn[aria-pressed='true'] {
+  border-color: var(--c-sun);
+}
+.def-preset-btn__glyph {
+  color: var(--c-sun);
+}
+.def-preset-btn__text {
+  flex: 1;
+}
+.def-preset-btn__state {
+  color: var(--c-sun);
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.def-editor__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5) var(--sp-6);
+}
+.def-field {
+  min-width: 0;
+}
+.def-field__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  min-height: 18px;
+  margin-bottom: var(--sp-2);
+}
+.def-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 0;
+  color: var(--c-text);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+}
+.def-field__value {
+  flex: none;
+  color: var(--c-text);
+  font-size: var(--fs-xs);
+}
+.def-field__help {
+  margin: var(--sp-1) 0 0;
+  color: var(--c-text-faint);
+  font-size: var(--fs-2xs);
+  line-height: var(--lh-snug);
+}
+.def-field .ui-slider:disabled {
+  opacity: 0.4;
+}
+.def-editor__foot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--c-hairline);
+}
+.def-link-btn {
+  padding: var(--sp-2) var(--sp-4);
+  border: 0;
+  border-radius: var(--r-md);
+  background: none;
+  color: var(--c-text-muted);
+  font-size: var(--fs-xs);
+}
+.def-link-btn:hover:not(:disabled) {
+  background: var(--c-surface3);
+  color: var(--c-text);
+}
+.def-link-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

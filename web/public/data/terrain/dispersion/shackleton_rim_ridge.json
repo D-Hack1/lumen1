@@ -1,0 +1,22 @@
+{
+  "clipped_nodes": 0,
+  "created_utc": "2026-11-15T16:28:12.989312Z",
+  "dem_source": "polar_10m_lola_pgda_90",
+  "dtype": "uint8",
+  "latitude_deg": -89.684,
+  "longitude_deg_east": 196.739,
+  "method": "R3 7x7 plane-fit slope evaluated at each node (pad.fit_ground_plane)",
+  "near_field_resolution_m": 10.0,
+  "nodes": [
+    11,
+    11
+  ],
+  "order": "row-major [north row j][east column i]; j increases north, i increases east; node (5, 5) is the site",
+  "producer": "lumen_pipeline.terrain.dispersion",
+  "site_id": "shackleton_rim_ridge",
+  "slope_deg_max": 23.341563240647837,
+  "slope_deg_min": 2.5453709070709976,
+  "spacing_m": 50.0,
+  "unit_deg": 0.1,
+  "version": "0.1.0"
+}

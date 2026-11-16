@@ -1,0 +1,20 @@
+{
+  "array_order": "c_contiguous_row_major",
+  "byte_order": "little",
+  "created_utc": "2026-11-15T00:36:35.911324Z",
+  "definition": "permanently shadowed region (a cold trap that may host ice)",
+  "dtype": "float32",
+  "extent": "85_90S",
+  "filename": "psr/psr_distance_85_90S.bin",
+  "git_commit": "c4e5c36c421c88b90e996df1ecbc79ec6e6a220d",
+  "height_px": 5058,
+  "nodata": "NaN",
+  "producer": "lumen_pipeline.terrain.psr",
+  "qualifying_components": 2443,
+  "radius_m": 151713.0444184977,
+  "resolution_m": 60.0,
+  "scale_correction": "true_km = projected_m_to_nearest_qualifying_psr / k(lat); k(lat) = 2/(1+sin|lat|), per-pixel",
+  "unit": "km",
+  "version": "0.1.0",
+  "width_px": 5058
+}

@@ -1,0 +1,28 @@
+{
+  "dem_source": "lola_gdr_ldem_128_pds",
+  "dispersion_available": false,
+  "files_present": {
+    "dispersion_bin": null,
+    "dispersion_json": null,
+    "mask_bin": "terrain/masks/apollo_14.bin",
+    "mask_json": "terrain/masks/apollo_14.json",
+    "pad_json": null,
+    "sigma_bin": null,
+    "sigma_json": null
+  },
+  "git_commit": "4b9e995d754aa6537ba47bd82e2d2599f46480fa",
+  "mask_available": true,
+  "near_field_res_m": 236.901,
+  "pad_available": false,
+  "pad_headline": null,
+  "psr": null,
+  "run_timestamp_utc": "2026-11-15T17:10:39.274036Z",
+  "sigma_available": false,
+  "site_id": "apollo_14",
+  "tier": "Tier A",
+  "unavailable": {
+    "far": "one global elevation model covers the whole 250 km range",
+    "mid": "one global elevation model covers the whole 250 km range"
+  },
+  "version": "0.1.0"
+}

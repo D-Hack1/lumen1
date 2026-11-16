@@ -1,0 +1,70 @@
+{
+  "version": "1",
+  "note": "Four guided starting points (PLAN_FINAL 8.9). Each applies a real app state and says what to look at. 'siteIds' lists the id in real-data mode first, then the sample-mode id. Images are local files with their credit; none is a logo or an AI image.",
+  "cards": [
+    {
+      "id": "slip-9",
+      "title": "What does a 9-day slip do?",
+      "blurb": "Delay the landing by nine days at IM-2 and see what it costs in sunlight and contact with Earth.",
+      "image": "content/moon/south_pole_lroc.webp",
+      "alt": "The Moon's south polar region from above, a grey cratered landscape with the pole at the centre.",
+      "credit": "NASA/GSFC/Arizona State University (LROC), via LROC QuickMap",
+      "sourceUrl": "https://quickmap.lroc.im-ldi.com/",
+      "license": "NASA imagery, credit required",
+      "action": { "route": "slip", "siteIds": ["im2_athena", "im2"], "mastM": 2, "slipDays": 9 },
+      "steps": [
+        "Opens the Slip explorer at IM-2 with a 9-day slip.",
+        "Each bar is a 14-day window that starts that many days after 8 Feb 2027.",
+        "Compare the sunlight and DSN-contact bars at +9 days with “on time”, and try “Jump to it” for the best window."
+      ]
+    },
+    {
+      "id": "sun-at-im2",
+      "title": "Is the Sun up at IM-2, and for how long?",
+      "blurb": "Stand at the IM-2 site and read the real skyline, the Sun and Earth paths, and the numbers behind them.",
+      "image": "content/bodies/sun_sdo.webp",
+      "alt": "The Sun's disk, orange, with a few dark sunspots.",
+      "credit": "NASA/SDO and the HMI science team",
+      "sourceUrl": "https://sdo.gsfc.nasa.gov/data/",
+      "license": "NASA imagery, credit required",
+      "action": { "route": "stand-here", "siteIds": ["im2_athena", "im2"], "mastM": 2, "slipDays": 0 },
+      "steps": [
+        "Opens Stand here at IM-2 with a 2 m solar array.",
+        "The skyline is the site's real terrain; the dashed lines are the Sun's and Earth's paths over a lunar month.",
+        "Under “Numbers for this window” read Sunlit % and Longest night, and press Why? on any of them for the explanation."
+      ]
+    },
+    {
+      "id": "pole-vs-equator",
+      "title": "Why is the pole so different?",
+      "blurb": "Put a south-pole site, a mid-latitude site and an equatorial site side by side.",
+      "image": "content/orbit/moon_map.jpg",
+      "alt": "A map of the whole Moon in greys and browns showing the dark maria and bright highlands.",
+      "credit": "LROC colour map (NASA SVS CGI Moon Kit)",
+      "sourceUrl": "https://svs.gsfc.nasa.gov/4720/",
+      "license": "NASA imagery, credit required",
+      "action": { "route": "compare", "siteIds": ["im2_athena", "cy3_shiv_shakti", "blue_ghost_m1"], "mastM": 2, "slipDays": 0 },
+      "steps": [
+        "Opens Compare with IM-2 (85°S), Chandrayaan-3 (69°S) and Blue Ghost (18°N).",
+        "Look at “Longest dark stretch”: near the pole the Sun skims the horizon, so light comes and goes with every ridge.",
+        "Blue Ghost has no terrain data, so it is a smooth-Moon estimate and is labelled as one."
+      ]
+    },
+    {
+      "id": "talk-to-earth",
+      "title": "When can we talk to Earth?",
+      "blurb": "See when Earth is in view from IM-2 and which Deep Space Network station can listen.",
+      "image": "content/bodies/earth_epic.webp",
+      "alt": "The Earth as seen from space, blue oceans and white clouds with Australia visible.",
+      "credit": "NASA EPIC team / DSCOVR",
+      "sourceUrl": "https://epic.gsfc.nasa.gov/",
+      "license": "NASA imagery, credit required",
+      "action": { "route": "stand-here", "siteIds": ["im2_athena", "im2"], "mastM": 2, "slipDays": 0 },
+      "steps": [
+        "Opens Stand here at IM-2.",
+        "Scroll to Details and open “Pointing & link”: Earth's range, one-way light time and the Goldstone, Canberra and Madrid lanes.",
+        "Open “Windows” for every period when the link is up, and click a row to jump the clock to it."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,478 @@
+{
+  "schema": "layers",
+  "version": "0.1.0",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "layers": [
+    {
+      "layer_id": "illumination",
+      "name": "Average Illumination",
+      "extent": "80_90S",
+      "filename": "illumination_80S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -80,
+        "half_extent_km": 304.0056080198807,
+        "metres_per_px": 2375.043812655318,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "0 %",
+          "hex": "#1b1b2f"
+        },
+        {
+          "value": 0.5,
+          "label": "50 %",
+          "hex": "#8a8a5c"
+        },
+        {
+          "value": 1,
+          "label": "100 %",
+          "hex": "#fff3b0"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": false
+    },
+    {
+      "layer_id": "earth_visibility",
+      "name": "Earth Visibility",
+      "extent": "80_90S",
+      "filename": "earth_visibility_80S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -80,
+        "half_extent_km": 304.0056080198807,
+        "metres_per_px": 2375.043812655318,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "0 %",
+          "hex": "#1e2a4a"
+        },
+        {
+          "value": 0.5,
+          "label": "50 %",
+          "hex": "#3d7ea6"
+        },
+        {
+          "value": 1,
+          "label": "100 %",
+          "hex": "#9fe0f6"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": false
+    },
+    {
+      "layer_id": "slope_hazard",
+      "name": "Slope Hazard",
+      "extent": "80_90S",
+      "filename": "slope_hazard_80S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -80,
+        "half_extent_km": 304.0056080198807,
+        "metres_per_px": 2375.043812655318,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "<5\u00b0",
+          "hex": "#44aa99"
+        },
+        {
+          "value": 0.33,
+          "label": "5\u201310\u00b0",
+          "hex": "#ddcc77"
+        },
+        {
+          "value": 0.66,
+          "label": "10\u201315\u00b0",
+          "hex": "#cc6677"
+        },
+        {
+          "value": 1,
+          "label": ">15\u00b0",
+          "hex": "#882255"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": false
+    },
+    {
+      "layer_id": "psr",
+      "name": "PSR (derived)",
+      "extent": "80_90S",
+      "filename": "psr_80S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -80,
+        "half_extent_km": 304.0056080198807,
+        "metres_per_px": 2375.043812655318,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "no",
+          "hex": "#000000"
+        },
+        {
+          "value": 1,
+          "label": "permanently shadowed region (a cold trap that may host ice)",
+          "hex": "#1e3cc8"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": true
+    },
+    {
+      "layer_id": "psr_distance",
+      "name": "Distance to PSR",
+      "extent": "80_90S",
+      "filename": "psr_distance_80S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -80,
+        "half_extent_km": 304.0056080198807,
+        "metres_per_px": 2375.043812655318,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "0 km",
+          "hex": "#ff0000"
+        },
+        {
+          "value": 1,
+          "label": "200 km",
+          "hex": "#00b4ff"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": true
+    },
+    {
+      "layer_id": "illumination",
+      "name": "Average Illumination",
+      "extent": "85_90S",
+      "filename": "illumination_85S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -85,
+        "half_extent_km": 151.7130444184977,
+        "metres_per_px": 1185.2581595195134,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "0 %",
+          "hex": "#1b1b2f"
+        },
+        {
+          "value": 0.5,
+          "label": "50 %",
+          "hex": "#8a8a5c"
+        },
+        {
+          "value": 1,
+          "label": "100 %",
+          "hex": "#fff3b0"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": false
+    },
+    {
+      "layer_id": "earth_visibility",
+      "name": "Earth Visibility",
+      "extent": "85_90S",
+      "filename": "earth_visibility_85S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -85,
+        "half_extent_km": 151.7130444184977,
+        "metres_per_px": 1185.2581595195134,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "0 %",
+          "hex": "#1e2a4a"
+        },
+        {
+          "value": 0.5,
+          "label": "50 %",
+          "hex": "#3d7ea6"
+        },
+        {
+          "value": 1,
+          "label": "100 %",
+          "hex": "#9fe0f6"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": false
+    },
+    {
+      "layer_id": "slope_hazard",
+      "name": "Slope Hazard",
+      "extent": "85_90S",
+      "filename": "slope_hazard_85S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -85,
+        "half_extent_km": 151.7130444184977,
+        "metres_per_px": 1185.2581595195134,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "<5\u00b0",
+          "hex": "#44aa99"
+        },
+        {
+          "value": 0.33,
+          "label": "5\u201310\u00b0",
+          "hex": "#ddcc77"
+        },
+        {
+          "value": 0.66,
+          "label": "10\u201315\u00b0",
+          "hex": "#cc6677"
+        },
+        {
+          "value": 1,
+          "label": ">15\u00b0",
+          "hex": "#882255"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": false
+    },
+    {
+      "layer_id": "psr",
+      "name": "PSR (derived)",
+      "extent": "85_90S",
+      "filename": "psr_85S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -85,
+        "half_extent_km": 151.7130444184977,
+        "metres_per_px": 1185.2581595195134,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "no",
+          "hex": "#000000"
+        },
+        {
+          "value": 1,
+          "label": "permanently shadowed region (a cold trap that may host ice)",
+          "hex": "#1e3cc8"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": true
+    },
+    {
+      "layer_id": "psr_distance",
+      "name": "Distance to PSR",
+      "extent": "85_90S",
+      "filename": "psr_distance_85S.png",
+      "projection": {
+        "type": "polar_stereographic_south",
+        "radius_m": 1737400.0,
+        "central_meridian_deg": 0.0,
+        "standard_parallel_deg": -90.0,
+        "r": "2R*tan(colat/2)",
+        "x": "r*sin(lon_east)",
+        "y": "r*cos(lon_east)",
+        "px": "cx + x/mpp",
+        "py": "cy - y/mpp",
+        "size_px": [
+          256,
+          256
+        ],
+        "centre_px": [
+          128.0,
+          128.0
+        ],
+        "lat_limit_deg": -85,
+        "half_extent_km": 151.7130444184977,
+        "metres_per_px": 1185.2581595195134,
+        "status": "DRAFT: projection parameters not frozen (data_terrain_misc.md 5.4)"
+      },
+      "legend_stops": [
+        {
+          "value": 0,
+          "label": "0 km",
+          "hex": "#ff0000"
+        },
+        {
+          "value": 1,
+          "label": "200 km",
+          "hex": "#00b4ff"
+        }
+      ],
+      "source_citation": "MOCK (synthetic raster)",
+      "derived": true
+    }
+  ]
+}

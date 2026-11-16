@@ -1,0 +1,58 @@
+{
+  "measured": {
+    "siteSwitchMs": {
+      "n": 8,
+      "p50": 137.8,
+      "p95": 193.5,
+      "max": 193.5
+    },
+    "hoverToFrameMs": {
+      "n": 300,
+      "p50": 14.2,
+      "p95": 15,
+      "max": 31.63
+    },
+    "slipDragFrameMs": {
+      "n": 217,
+      "p50": 16.7,
+      "p95": 16.7,
+      "max": 16.8
+    }
+  },
+  "machine": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13420H",
+    "logical_cpus": 12,
+    "total_mem_gb": 16.8,
+    "node": "v22.13.0"
+  },
+  "viewport": "1440x810",
+  "browser": "Playwright Chromium (headless)",
+  "data": "real",
+  "gate": "G8",
+  "description": "Performance of the live app on the machine it was measured on",
+  "recorded_utc": "2026-11-15T16:09:40Z",
+  "git_commit": "f14aa632d1d0d51615538d36f3eeb2bc39f45b96",
+  "command": "LUMEN_G8_OUT=<file> npx playwright test -c e2e/playwright.real.config.ts livePerf",
+  "budgets_ms": {
+    "siteSwitch": 100,
+    "slipFrame": 16.7,
+    "hover": 4,
+    "scanStage1": 100,
+    "scanFirstStage2": 300,
+    "quickAnswer": 150
+  },
+  "not_measurable_in_live_app": [
+    "scanStage1",
+    "scanFirstStage2",
+    "quickAnswer"
+  ],
+  "notes": [
+    "siteSwitchMs is click to the engine's new numbers on screen, end to end (worker evaluation included), headless Chromium.",
+    "hoverToFrameMs is pointer event to the next animation frame; it is dominated by the 60 Hz frame wait and is NOT the 4 ms pointer-to-overlay-drawn measurement of the old harness.",
+    "slipDragFrameMs is the frame time while dragging the slip slider; 16.7 ms is one 60 Hz frame (no dropped frames).",
+    "Scan and Quick Answer are not part of the live pages, so they cannot be timed there.",
+    "This machine is not confirmed to be the demo laptop."
+  ]
+}

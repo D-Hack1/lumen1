@@ -1,0 +1,12 @@
+{
+  "schema": "golden",
+  "version": 1,
+  "mock": true,
+  "note": "Empty on purpose: real vectors come from Gowri (H7:30 / H12). Parity tests must SKIP while cases is empty.",
+  "set": 2,
+  "cases": [],
+  "tolerances": {
+    "elevation_deg": 0.01,
+    "time_s": 10
+  }
+}

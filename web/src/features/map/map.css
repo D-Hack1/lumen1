@@ -1,0 +1,184 @@
+/* Owner: Nived — South Pole Basemap. Tokens only. The pointer readout is written by ref (Fast Lane): no transitions, no React state. */
+.basemap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--sp-2);
+}
+.basemap__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+.basemap__layer {
+  flex: 1;
+  min-width: 0;
+  height: 24px;
+  padding: 0 var(--sp-2);
+  color: var(--c-text);
+  background: var(--c-surface2);
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-xs);
+}
+.basemap__opacity {
+  width: 72px;
+  flex: none;
+}
+.basemap__stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+.basemap__square {
+  position: relative;
+  aspect-ratio: 1;
+  height: 100%;
+  max-width: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+.basemap__square > img,
+.basemap__square > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.basemap__base {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  background: #000;
+}
+.basemap__base > img {
+  position: absolute;
+  max-width: none;
+  image-rendering: auto;
+}
+.basemap__credit {
+  flex: none;
+  font-size: var(--fs-2xs);
+  color: var(--c-text-faint);
+  text-align: center;
+}
+.basemap__square > img {
+  border-radius: 50%;
+  pointer-events: none;
+}
+/* The hillshade slot: relief shading over the LROC base, under the data layer. */
+.basemap__square > img.basemap__hillshade {
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+}
+.basemap__ring {
+  fill: none;
+  stroke: var(--c-hairline-strong);
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke;
+}
+.basemap__meridian {
+  stroke: var(--c-hairline);
+  stroke-width: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+.basemap__meridian--zero {
+  stroke: var(--c-earth);
+  stroke-width: 1;
+}
+.basemap__region {
+  fill: none;
+  stroke: var(--c-text);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+}
+.basemap__pin {
+  fill: var(--c-accent);
+  stroke: var(--c-bg);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+}
+.basemap__pin.is-selected {
+  fill: var(--c-sun);
+  stroke: var(--c-text);
+  stroke-width: 2;
+}
+.basemap__disk {
+  fill: var(--c-surface1);
+  stroke: var(--c-hairline-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.basemap__tick,
+.basemap__earth {
+  fill: var(--c-text-muted);
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+.basemap__earth {
+  fill: var(--c-earth);
+}
+.basemap__name {
+  fill: var(--c-text);
+  font-weight: var(--fw-semibold);
+  paint-order: stroke;
+  stroke: var(--c-bg);
+  stroke-width: 3px;
+  pointer-events: none;
+}
+.basemap__notice {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-width: 0;
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+}
+.basemap__show {
+  flex: none;
+  height: 22px;
+  padding: 0 var(--sp-2);
+  color: var(--c-text);
+  background: var(--c-surface3);
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+}
+.basemap__readout {
+  color: var(--c-text-muted);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.basemap__inset {
+  position: absolute;
+  left: var(--sp-1);
+  bottom: var(--sp-1);
+  width: 28%;
+  aspect-ratio: 1;
+  background: var(--c-surface1);
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-sm);
+}
+.basemap__inset svg {
+  width: 100%;
+  height: 100%;
+}
+.basemap__inset text {
+  fill: var(--c-text-faint);
+  font-size: 9px;
+}

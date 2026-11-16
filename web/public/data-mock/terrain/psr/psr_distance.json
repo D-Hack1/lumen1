@@ -1,0 +1,25 @@
+{
+  "schema": "psr_distance",
+  "version": 1,
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "size_px": [
+    80,
+    80
+  ],
+  "pixel_m": 7600.0,
+  "half_extent_km": 304.0,
+  "dtype": "uint16",
+  "unit_km": 0.01,
+  "projection": {
+    "type": "polar_stereographic_south",
+    "radius_m": 1737400.0,
+    "x": "r*sin(lon)",
+    "y": "r*cos(lon)",
+    "r": "2R*tan(colat/2)"
+  },
+  "origin": "top-left pixel centre at (-half+px/2, +half-px/2) km",
+  "source": "derived",
+  "psr_threshold_pct": 0.1,
+  "min_area_km2": 0.1
+}

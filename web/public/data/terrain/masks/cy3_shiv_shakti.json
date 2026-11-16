@@ -1,0 +1,124 @@
+{
+  "azimuth_center": "i_plus_0.5_times_bin_width",
+  "azimuth_count": 3600,
+  "azimuth_direction": "toward_site_frame_e",
+  "azimuth_zero": "projected_site_frame_reference",
+  "bin_width_deg": 0.1,
+  "binary": {
+    "array_order": "c_contiguous_height_major",
+    "byte_order": "little",
+    "float_encoding": "ieee754-binary32",
+    "format_version": 1,
+    "layout": "header_then_elevation_then_distance",
+    "magic": "LUMENMSK"
+  },
+  "created_utc": "2026-11-15T05:40:11.297143Z",
+  "d_min_m": 180.0,
+  "dem_crops": {
+    "far": {
+      "cache_key": "b80b627a6449613466b466f0c8577753e071b9972fbff063b0d041d707c2eba6",
+      "crs": "PROJCS[\"Moon (2015) - Sphere / Ocentric / South Polar\",GEOGCS[\"Moon (2015) - Sphere / Ocentric\",DATUM[\"Moon (2015) - Sphere\",SPHEROID[\"Moon (2015) - Sphere\",1737400,0,AUTHORITY[\"IAU\",\"30100\"]],AUTHORITY[\"IAU\",\"30100\"]],PRIMEM[\"Reference Meridian\",0,AUTHORITY[\"IAU\",\"30100\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"IAU\",\"30100\"]],PROJECTION[\"Polar_Stereographic\"],PARAMETER[\"latitude_of_origin\",-90],PARAMETER[\"central_meridian\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",NORTH],AXIS[\"Northing\",NORTH],AUTHORITY[\"IAU\",\"30135\"]]",
+      "datum_reference": "1737400 m reference sphere",
+      "frame": "MOON_ME / DE421",
+      "nodata": null,
+      "offset": 0.0,
+      "resolution_m": [
+        240.0,
+        240.0
+      ],
+      "scale": 1.0,
+      "shape": [
+        2085,
+        2085
+      ],
+      "source_key": "regional_240m_lola_pgda_90",
+      "source_url": "/tmp/LDEM_60S_240MPP_ADJ.TIF",
+      "unit": "m",
+      "vertical_reference": "height_relative"
+    },
+    "mid": {
+      "cache_key": "5e9feae7014244d71493805d7b15e71e13b1ac66b6dfec7798ca1d43e91da9ad",
+      "crs": "PROJCS[\"Moon (2015) - Sphere / Ocentric / South Polar\",GEOGCS[\"Moon (2015) - Sphere / Ocentric\",DATUM[\"Moon (2015) - Sphere\",SPHEROID[\"Moon (2015) - Sphere\",1737400,0,AUTHORITY[\"IAU\",\"30100\"]],AUTHORITY[\"IAU\",\"30100\"]],PRIMEM[\"Reference Meridian\",0,AUTHORITY[\"IAU\",\"30100\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"IAU\",\"30100\"]],PROJECTION[\"Polar_Stereographic\"],PARAMETER[\"latitude_of_origin\",-90],PARAMETER[\"central_meridian\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",NORTH],AXIS[\"Northing\",NORTH],AUTHORITY[\"IAU\",\"30135\"]]",
+      "datum_reference": "1737400 m reference sphere",
+      "frame": "MOON_ME / DE421",
+      "nodata": null,
+      "offset": 0.0,
+      "resolution_m": [
+        60.0,
+        60.0
+      ],
+      "scale": 1.0,
+      "shape": [
+        2668,
+        2667
+      ],
+      "source_key": "polar_60m_lola_pgda_90",
+      "source_url": "/tmp/LDEM_60S_60MPP_ADJ.TIF",
+      "unit": "m",
+      "vertical_reference": "height_relative"
+    },
+    "near": {
+      "cache_key": "f0a765e26621d358517205696bf3d9a6f5fb69730200ec4288e758c82545bf01",
+      "crs": "PROJCS[\"Moon (2015) - Sphere / Ocentric / South Polar\",GEOGCS[\"Moon (2015) - Sphere / Ocentric\",DATUM[\"Moon (2015) - Sphere\",SPHEROID[\"Moon (2015) - Sphere\",1737400,0,AUTHORITY[\"IAU\",\"30100\"]],AUTHORITY[\"IAU\",\"30100\"]],PRIMEM[\"Reference Meridian\",0,AUTHORITY[\"IAU\",\"30100\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"IAU\",\"30100\"]],PROJECTION[\"Polar_Stereographic\"],PARAMETER[\"latitude_of_origin\",-90],PARAMETER[\"central_meridian\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",NORTH],AXIS[\"Northing\",NORTH],AUTHORITY[\"IAU\",\"30135\"]]",
+      "datum_reference": "1737400 m reference sphere",
+      "frame": "MOON_ME / DE421",
+      "nodata": null,
+      "offset": 0.0,
+      "resolution_m": [
+        60.0,
+        60.0
+      ],
+      "scale": 1.0,
+      "shape": [
+        168,
+        167
+      ],
+      "source_key": "polar_60m_lola_pgda_90",
+      "source_url": "/tmp/LDEM_60S_60MPP_ADJ.TIF",
+      "unit": "m",
+      "vertical_reference": "height_relative"
+    }
+  },
+  "dem_source": "polar_60m_lola_pgda_90",
+  "downhill_aspect_deg": 10.30633438438781,
+  "git_commit": "fc3a7d3f5ae1d57a01cedd778cba64eb709d152d",
+  "global_max_deg": [
+    2.4844253063201904,
+    2.480881452560425,
+    2.470249891281128,
+    2.4525299072265625
+  ],
+  "global_min_deg": [
+    0.7423702478408813,
+    0.471822589635849,
+    0.42252790927886963,
+    0.3555205464363098
+  ],
+  "heights_m": [
+    1.0,
+    2.0,
+    5.0,
+    10.0
+  ],
+  "median_filter_kernel_px": 3,
+  "median_filter_region_radius_m": 100.0,
+  "median_filter_status": "applied",
+  "near_field_resolution_m": 60.0,
+  "near_zone_model": "fitted_local_plane",
+  "plane_fit_half_width_px": 3,
+  "plane_fit_kernel_px": 7,
+  "producer": "lumen_pipeline.terrain.masks",
+  "provenance": {
+    "median_filter_reason": null
+  },
+  "range_extrema": {
+    "strategy": "finite_segment_tree",
+    "supports_circular_azimuth_ranges": true
+  },
+  "ray_range_km": 250.0,
+  "site_id": "cy3_shiv_shakti",
+  "slope_deg": 0.5192388083816715,
+  "uphill_azimuth_deg": 190.30633438438778,
+  "version": "1.0.0",
+  "z0_m": 529.2563998637414
+}

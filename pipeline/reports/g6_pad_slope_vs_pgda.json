@@ -1,0 +1,68 @@
+{
+  "gate": "G6",
+  "description": "Pad slope versus PGDA slope rasters",
+  "criterion_deg": 3.0,
+  "recorded_utc": "2026-11-15T16:28:59Z",
+  "git_commit": "d80ff83a0ee6a8ddc8db2480e6eaf03735f1da4d",
+  "command": "python pipeline/scripts/run_g6.py",
+  "sites": [
+    {
+      "site_id": "im2_athena",
+      "latitude_deg": -84.7906,
+      "longitude_deg_east": 29.1957,
+      "pad_slope_deg": 2.8089403306282548,
+      "pad_dem_source": "polar_10m_lola_pgda_90",
+      "pgda_product": "polar_20m_lola_pgda_90",
+      "pgda_slope_url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDSM_80S_20MPP_ADJ.TIF",
+      "pgda": {
+        "centre_deg": 3.077568292617798,
+        "mean_3x3_deg": 2.7580369578467474,
+        "min_3x3_deg": 2.1108639240264893,
+        "max_3x3_deg": 3.2035326957702637,
+        "pixel_size_m": 20.0
+      },
+      "abs_difference_vs_centre_deg": 0.2686279619895431,
+      "abs_difference_vs_3x3_mean_deg": 0.05090337278150736,
+      "within_tolerance": true
+    },
+    {
+      "site_id": "shackleton_rim_ridge",
+      "latitude_deg": -89.684,
+      "longitude_deg_east": 196.739,
+      "pad_slope_deg": 5.83101069550598,
+      "pad_dem_source": "polar_10m_lola_pgda_90",
+      "pgda_product": "polar_20m_lola_pgda_90",
+      "pgda_slope_url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDSM_80S_20MPP_ADJ.TIF",
+      "pgda": {
+        "centre_deg": 5.75927209854126,
+        "mean_3x3_deg": 6.628510395685832,
+        "min_3x3_deg": 2.337543249130249,
+        "max_3x3_deg": 10.710142135620117,
+        "pixel_size_m": 20.0
+      },
+      "abs_difference_vs_centre_deg": 0.07173859696472018,
+      "abs_difference_vs_3x3_mean_deg": 0.7974997001798521,
+      "within_tolerance": true
+    },
+    {
+      "site_id": "cy3_shiv_shakti",
+      "latitude_deg": -69.373,
+      "longitude_deg_east": 32.319,
+      "pad_slope_deg": 0.5137536572065533,
+      "pad_dem_source": "polar_60m_lola_pgda_90",
+      "pgda_product": "polar_60m_lola_pgda_90",
+      "pgda_slope_url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDSM_60S_60MPP_ADJ.TIF",
+      "pgda": {
+        "centre_deg": 0.47960472106933594,
+        "mean_3x3_deg": 0.9539535774124993,
+        "min_3x3_deg": 0.35207217931747437,
+        "max_3x3_deg": 1.364333152770996,
+        "pixel_size_m": 60.0
+      },
+      "abs_difference_vs_centre_deg": 0.03414893613721737,
+      "abs_difference_vs_3x3_mean_deg": 0.440199920205946,
+      "within_tolerance": true
+    }
+  ],
+  "method": "PGDA slope raster read over HTTP at the site; centre pixel compared with the published pad slope. The baselines differ (70 m plane fit vs 20 m / 60 m pixel slope)."
+}

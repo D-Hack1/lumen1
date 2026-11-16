@@ -1,0 +1,134 @@
+{
+  "schema": "validation_report",
+  "version": 1,
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "gates": [
+    {
+      "id": "G0",
+      "description": "mock gate 0",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G1",
+      "description": "mock gate 1",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G2",
+      "description": "mock gate 2",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G3",
+      "description": "mock gate 3",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G4",
+      "description": "mock gate 4",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G5",
+      "description": "mock gate 5",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G6",
+      "description": "mock gate 6",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G7",
+      "description": "mock gate 7",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G8",
+      "description": "mock gate 8",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G9",
+      "description": "mock gate 9",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G10",
+      "description": "mock gate 10",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G11",
+      "description": "mock gate 11",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G12",
+      "description": "mock gate 12",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    },
+    {
+      "id": "G13",
+      "description": "mock gate 13",
+      "metric": "n/a",
+      "threshold": null,
+      "value": null,
+      "pass": null,
+      "chart": null
+    }
+  ]
+}

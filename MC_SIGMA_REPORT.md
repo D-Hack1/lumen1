@@ -1,0 +1,104 @@
+# LUMEN — Preliminary Shackleton/IM-2/CY-3 Monte Carlo Terrain σ Pipeline
+
+**Status: PRELIMINARY. Not production-accepted.** Working branch `shivha/s7-transfer`, base commit `f2df9db0ec5d640b2430645f82641f3b3f1ae5f6`. Nothing has been committed or pushed.
+
+## 1. What was implemented
+
+- `pipeline/lumen_pipeline/terrain/mc_horizon.py` (new): the actual clone-generation and horizon-uncertainty workflow.
+  - `read_aligned_error_window` / `read_all_aligned_error_windows`: reads each crop's `_ERR.TIF` independently via `DemReader.read_site_window(..., read_error=True)`, verifies the re-read DEM elevation/validity is pixel-identical to the original crop before trusting grid alignment.
+  - `_correlated_gaussian_field` / `perturbed_elevation`: spatially correlated Gaussian perturbation field (white noise → `scipy.ndimage.gaussian_filter` smoothing → renormalized to unit variance → scaled pointwise by the crop's own `_ERR` magnitude, zero where `error_valid` is False). Configurable correlation length in metres, converted to pixels per crop resolution.
+  - `compute_horizon`: replicates the existing production `masks.py` pipeline (`fit_near_field` → per-crop `raycast_horizon` → `_combine_horizons` → `_apply_near_zone`) without writing a mask file, optionally with per-crop elevation overrides (the perturbed clone).
+  - `generate_clone_ensemble`: generates N reproducibly seeded clones via `np.random.SeedSequence([base_seed, length_key, clone_index, crop_seed_component])` (fixed `{"near":1,"mid":2,"far":3}` map — not Python's randomized `hash()`).
+  - `sample_sigma`: `ddof=1` sample standard deviation across clones, NaN-propagating (not `nanstd`).
+  - `nan_pattern_matches_nominal`, `evaluate_convergence` (20-vs-30 clone comparison with max/mean abs diff).
+- `pipeline/lumen_pipeline/terrain/mc_sigma.py` (extended): `write_sigma()` now accepts an `extra` dict of additional sidecar fields (methodology, provenance, caveats), with a `_CONTRACT_SIDECAR_FIELDS` collision check that runs **before** any file write.
+- Tests: `pipeline/tests/terrain/test_mc_horizon.py` (21 new tests, monkeypatched fast fake raycaster), `pipeline/tests/terrain/test_mc_sigma.py` (+2 new tests for `extra`). Existing serializer/contract tests retained unmodified in behavior.
+- A one-off, **not committed** orchestration script (`scratchpad/generate_mc_sigma_site.py`) calls these real, unmodified production functions to actually run the generation for each site.
+
+No synthetic arrays, no placeholder functions — every artifact below was produced by the real raycaster (`horizon.raycast_horizon`) run against real LOLA DEM data, perturbed 90 times per site (30 primary + 10 secondary clones × 3 crops) plus one nominal run.
+
+## 2. What was actually generated
+
+All three target sites passed every required technical check and have artifacts published at `web/public/data/terrain/sigma/<site_id>.{bin,json}`:
+
+| Site | σ mean (deg) | σ max (deg) | Nominal horizon range (deg) | 20-vs-30 max |Δ| (deg) | 50m-vs-150m max |Δ| (deg) | Wall time |
+|---|---|---|---|---|---|---|
+| `im2_athena` | 0.01117 | 0.08591 | [-1.501, 4.070] | 0.03340 | 0.04280 | ~92 min |
+| `cy3_shiv_shakti` | 0.01674 | 0.14903 | [0.356, 2.484] | 0.02772 | 0.10067 | ~19.6 min |
+| `shackleton_ridge` | 0.00152 | 0.00416 | [14.296, 26.879] | 0.00074 | 0.00167 | ~92.5 min |
+
+All three: `finite_fraction = 1.0000`, NaN pattern matches nominal mask validity exactly, DEM/ERR grid alignment verified (100% `fraction_valid` on every crop at every site), seeded reproducibility verified, `ddof=1`, `clone_count=30`, `source="monte_carlo"`.
+
+**No site was blocked.** (Shackleton required three attempts purely due to a container memory constraint — see §7 — not a data or methodology blocker.)
+
+### Artifact hashes (SHA-256)
+
+| File | SHA-256 |
+|---|---|
+| `im2_athena.bin` | `a47638cb34c191a52908141acea830505050b71f7070a59aebe9be0867146fc3` |
+| `im2_athena.json` | `4f4e6c6161b7f9c4e700b5c30d72ea0d51ada6a138d83882eb19270be3173c07` |
+| `cy3_shiv_shakti.bin` | `2bef98d5a664c7cbf0b7fc0ebb84ad77322bc2e607e84d7eb00853452bbc356a` |
+| `cy3_shiv_shakti.json` | `ab5a2900c80dcad3d10e2a064fd8f9ee29a1bcf4c9863a9bdf25115f4dd9a3d6` |
+| `shackleton_ridge.bin` | `5171a25b9f5f434b940c7e311d6d77f0ea7db75e5bc0813f4a2867834bd9ab3a` |
+| `shackleton_ridge.json` | `ef7da3d3e360454376b899407bd91dda901d7a7903375508710042b74c941bdf` |
+
+### Source DEM/ERR files used (all verified against the real PGDA Product 90 URLs; local copies used only to route around the rate limiter, not to substitute data)
+
+| Product key | DEM SHA-256 | ERR SHA-256 |
+|---|---|---|
+| `polar_20m_lola_pgda_90` (mid crop, 20m) | `09b7ca80f9e6a146f970225d18af72fc02787669b3ef51b888e347d2b6845649` | `d64045b8aa58a24010f009ab5667ae02cc06cffa7796784dd5e2d48b3059d8cf` |
+| `regional_240m_lola_pgda_90` (far crop, 240m) | `3f9663257b63022f2b0d5a623482ff3cadddceb91594a4e4ca14a94d8cec8b34` | `6b987570acf20cba527d29a519a9b1fd9d4550e98a81d4b8c1be4903b6d38fab` |
+| `polar_60m_lola_pgda_90` (CY-3 near/mid, 60m) | `b03b5b3b3bf6a0eb8e871be7a7c04bcfa1f7d9c01c885db10655c9f26afc1f6a` | `0a74522cba22896863e72d57ea0d2bc61224a6e43d05b8f514e4c0108cb086c2` |
+
+(The 10m near-crop product for IM-2/Shackleton was read live from `https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_83S_10MPP_ADJ*.TIF` — never hit the rate limiter this session, so no local override was needed.)
+
+## 3. Scientific assumptions (explicit, unverified where stated)
+
+1. **Perturbation model**: spatially correlated Gaussian field, constructed as white noise smoothed by a Gaussian kernel, renormalized to unit variance, then scaled pointwise by each crop's own `_ERR` raster magnitude (zero perturbation where `error_valid` is False — never fabricated for invalid pixels).
+2. **ERR interpretation — UNVERIFIED MODELLING ASSUMPTION**: `_ERR.TIF` values (metres) are treated as a Gaussian 1σ elevation-error magnitude per pixel. This has **not** been confirmed against PGDA/Barker et al. (2023) documentation — that paper (DOI `10.3847/PSJ/acf3e1`) was unreachable from this environment (`iopscience.iop.org` and `arxiv.org` both blocked by the egress proxy).
+3. **Correlation length**: two lengths tested (50m primary, 150m secondary) purely for sensitivity; **neither is claimed to be physically calibrated**. 50m was selected as the primary/published length because it is the finer, more conservative choice relative to near-crop resolution (10-20m), not because of any physical justification.
+4. **Vertical datum caveat**: the adjusted LOLA DEM's exact vertical offset/scaling relative to the 1,737,400 m reference sphere remains formally unconfirmed (same unresolved question investigated earlier this session — CRS/IAU-registry and GMT-processing-history evidence are consistent with a `height_relative` product, but the authoritative PGDA/Barker documentation could not be reached). This does **not** affect σ directly, since σ is a spread statistic invariant to a constant vertical offset — but it remains an open caveat on the underlying DEM's absolute elevation values, and is recorded verbatim in every sidecar's `vertical_datum_caveat` field.
+5. Shackleton's coordinates, rotation, masks, and catalog identity were **not** touched — only new σ artifacts were added.
+
+## 4. Convergence (20-vs-30) and cross-length sensitivity
+
+For every site, the 20-clone and 30-clone sigma estimates differ by less than ~0.034° at every bin (max across all three sites), and the ratio of that difference to the mean σ itself ranges from ~30% (IM-2) down to ~3% (Shackleton) — i.e., convergence is good but not perfect at 20 clones; 30 clones noticeably tightens the estimate, consistent with the task's requirement to compare 20-vs-30 rather than assume either is sufficient. No ensemble was expanded past 30, since 30 already shows tightening relative to 20 at every site and 30 is the task's specified clone count.
+
+Cross-length sensitivity (50m vs 150m correlation length) shows larger differences than the 20-vs-30 clone-count sensitivity at every site — i.e., the choice of correlation length matters more than clone count in this preliminary setup, reinforcing that the correlation length is a modelling choice requiring real calibration, not a converged/settled parameter.
+
+## 5. Test results
+
+- `pipeline/tests/terrain/test_mc_horizon.py`: 21/21 passed (perturbation reproducibility, seed-sensitivity, correlation-length smoothness, zero-magnitude and negative-length rejection, error-window alignment validation, `compute_horizon` override/no-mutation behavior, clone-ensemble reproducibility/seed/length differentiation and shape, `sample_sigma` against a known analytic value and NaN-propagation, `nan_pattern_matches_nominal`, `evaluate_convergence` including the `<20 clones` rejection).
+- `pipeline/tests/terrain/test_mc_sigma.py`: 35/35 passed (existing header/schema/contract tests retained unmodified, plus the 2 new `extra`-field tests, including the fixed before-write collision check).
+- Full backend suite: **421 passed**, 12 failed — the exact same 12 pre-existing, unrelated failures present in the baseline before any Task D changes (SPICE/DE421 kernel-dependent `tests/gowri/*` tests and one CRLF golden-fixture test). **Zero regressions.**
+- `ruff` / `black`: clean on all new and modified files.
+
+## 6. Changed/added files (exact list — nothing else was touched)
+
+```
+M  pipeline/lumen_pipeline/terrain/mc_sigma.py
+M  pipeline/tests/terrain/test_mc_sigma.py
+A  pipeline/lumen_pipeline/terrain/mc_horizon.py
+A  pipeline/tests/terrain/test_mc_horizon.py
+A  web/public/data/terrain/sigma/im2_athena.bin
+A  web/public/data/terrain/sigma/im2_athena.json
+A  web/public/data/terrain/sigma/cy3_shiv_shakti.bin
+A  web/public/data/terrain/sigma/cy3_shiv_shakti.json
+A  web/public/data/terrain/sigma/shackleton_ridge.bin
+A  web/public/data/terrain/sigma/shackleton_ridge.json
+```
+
+(The other modified/untracked entries in `git status` — `layers.py`, `layers.json`, `test_layers.py`, `test_layers_index_frontend_contract.py`, `loaders.test.ts`, `pipeline/cache/dem/` — belong to the earlier, separate S-7 Layers Index task and local DEM cache, not to this Monte Carlo work, and were left untouched.)
+
+No Shackleton coordinates/rotation/masks/fixtures, no IM-2/CY-3 production masks, and no unrelated frontend/mask/pad/dispersion/catalog files were modified.
+
+## 7. Remaining work before production acceptance
+
+1. **ERR-as-1σ assumption is unverified.** Needs confirmation against PGDA/Barker et al. (2023) documentation (currently unreachable from this environment) before this pipeline's σ values can be called scientifically calibrated.
+2. **Correlation length is not physically calibrated.** 50m/150m were tested only for sensitivity, not derived from any physical argument (e.g., DEM autocorrelation structure, known LOLA footprint spacing). Real calibration work is needed.
+3. **Vertical datum of the adjusted DEM is still not formally confirmed** against authoritative PGDA documentation (same open question from earlier in this session) — doesn't block σ but blocks full DEM provenance sign-off.
+4. **Transient per-process memory peaks (~7.6-7.7 GB RSS)** were observed during long MC runs (cause not root-caused — possibly tied to specific moments in the 90-raycast-call sequence, not a monotonic leak); running sites one at a time was required to avoid OOM kills in this container. Needs investigation/optimization before this can run unattended or concurrently in production.
+5. **Only 2 correlation lengths and 1 clone-count comparison (20 vs 30) have been evaluated.** A broader, more systematic sensitivity sweep is warranted before treating any single configuration as final.
+6. No downstream frontend consumption of these σ artifacts has been wired up or tested — this work produced only the backend artifacts per the task's explicit scope.
+
+Every sidecar JSON encodes `"preliminary": true`, `"production_ready": false`, and the full methodology/provenance detail above directly in its own fields, so the artifacts are self-describing without this report.

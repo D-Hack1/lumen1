@@ -1,0 +1,88 @@
+/* Stand here: "Numbers for this window" (Nived). Uses the pages' own tokens (--sunk, --line3, --mut, --amberT, ...). */
+.lm-box.lm-nums {
+  flex: none; /* .lm-box asks for a 320 px basis; this section is as tall as its content */
+  gap: 12px;
+}
+.lm-nums__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.lm-nums__title {
+  margin: 0;
+  font-family: 'DM Sans', Inter, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.lm-nums__window,
+.lm-nums__badge {
+  font-size: 12px;
+  color: var(--mut);
+}
+.lm-nums__badge[data-terrain='smooth'] {
+  color: var(--amberT);
+}
+.lm-nums__verdict {
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lm-nums__verdict ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--mut);
+}
+.lm-nums__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+.lm-nums__tile {
+  background: var(--sunk);
+  border: 1px solid var(--line3);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.lm-nums__label {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mut);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.lm-nums__value {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.lm-nums__why {
+  flex: none;
+  white-space: nowrap;
+  padding: 0 8px;
+  border: 1px solid var(--line3);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 11px;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.7;
+  cursor: pointer;
+}
+.lm-nums__why:hover,
+.lm-nums__why:focus-visible {
+  color: var(--amberT);
+  border-color: var(--amberLine);
+}

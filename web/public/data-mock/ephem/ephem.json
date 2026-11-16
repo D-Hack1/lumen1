@@ -1,0 +1,47 @@
+{
+  "version": "1",
+  "shape": [
+    11689,
+    12
+  ],
+  "dtype": "float32",
+  "fields": [
+    "sun_position_km",
+    "sun_velocity_km_s",
+    "earth_position_km",
+    "earth_velocity_km_s"
+  ],
+  "units": [
+    "km",
+    "km/s",
+    "km",
+    "km/s"
+  ],
+  "scale": null,
+  "offset": null,
+  "producer": "web/src/mocks/make_mock.py",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "sha256": "57f1f4f4330317f5d2bb876ed05ad5674f9b1853cd992298f92553e56e1ac05e",
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "start_utc": "2023-01-01T00:00:00Z",
+  "end_utc": "2031-01-01T00:00:00Z",
+  "count": 11689,
+  "start_et_tdb": 725803268.1839136,
+  "step_seconds": 21600,
+  "frame": "MOON_ME",
+  "spice_frame": "MOON_ME_DE421",
+  "cadence_s": 21600,
+  "body_order": [
+    "sun",
+    "earth"
+  ],
+  "aberration_correction": "LT+S",
+  "kernel_provenance": [
+    {
+      "filename": "MOCK",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "mock_cadence_note": "mock is 6 h; real is 3600 s. Loaders must read step_seconds."
+}

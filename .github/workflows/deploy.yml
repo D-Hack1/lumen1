@@ -1,0 +1,74 @@
+# Deploys the static, offline-capable web app to GitHub Pages on every push to main (and on demand).
+# Plan: public, no-login URL; works offline after first load (PLAN_FINAL §3, §13).
+#
+# ONE-TIME SETUP (repo admin): Settings → Pages → Build and deployment → Source: "GitHub Actions".
+# The site is then at https://<owner>.github.io/<repo>/ (the build is given that base path below).
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true # ephem.bin, dsn.bin, masks, sigma ... are Git LFS objects
+      - name: Verify the LFS data was hydrated (a pointer file would ship a broken app)
+        working-directory: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in web/public/data/ephem/ephem.bin web/public/data/dsn/dsn.bin web/public/data/terrain/masks/im2_athena.bin; do
+            if head -c 64 "$f" | grep -q '^version https://git-lfs.github.com/spec/v1'; then
+              echo "$f is still a Git LFS pointer after checkout" >&2
+              exit 1
+            fi
+          done
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - name: Build (real data, served under /<repo>/)
+        run: npm run build
+        env:
+          VITE_BASE: /${{ github.event.repository.name }}/
+          VITE_LUMEN_DATA: real
+      - name: Drop files the live site never reads (mock fixtures)
+        run: rm -rf dist/data-mock
+      - name: Check the build is self-contained (entry page, service worker, real data present)
+        run: |
+          test -f dist/index.html
+          test -f dist/sw.js
+          test -f dist/data/ephem/ephem.bin
+          grep -q "/${{ github.event.repository.name }}/" dist/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

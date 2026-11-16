@@ -1,0 +1,17 @@
+{
+  "polar": {
+    "size": 768,
+    "mapRadiusKm": 304,
+    "heightRangeM": [-8000, 8000],
+    "azimuthSteps": 24,
+    "horizonUnitDeg": 0.1,
+    "mosaic": { "cols": 4, "rows": 2 },
+    "files": { "dem": "polar_dem.png", "horizon": "polar_horizon.png", "illum": "polar_illum.png" },
+    "credit": "Terrain: NASA LRO LOLA 80 m south-polar DEM (PDS ldem_80s_80m), averaged to 768 px. Horizons and illumination: computed from that DEM for this app."
+  },
+  "globe": {
+    "moonMap": "moon_map.jpg",
+    "earthMap": "earth_map.jpg",
+    "credit": "Moon: LROC colour map (NASA SVS CGI Moon Kit). Earth: NASA Blue Marble (Land/Ocean/Ice, via Wikimedia Commons)."
+  }
+}

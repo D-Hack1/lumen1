@@ -1,0 +1,67 @@
+{
+  "schema": "tierb_index",
+  "version": 1,
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "node_spacing_m": 2000,
+  "bin_deg": 0.5,
+  "height_m": 1.0,
+  "d_min_m": 6000,
+  "sigma_default_deg": 0.5,
+  "tiles": [
+    {
+      "id": "s90_000",
+      "file": "tiles/s90_000.bin",
+      "n_nodes": 64,
+      "grid": [
+        8,
+        8
+      ],
+      "sections": {
+        "lat_deg": {
+          "dtype": "float32",
+          "offset_bytes": 0,
+          "byte_length": 256
+        },
+        "lon_deg": {
+          "dtype": "float32",
+          "offset_bytes": 256,
+          "byte_length": 256
+        },
+        "mask": {
+          "dtype": "uint8",
+          "offset_bytes": 512,
+          "byte_length": 46080,
+          "shape": [
+            64,
+            720
+          ],
+          "scale": 0.05,
+          "offset": -2.0
+        },
+        "slope_deg": {
+          "dtype": "uint8",
+          "offset_bytes": 46592,
+          "byte_length": 64,
+          "unit": 0.1
+        },
+        "downhill_aspect_deg": {
+          "dtype": "uint16",
+          "offset_bytes": 46656,
+          "byte_length": 128,
+          "unit": 0.01
+        },
+        "z0_m": {
+          "dtype": "int16",
+          "offset_bytes": 46784,
+          "byte_length": 128,
+          "unit": 0.5
+        }
+      },
+      "bbox_deg": {
+        "lat_min": -89.95336222862885,
+        "lat_max": -89.67353646561696
+      }
+    }
+  ]
+}

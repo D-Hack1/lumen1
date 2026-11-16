@@ -1,0 +1,700 @@
+{
+  "coordinate_frame": "MOON_ME_DE421",
+  "schema": "catalog",
+  "sites": [
+    {
+      "agency": "NASA / Intuitive Machines",
+      "category": "historical_landing",
+      "coord_note": "Published landing coordinate; reports with a minute-only touchdown time are noted separately.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "im2_athena",
+      "landing_coords": {
+        "lat": -84.7906,
+        "lon": 29.1957,
+        "source": "NASA and LROC landing-site release"
+      },
+      "last_contact_utc": "2025-03-07T06:15:00Z",
+      "latitude_deg": -84.7906,
+      "longitude_deg_east": 29.1957,
+      "name": "IM-2 Athena (Mons Mouton)",
+      "notes": "Published landing coordinate; reports with a minute-only touchdown time are noted separately.",
+      "program": "CLPS IM-2",
+      "reference_axis": "+X_ME",
+      "rotation_matrix": [
+        [
+          -0.0,
+          0.9990125213061966,
+          0.04442952029266446
+        ],
+        [
+          0.9968538879214051,
+          -0.0035215338175812135,
+          0.07918285758641631
+        ],
+        [
+          0.07926112625984477,
+          0.04428974004222553,
+          -0.9958695159462474
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://www.nasa.gov/missions/artemis/clps/",
+      "target_coords": null,
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": "second",
+      "touchdown_utc": "2025-03-06T17:28:50Z",
+      "verification_status": "verified",
+      "verified_by": "Gowri"
+    },
+    {
+      "agency": "ISRO",
+      "category": "historical_landing",
+      "coord_note": "Landing coordinates drive computation; the target is a secondary pin.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "cy3_shiv_shakti",
+      "landing_coords": {
+        "lat": -69.373,
+        "lon": 32.319,
+        "source": "ISRO landing announcement"
+      },
+      "last_contact_utc": null,
+      "latitude_deg": -69.373,
+      "longitude_deg_east": 32.319,
+      "name": "Chandrayaan-3 Statio Shiv Shakti",
+      "notes": "Landing coordinates drive computation; the target is a secondary pin.",
+      "program": "Chandrayaan-3",
+      "reference_axis": "+X_ME",
+      "rotation_matrix": [
+        [
+          -0.0,
+          0.9803456779039375,
+          0.1972874851962721
+        ],
+        [
+          0.9546567618290611,
+          -0.058734199762732704,
+          0.2918574324431071
+        ],
+        [
+          0.29770869502594544,
+          0.18834183176687194,
+          -0.9358936303408887
+        ]
+      ],
+      "source_type": "agency_and_peer_reviewed",
+      "source_url": "https://www.isro.gov.in/Chandrayaan3.html",
+      "target_coords": {
+        "lat": -69.367621,
+        "lon": 32.348126,
+        "source": "PRL, Current Science pre-landing target"
+      },
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": "minute",
+      "touchdown_utc": "2023-08-23T12:33:00Z",
+      "verification_status": "verified",
+      "verified_by": "Gowri"
+    },
+    {
+      "agency": "NASA",
+      "category": "published_target",
+      "coord_note": "Published target coordinate; no landing has occurred.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "shackleton_ridge",
+      "landing_coords": null,
+      "last_contact_utc": null,
+      "latitude_deg": -89.54,
+      "longitude_deg_east": 129.0,
+      "name": "Shackleton connecting ridge",
+      "notes": "Published target coordinate; no landing has occurred.",
+      "program": "CLPS",
+      "reference_axis": "+X_ME",
+      "rotation_matrix": [
+        [
+          -0.0,
+          0.9999805351270227,
+          0.00623934027549719
+        ],
+        [
+          0.9999872362746323,
+          3.152397750993308e-05,
+          -0.005052355298445896
+        ],
+        [
+          -0.005052453643814296,
+          0.0062392606382714365,
+          -0.9999677716500991
+        ]
+      ],
+      "source_type": "usgs_and_agency",
+      "source_url": "https://astrogeology.usgs.gov/search/map/Moon/Lunar_Polar_Maps",
+      "target_coords": {
+        "lat": -89.54,
+        "lon": 129.0,
+        "source": "USGS navigational grid and NASA CLPS mission material"
+      },
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": null,
+      "touchdown_utc": null,
+      "verification_status": "verified",
+      "verified_by": "Gowri"
+    },
+    {
+      "agency": "Firefly Aerospace",
+      "category": "historical_landing",
+      "coord_note": "Target centre; Blue Ghost landed within 100 m. Awaiting an LROC final landing fix.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "blue_ghost_m1",
+      "landing_coords": null,
+      "last_contact_utc": "2025-03-16T23:25:00Z",
+      "latitude_deg": 18.56,
+      "longitude_deg_east": 61.81,
+      "name": "Blue Ghost Mission 1 (Mare Crisium)",
+      "notes": "Target centre; Blue Ghost landed within 100 m. Awaiting an LROC final landing fix.",
+      "program": "CLPS Blue Ghost Mission 1",
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          -0.8813859143088522,
+          0.472396941202998,
+          0.0
+        ],
+        [
+          -0.15036279583917211,
+          -0.28054298986621573,
+          0.9479908546311784
+        ],
+        [
+          0.44782798001618457,
+          0.8355457861655312,
+          0.3182975644513294
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://fireflyspace.com/missions/blue-ghost-mission-1/",
+      "target_coords": {
+        "lat": 18.56,
+        "lon": 61.81,
+        "source": "Firefly landing ellipse centre"
+      },
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": "minute",
+      "touchdown_utc": "2025-03-02T08:34:00Z",
+      "verification_status": "verified",
+      "verified_by": "Gowri"
+    },
+    {
+      "agency": "NASA",
+      "category": "historical_landing",
+      "coord_note": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 0.3 m.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "apollo_11",
+      "landing_coords": {
+        "lat": 0.67416,
+        "lon": 23.47314,
+        "source": "NASA NSSDC Apollo landing site coordinates (planetocentric Mean Earth/Polar Axis, DE421), Lunar Module row; identical to the LROC 2016 table of coordinates of human features (Lunar Module row)"
+      },
+      "last_contact_utc": null,
+      "latitude_deg": 0.67416,
+      "longitude_deg_east": 23.47314,
+      "name": "Apollo 11 (Tranquility Base)",
+      "notes": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 0.3 m.",
+      "program": "Apollo 11",
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          -0.39831911154621447,
+          0.9172469053515713,
+          0.0
+        ],
+        [
+          -0.010792363949904299,
+          -0.0046866386737620955,
+          0.9999307777532975
+        ],
+        [
+          0.9171834114600019,
+          0.3982915390024087,
+          0.011766040187148625
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+      "target_coords": null,
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": null,
+      "touchdown_utc": null,
+      "verification_status": "verified",
+      "verified_by": "Ebin (read from the cited NASA table on 2026-11-15)"
+    },
+    {
+      "agency": "NASA",
+      "category": "historical_landing",
+      "coord_note": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 2.2 m.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "apollo_12",
+      "landing_coords": {
+        "lat": -3.0128,
+        "lon": -23.4219,
+        "source": "NASA NSSDC Apollo landing site coordinates (planetocentric Mean Earth/Polar Axis, DE421), Lunar Module row; identical to the LROC 2016 table of coordinates of human features (Lunar Module row)"
+      },
+      "last_contact_utc": null,
+      "latitude_deg": -3.0128,
+      "longitude_deg_east": -23.4219,
+      "name": "Apollo 12 (Ocean of Storms)",
+      "notes": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 2.2 m.",
+      "program": "Apollo 12",
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          0.397498652309835,
+          0.9176027579578566,
+          -0.0
+        ],
+        [
+          0.048228330074759504,
+          -0.020892151905183412,
+          0.9986178178697649
+        ],
+        [
+          0.9163344638231529,
+          -0.3969492367758198,
+          -0.05255905091446392
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+      "target_coords": null,
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": null,
+      "touchdown_utc": null,
+      "verification_status": "verified",
+      "verified_by": "Ebin (read from the cited NASA table on 2026-11-15)"
+    },
+    {
+      "agency": "NASA",
+      "category": "historical_landing",
+      "coord_note": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 0.4 m.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "apollo_14",
+      "landing_coords": {
+        "lat": -3.64589,
+        "lon": -17.47194,
+        "source": "NASA NSSDC Apollo landing site coordinates (planetocentric Mean Earth/Polar Axis, DE421), Lunar Module row; identical to the LROC 2016 table of coordinates of human features (Lunar Module row)"
+      },
+      "last_contact_utc": null,
+      "latitude_deg": -3.64589,
+      "longitude_deg_east": -17.47194,
+      "name": "Apollo 14 (Fra Mauro)",
+      "notes": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 0.4 m.",
+      "program": "Apollo 14",
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          0.3002386907057141,
+          0.9538641038446298,
+          -0.0
+        ],
+        [
+          0.060656075705717814,
+          -0.01909213343895551,
+          0.9979761174099967
+        ],
+        [
+          0.9519335948916293,
+          -0.29963104284674935,
+          -0.06358985044225732
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+      "target_coords": null,
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": null,
+      "touchdown_utc": null,
+      "verification_status": "verified",
+      "verified_by": "Ebin (read from the cited NASA table on 2026-11-15)"
+    },
+    {
+      "agency": "NASA",
+      "category": "historical_landing",
+      "coord_note": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 1.0 m.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "apollo_15",
+      "landing_coords": {
+        "lat": 26.13239,
+        "lon": 3.6333,
+        "source": "NASA NSSDC Apollo landing site coordinates (planetocentric Mean Earth/Polar Axis, DE421), Lunar Module row; identical to the LROC 2016 table of coordinates of human features (Lunar Module row)"
+      },
+      "last_contact_utc": null,
+      "latitude_deg": 26.13239,
+      "longitude_deg_east": 3.6333,
+      "name": "Apollo 15 (Hadley-Apennine)",
+      "notes": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 1.0 m.",
+      "program": "Apollo 15",
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          -0.06337055667779254,
+          0.9979900663565477,
+          0.0
+        ],
+        [
+          -0.4395614966543682,
+          -0.027911356712000804,
+          0.8977787293233602
+        ],
+        [
+          0.8959742536509175,
+          0.05689273785070258,
+          0.44044676542634836
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+      "target_coords": null,
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": null,
+      "touchdown_utc": null,
+      "verification_status": "verified",
+      "verified_by": "Ebin (read from the cited NASA table on 2026-11-15)"
+    },
+    {
+      "agency": "NASA",
+      "category": "historical_landing",
+      "coord_note": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 3.0 m.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "apollo_16",
+      "landing_coords": {
+        "lat": -8.9734,
+        "lon": 15.5011,
+        "source": "NASA NSSDC Apollo landing site coordinates (planetocentric Mean Earth/Polar Axis, DE421), Lunar Module row; identical to the LROC 2016 table of coordinates of human features (Lunar Module row)"
+      },
+      "last_contact_utc": null,
+      "latitude_deg": -8.9734,
+      "longitude_deg_east": 15.5011,
+      "name": "Apollo 16 (Descartes)",
+      "notes": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 3.0 m.",
+      "program": "Apollo 16",
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          -0.26725687640560447,
+          0.9636253224225272,
+          0.0
+        ],
+        [
+          0.15030233309323401,
+          0.04168563353854988,
+          0.9877608600381067
+        ],
+        [
+          0.9518313772305733,
+          0.26398588208949786,
+          -0.15597590639832726
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+      "target_coords": null,
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": null,
+      "touchdown_utc": null,
+      "verification_status": "verified",
+      "verified_by": "Ebin (read from the cited NASA table on 2026-11-15)"
+    },
+    {
+      "agency": "NASA",
+      "category": "historical_landing",
+      "coord_note": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 3.5 m.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "apollo_17",
+      "landing_coords": {
+        "lat": 20.1911,
+        "lon": 30.7723,
+        "source": "NASA NSSDC Apollo landing site coordinates (planetocentric Mean Earth/Polar Axis, DE421), Lunar Module row; identical to the LROC 2016 table of coordinates of human features (Lunar Module row)"
+      },
+      "last_contact_utc": null,
+      "latitude_deg": 20.1911,
+      "longitude_deg_east": 30.7723,
+      "name": "Apollo 17 (Taurus-Littrow)",
+      "notes": "Published landing coordinate (east-positive longitude); no touchdown time is recorded here because the cited table does not give one. Stated uncertainty in the LROC table is 3.5 m.",
+      "program": "Apollo 17",
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          -0.5116275355567561,
+          0.8592073468378401,
+          0.0
+        ],
+        [
+          -0.29655749046616536,
+          -0.176589479310791,
+          0.9385466480922267
+        ],
+        [
+          0.8064061753908699,
+          0.48018630856847994,
+          0.3451524146733527
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+      "target_coords": null,
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": null,
+      "touchdown_utc": null,
+      "verification_status": "verified",
+      "verified_by": "Ebin (read from the cited NASA table on 2026-11-15)"
+    },
+    {
+      "agency": "JAXA",
+      "category": "historical_landing",
+      "coord_note": "Touchdown location from the LROC image caption; the lander came to rest on its side. Time is to the minute as stated by LROC.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "slim_shioli",
+      "landing_coords": {
+        "lat": -13.316,
+        "lon": 25.251,
+        "source": "LROC image 1358, lander located in LROC NAC M1460739214L (NASA/GSFC/Arizona State University)"
+      },
+      "last_contact_utc": null,
+      "latitude_deg": -13.316,
+      "longitude_deg_east": 25.251,
+      "name": "SLIM (Shioli crater)",
+      "notes": "Touchdown location from the LROC image caption; the lander came to rest on its side. Time is to the minute as stated by LROC.",
+      "program": "SLIM",
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          -0.42658452555671217,
+          0.9044477002876146,
+          0.0
+        ],
+        [
+          0.20831374288288262,
+          0.09825158397370995,
+          0.9731145928269607
+        ],
+        [
+          0.880131255598663,
+          0.41511562689340215,
+          -0.23032149102334915
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://lroc.im-ldi.com/images/1358",
+      "target_coords": null,
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": "minute",
+      "touchdown_utc": "2024-01-19T15:20:00Z",
+      "verification_status": "verified",
+      "verified_by": "Ebin (read from the cited LROC page on 2026-11-15)"
+    },
+    {
+      "agency": "CNSA",
+      "category": "historical_landing",
+      "coord_note": "Landed 1 June 2024; the LROC page gives the date but no time of day, so no touchdown time is recorded. Far side - no direct line of sight to Earth.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "change6_apollo_basin",
+      "landing_coords": {
+        "lat": -41.6385,
+        "lon": 206.0148,
+        "source": "LROC image 1374 (LROC NAC M1472410644L, NASA/GSFC/Arizona State University); stated horizontal accuracy +/-30 m"
+      },
+      "last_contact_utc": null,
+      "latitude_deg": -41.6385,
+      "longitude_deg_east": 206.0148,
+      "name": "Chang'e-6 (Apollo basin, far side)",
+      "notes": "Landed 1 June 2024; the LROC page gives the date but no time of day, so no touchdown time is recorded. Far side - no direct line of sight to Earth.",
+      "program": "Chang'e-6",
+      "reference_axis": "+Z_ME",
+      "rotation_matrix": [
+        [
+          0.4386032985096866,
+          -0.8986807812212424,
+          0.0
+        ],
+        [
+          -0.5971091656578371,
+          -0.2914205523255979,
+          0.7473517953210824
+        ],
+        [
+          -0.6716306952662485,
+          -0.327790962574963,
+          -0.6644285469712714
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://lroc.im-ldi.com/images/1374",
+      "target_coords": null,
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": null,
+      "touchdown_utc": null,
+      "verification_status": "verified",
+      "verified_by": "Ebin (read from the cited LROC page on 2026-11-15)"
+    },
+    {
+      "agency": "NASA",
+      "category": "published_target",
+      "coord_note": "A mapped location where the ridge meets the Shackleton rim, not a landing target; no landing has occurred and NASA has not published a centre coordinate for the \"Shackleton connecting ridge\". NASA's average-illumination map reads about 78 percent at this point (pipeline/scripts/check_site_illumination.py), unlike the 0 percent at the older catalogue coordinates of shackleton_ridge.",
+      "coordinate_frame": "MOON_ME_DE421",
+      "id": "shackleton_rim_ridge",
+      "landing_coords": null,
+      "last_contact_utc": null,
+      "latitude_deg": -89.684,
+      "longitude_deg_east": 196.739,
+      "name": "Shackleton-de Gerlache ridge (Shackleton-rim end)",
+      "notes": "A mapped location where the ridge meets the Shackleton rim, not a landing target; no landing has occurred and NASA has not published a centre coordinate for the \"Shackleton connecting ridge\". NASA's average-illumination map reads about 78 percent at this point (pipeline/scripts/check_site_illumination.py), unlike the 0 percent at the older catalogue coordinates of shackleton_ridge.",
+      "program": "Shackleton-de Gerlache ridge (LROC-mapped location)",
+      "reference_axis": "+X_ME",
+      "rotation_matrix": [
+        [
+          0.0,
+          0.9999987383777795,
+          -0.0015884718597173044
+        ],
+        [
+          0.999986052704641,
+          -8.389537276820063e-06,
+          -0.005281507910304735
+        ],
+        [
+          -0.005281514573580877,
+          -0.0015884497048311076,
+          -0.9999847911000168
+        ]
+      ],
+      "source_type": "agency",
+      "source_url": "https://lroc.im-ldi.com/images/1247",
+      "target_coords": {
+        "lat": -89.684,
+        "lon": 196.739,
+        "source": "LROC image 1247 \"Traversing the Shackleton de Gerlache Ridge\" (Robinson, 1 Apr 2022; NASA/GSFC/Arizona State University) - centre of the 750 m wide NAC mosaic at the ridge/Shackleton-rim intersection"
+      },
+      "terrain": {
+        "dispersion_file": null,
+        "mask": null,
+        "near_field_res_m": null,
+        "pad": null,
+        "psr": null,
+        "sigma": null,
+        "status": "pending"
+      },
+      "tier": "pending",
+      "touchdown_precision": null,
+      "touchdown_utc": null,
+      "verification_status": "verified",
+      "verified_by": "Ebin (read from the cited LROC page on 2026-11-15)"
+    }
+  ],
+  "version": 1
+}

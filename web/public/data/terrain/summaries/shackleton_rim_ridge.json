@@ -1,0 +1,30 @@
+{
+  "dem_source": "polar_10m_lola_pgda_90",
+  "dispersion_available": false,
+  "files_present": {
+    "dispersion_bin": null,
+    "dispersion_json": null,
+    "mask_bin": "terrain/masks/shackleton_rim_ridge.bin",
+    "mask_json": "terrain/masks/shackleton_rim_ridge.json",
+    "pad_json": "terrain/pad/shackleton_rim_ridge.json",
+    "sigma_bin": null,
+    "sigma_json": null
+  },
+  "git_commit": "f14aa632d1d0d51615538d36f3eeb2bc39f45b96",
+  "mask_available": true,
+  "near_field_res_m": 10.0,
+  "pad_available": true,
+  "pad_headline": {
+    "downhill_aspect_deg": 171.8662890016426,
+    "slope_deg": 5.83101069550598,
+    "under_resolved": true,
+    "uphill_az_deg": 351.86628900164266
+  },
+  "psr": null,
+  "run_timestamp_utc": "2026-11-15T16:17:08.099513Z",
+  "sigma_available": false,
+  "site_id": "shackleton_rim_ridge",
+  "tier": "Tier A",
+  "unavailable": {},
+  "version": "0.1.0"
+}

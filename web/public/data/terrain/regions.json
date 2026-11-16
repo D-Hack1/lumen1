@@ -1,0 +1,104 @@
+{
+  "regions": [
+    {
+      "centroid_lat_deg": null,
+      "centroid_lon_deg": null,
+      "geometry_available": false,
+      "name": "de Gerlache Rim 2",
+      "region_id": "de_gerlache_rim_2",
+      "source_catalog": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK) -- region identifier and name only; no coordinates or boundary verified",
+      "source_needed": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK, https://www.sciencebase.gov/catalog/item/671a6fa8d34efed5620f89f8), file A3_9regions-lonlat-simplified.zip (S3 key 671a6fa8d34efed5620f89f8/A3_9regions-lonlat-simplified.zip, bucket prod-is-usgs-sb-prod-content, declared size 637136 bytes), OR an equivalent officially published boundary/footprint polygon for the same nine regions.",
+      "svg_path": null,
+      "unavailable_reason": "Region boundary/footprint geometry was not retrievable in this environment: the ScienceBase file/download endpoints for this item serve only its single-page-app HTML shell for this file, not the file bytes, and the known fallback URL patterns (legacy __disk__ catalog route, direct S3 bucket) were refused or unavailable. The per-region zip files that *were* downloaded successfully contain only fine-resolution navigation grid lines (1 km/100 m/10 m *_S_Grid.shp), not a region boundary polygon, and were not used as a substitute for one."
+    },
+    {
+      "centroid_lat_deg": null,
+      "centroid_lon_deg": null,
+      "geometry_available": false,
+      "name": "Haworth",
+      "region_id": "haworth",
+      "source_catalog": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK) -- region identifier and name only; no coordinates or boundary verified",
+      "source_needed": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK, https://www.sciencebase.gov/catalog/item/671a6fa8d34efed5620f89f8), file A3_9regions-lonlat-simplified.zip (S3 key 671a6fa8d34efed5620f89f8/A3_9regions-lonlat-simplified.zip, bucket prod-is-usgs-sb-prod-content, declared size 637136 bytes), OR an equivalent officially published boundary/footprint polygon for the same nine regions.",
+      "svg_path": null,
+      "unavailable_reason": "Region boundary/footprint geometry was not retrievable in this environment: the ScienceBase file/download endpoints for this item serve only its single-page-app HTML shell for this file, not the file bytes, and the known fallback URL patterns (legacy __disk__ catalog route, direct S3 bucket) were refused or unavailable. The per-region zip files that *were* downloaded successfully contain only fine-resolution navigation grid lines (1 km/100 m/10 m *_S_Grid.shp), not a region boundary polygon, and were not used as a substitute for one."
+    },
+    {
+      "centroid_lat_deg": null,
+      "centroid_lon_deg": null,
+      "geometry_available": false,
+      "name": "Malapert Massif",
+      "region_id": "malapert_massif",
+      "source_catalog": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK) -- region identifier and name only; no coordinates or boundary verified",
+      "source_needed": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK, https://www.sciencebase.gov/catalog/item/671a6fa8d34efed5620f89f8), file A3_9regions-lonlat-simplified.zip (S3 key 671a6fa8d34efed5620f89f8/A3_9regions-lonlat-simplified.zip, bucket prod-is-usgs-sb-prod-content, declared size 637136 bytes), OR an equivalent officially published boundary/footprint polygon for the same nine regions.",
+      "svg_path": null,
+      "unavailable_reason": "Region boundary/footprint geometry was not retrievable in this environment: the ScienceBase file/download endpoints for this item serve only its single-page-app HTML shell for this file, not the file bytes, and the known fallback URL patterns (legacy __disk__ catalog route, direct S3 bucket) were refused or unavailable. The per-region zip files that *were* downloaded successfully contain only fine-resolution navigation grid lines (1 km/100 m/10 m *_S_Grid.shp), not a region boundary polygon, and were not used as a substitute for one."
+    },
+    {
+      "centroid_lat_deg": null,
+      "centroid_lon_deg": null,
+      "geometry_available": false,
+      "name": "Mons Mouton",
+      "region_id": "mons_mouton",
+      "source_catalog": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK) -- region identifier and name only; no coordinates or boundary verified",
+      "source_needed": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK, https://www.sciencebase.gov/catalog/item/671a6fa8d34efed5620f89f8), file A3_9regions-lonlat-simplified.zip (S3 key 671a6fa8d34efed5620f89f8/A3_9regions-lonlat-simplified.zip, bucket prod-is-usgs-sb-prod-content, declared size 637136 bytes), OR an equivalent officially published boundary/footprint polygon for the same nine regions.",
+      "svg_path": null,
+      "unavailable_reason": "Region boundary/footprint geometry was not retrievable in this environment: the ScienceBase file/download endpoints for this item serve only its single-page-app HTML shell for this file, not the file bytes, and the known fallback URL patterns (legacy __disk__ catalog route, direct S3 bucket) were refused or unavailable. The per-region zip files that *were* downloaded successfully contain only fine-resolution navigation grid lines (1 km/100 m/10 m *_S_Grid.shp), not a region boundary polygon, and were not used as a substitute for one."
+    },
+    {
+      "centroid_lat_deg": null,
+      "centroid_lon_deg": null,
+      "geometry_available": false,
+      "name": "Mons Mouton Plateau",
+      "region_id": "mons_mouton_plateau",
+      "source_catalog": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK) -- region identifier and name only; no coordinates or boundary verified",
+      "source_needed": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK, https://www.sciencebase.gov/catalog/item/671a6fa8d34efed5620f89f8), file A3_9regions-lonlat-simplified.zip (S3 key 671a6fa8d34efed5620f89f8/A3_9regions-lonlat-simplified.zip, bucket prod-is-usgs-sb-prod-content, declared size 637136 bytes), OR an equivalent officially published boundary/footprint polygon for the same nine regions.",
+      "svg_path": null,
+      "unavailable_reason": "Region boundary/footprint geometry was not retrievable in this environment: the ScienceBase file/download endpoints for this item serve only its single-page-app HTML shell for this file, not the file bytes, and the known fallback URL patterns (legacy __disk__ catalog route, direct S3 bucket) were refused or unavailable. The per-region zip files that *were* downloaded successfully contain only fine-resolution navigation grid lines (1 km/100 m/10 m *_S_Grid.shp), not a region boundary polygon, and were not used as a substitute for one."
+    },
+    {
+      "centroid_lat_deg": null,
+      "centroid_lon_deg": null,
+      "geometry_available": false,
+      "name": "Nobile Rim 1",
+      "region_id": "nobile_rim_1",
+      "source_catalog": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK) -- region identifier and name only; no coordinates or boundary verified",
+      "source_needed": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK, https://www.sciencebase.gov/catalog/item/671a6fa8d34efed5620f89f8), file A3_9regions-lonlat-simplified.zip (S3 key 671a6fa8d34efed5620f89f8/A3_9regions-lonlat-simplified.zip, bucket prod-is-usgs-sb-prod-content, declared size 637136 bytes), OR an equivalent officially published boundary/footprint polygon for the same nine regions.",
+      "svg_path": null,
+      "unavailable_reason": "Region boundary/footprint geometry was not retrievable in this environment: the ScienceBase file/download endpoints for this item serve only its single-page-app HTML shell for this file, not the file bytes, and the known fallback URL patterns (legacy __disk__ catalog route, direct S3 bucket) were refused or unavailable. The per-region zip files that *were* downloaded successfully contain only fine-resolution navigation grid lines (1 km/100 m/10 m *_S_Grid.shp), not a region boundary polygon, and were not used as a substitute for one."
+    },
+    {
+      "centroid_lat_deg": null,
+      "centroid_lon_deg": null,
+      "geometry_available": false,
+      "name": "Nobile Rim 2",
+      "region_id": "nobile_rim_2",
+      "source_catalog": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK) -- region identifier and name only; no coordinates or boundary verified",
+      "source_needed": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK, https://www.sciencebase.gov/catalog/item/671a6fa8d34efed5620f89f8), file A3_9regions-lonlat-simplified.zip (S3 key 671a6fa8d34efed5620f89f8/A3_9regions-lonlat-simplified.zip, bucket prod-is-usgs-sb-prod-content, declared size 637136 bytes), OR an equivalent officially published boundary/footprint polygon for the same nine regions.",
+      "svg_path": null,
+      "unavailable_reason": "Region boundary/footprint geometry was not retrievable in this environment: the ScienceBase file/download endpoints for this item serve only its single-page-app HTML shell for this file, not the file bytes, and the known fallback URL patterns (legacy __disk__ catalog route, direct S3 bucket) were refused or unavailable. The per-region zip files that *were* downloaded successfully contain only fine-resolution navigation grid lines (1 km/100 m/10 m *_S_Grid.shp), not a region boundary polygon, and were not used as a substitute for one."
+    },
+    {
+      "centroid_lat_deg": null,
+      "centroid_lon_deg": null,
+      "geometry_available": false,
+      "name": "Peak Near Cabeus B",
+      "region_id": "peak_near_cabeus_b",
+      "source_catalog": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK) -- region identifier and name only; no coordinates or boundary verified",
+      "source_needed": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK, https://www.sciencebase.gov/catalog/item/671a6fa8d34efed5620f89f8), file A3_9regions-lonlat-simplified.zip (S3 key 671a6fa8d34efed5620f89f8/A3_9regions-lonlat-simplified.zip, bucket prod-is-usgs-sb-prod-content, declared size 637136 bytes), OR an equivalent officially published boundary/footprint polygon for the same nine regions.",
+      "svg_path": null,
+      "unavailable_reason": "Region boundary/footprint geometry was not retrievable in this environment: the ScienceBase file/download endpoints for this item serve only its single-page-app HTML shell for this file, not the file bytes, and the known fallback URL patterns (legacy __disk__ catalog route, direct S3 bucket) were refused or unavailable. The per-region zip files that *were* downloaded successfully contain only fine-resolution navigation grid lines (1 km/100 m/10 m *_S_Grid.shp), not a region boundary polygon, and were not used as a substitute for one."
+    },
+    {
+      "centroid_lat_deg": null,
+      "centroid_lon_deg": null,
+      "geometry_available": false,
+      "name": "Slater Plain",
+      "region_id": "slater_plain",
+      "source_catalog": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK) -- region identifier and name only; no coordinates or boundary verified",
+      "source_needed": "USGS ScienceBase item 671a6fa8d34efed5620f89f8 (DOI 10.5066/P1MEQ6UK, https://www.sciencebase.gov/catalog/item/671a6fa8d34efed5620f89f8), file A3_9regions-lonlat-simplified.zip (S3 key 671a6fa8d34efed5620f89f8/A3_9regions-lonlat-simplified.zip, bucket prod-is-usgs-sb-prod-content, declared size 637136 bytes), OR an equivalent officially published boundary/footprint polygon for the same nine regions.",
+      "svg_path": null,
+      "unavailable_reason": "Region boundary/footprint geometry was not retrievable in this environment: the ScienceBase file/download endpoints for this item serve only its single-page-app HTML shell for this file, not the file bytes, and the known fallback URL patterns (legacy __disk__ catalog route, direct S3 bucket) were refused or unavailable. The per-region zip files that *were* downloaded successfully contain only fine-resolution navigation grid lines (1 km/100 m/10 m *_S_Grid.shp), not a region boundary polygon, and were not used as a substitute for one."
+    }
+  ],
+  "version": "0.1.0"
+}

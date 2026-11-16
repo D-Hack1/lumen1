@@ -1,0 +1,87 @@
+{
+  "azimuth_center": "i_plus_0.5_times_bin_width",
+  "azimuth_count": 3600,
+  "azimuth_direction": "toward_site_frame_e",
+  "azimuth_zero": "projected_site_frame_reference",
+  "bin_width_deg": 0.1,
+  "binary": {
+    "array_order": "c_contiguous_height_major",
+    "byte_order": "little",
+    "float_encoding": "ieee754-binary32",
+    "format_version": 1,
+    "layout": "header_then_elevation_then_distance",
+    "magic": "LUMENMSK"
+  },
+  "coordinate_frame": "MOON_ME_DE421",
+  "created_utc": "2026-11-15T17:10:39.268713Z",
+  "d_min_m": 710.703,
+  "dem_crops": {
+    "far": null,
+    "mid": null,
+    "near": {
+      "cache_key": null,
+      "crs": "PROJCS[\"SIMPLE_CYLINDRICAL MOON\",GEOGCS[\"GCS_MOON\",DATUM[\"D_MOON\",SPHEROID[\"MOON\",1737400,0]],PRIMEM[\"Reference_Meridian\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Equirectangular\"],PARAMETER[\"standard_parallel_1\",0],PARAMETER[\"central_meridian\",180],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "datum_reference": "1737400 m reference sphere",
+      "frame": "MOON_ME",
+      "nodata": -32768.0,
+      "offset": 1737400.0,
+      "resolution_m": [
+        236.901,
+        236.901
+      ],
+      "scale": 0.5,
+      "shape": [
+        2212,
+        2212
+      ],
+      "source_key": "lola_gdr_ldem_128_pds",
+      "source_url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_128.lbl",
+      "unit": "m",
+      "vertical_reference": "height_relative"
+    }
+  },
+  "dem_source": "lola_gdr_ldem_128_pds",
+  "downhill_aspect_deg": 275.06927746841916,
+  "git_commit": "4b9e995d754aa6537ba47bd82e2d2599f46480fa",
+  "global_max_deg": [
+    3.7728188037872314,
+    3.7305967807769775,
+    3.604665994644165,
+    3.39328932762146
+  ],
+  "global_min_deg": [
+    -0.16191017627716064,
+    -0.19413349032402039,
+    -0.2734954059123993,
+    -0.3187246322631836
+  ],
+  "heights_m": [
+    1.0,
+    2.0,
+    5.0,
+    10.0
+  ],
+  "latitude_deg": -3.64589,
+  "longitude_deg_east": -17.47194,
+  "median_filter_kernel_px": 3,
+  "median_filter_region_radius_m": 100.0,
+  "median_filter_status": "applied",
+  "near_field_resolution_m": 236.901,
+  "near_zone_model": "fitted_local_plane",
+  "plane_fit_half_width_px": 3,
+  "plane_fit_kernel_px": 7,
+  "producer": "lumen_pipeline.terrain.masks",
+  "provenance": {
+    "median_filter_reason": null
+  },
+  "range_extrema": {
+    "strategy": "finite_segment_tree",
+    "supports_circular_azimuth_ranges": true
+  },
+  "ray_range_km": 250.0,
+  "site_id": "apollo_14",
+  "slope_deg": 0.7932875955363706,
+  "uphill_azimuth_deg": 95.06927746841913,
+  "version": "1.0.0",
+  "z0_m": -1058.3857330415633
+}

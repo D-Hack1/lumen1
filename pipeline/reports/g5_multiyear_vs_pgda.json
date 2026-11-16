@@ -1,0 +1,191 @@
+{
+  "gate": "G5",
+  "description": "Multi-year averages versus independent PGDA map pixels",
+  "criterion_pct_points": 5.0,
+  "recorded_utc": "2026-11-15T17:45:11Z",
+  "git_commit": "fb87cad5ba503230b3585014a13d60f2d764dd25",
+  "command": "python pipeline/scripts/run_g5.py",
+  "sites": [
+    {
+      "site_id": "im2_athena",
+      "latitude_deg": -84.7906,
+      "longitude_deg_east": 29.1957,
+      "mask_height_m": 2.0,
+      "lumen_multi_year_sunlit_pct": 44.41883561643836,
+      "lumen_days": 2920,
+      "lumen_yearly_pct": {
+        "2023": 45.88219178082192,
+        "2024": 43.4207650273224,
+        "2025": 44.78630136986301,
+        "2026": 45.31780821917808,
+        "2027": 42.915068493150685,
+        "2028": 45.52732240437158,
+        "2029": 44.293150684931504,
+        "2030": 43.201101928374655
+      },
+      "lumen_yearly_spread_pct_points": 2.9671232876712352,
+      "lumen_any_part_of_disk_pct": 44.023972602739725,
+      "lumen_by_observer_height_pct": {
+        "1.0": 44.51917808219178,
+        "2.0": 44.5958904109589,
+        "5.0": 44.636986301369866,
+        "10.0": 44.68493150684932
+      },
+      "lumen_by_horizon_bias_deg_pct": {
+        "-0.5": 46.1972602739726,
+        "-0.2": 45.347945205479455,
+        "+0.0": 44.78082191780822,
+        "+0.2": 43.92328767123288,
+        "+0.5": 42.961643835616435
+      },
+      "pgda_layer": "avg_illumination_65S_240m_pgda_69",
+      "pgda_url": "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_65S_240M_201608.TIF",
+      "pgda": {
+        "centre_pct": 45.008,
+        "mean_3x3_pct": 44.984,
+        "min_3x3_pct": 42.620000000000005,
+        "max_3x3_pct": 46.716,
+        "pixel_size_m": 240.0
+      },
+      "abs_difference_vs_centre_pct_points": 0.5891643835616449,
+      "abs_difference_vs_3x3_mean_pct_points": 0.565164383561644,
+      "within_tolerance": true
+    },
+    {
+      "site_id": "cy3_shiv_shakti",
+      "latitude_deg": -69.373,
+      "longitude_deg_east": 32.319,
+      "mask_height_m": 2.0,
+      "lumen_multi_year_sunlit_pct": 47.81061643835616,
+      "lumen_days": 2920,
+      "lumen_yearly_pct": {
+        "2023": 49.37808219178082,
+        "2024": 46.34153005464481,
+        "2025": 48.487671232876714,
+        "2026": 48.43835616438356,
+        "2027": 46.44931506849315,
+        "2028": 49.22677595628415,
+        "2029": 47.43561643835616,
+        "2030": 46.72176308539945
+      },
+      "lumen_yearly_spread_pct_points": 3.036552137136013,
+      "lumen_any_part_of_disk_pct": 47.5,
+      "lumen_by_observer_height_pct": {
+        "1.0": 47.63972602739726,
+        "2.0": 47.727397260273975,
+        "5.0": 47.92328767123288,
+        "10.0": 48.21917808219178
+      },
+      "lumen_by_horizon_bias_deg_pct": {
+        "-0.5": 48.53972602739726,
+        "-0.2": 47.97808219178082,
+        "+0.0": 47.61917808219178,
+        "+0.2": 47.26849315068493,
+        "+0.5": 46.794520547945204
+      },
+      "pgda_layer": "avg_illumination_65S_240m_pgda_69",
+      "pgda_url": "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_65S_240M_201608.TIF",
+      "pgda": {
+        "centre_pct": 48.28000000000001,
+        "mean_3x3_pct": 48.21866666666667,
+        "min_3x3_pct": 47.492000000000004,
+        "max_3x3_pct": 48.50800000000001,
+        "pixel_size_m": 240.0
+      },
+      "abs_difference_vs_centre_pct_points": 0.46938356164384487,
+      "abs_difference_vs_3x3_mean_pct_points": 0.40805022831050763,
+      "within_tolerance": true
+    },
+    {
+      "site_id": "shackleton_rim_ridge",
+      "latitude_deg": -89.684,
+      "longitude_deg_east": 196.739,
+      "mask_height_m": 2.0,
+      "lumen_multi_year_sunlit_pct": 39.214383561643835,
+      "lumen_days": 2920,
+      "lumen_yearly_pct": {
+        "2023": 39.15890410958904,
+        "2024": 41.60109289617486,
+        "2025": 39.93698630136986,
+        "2026": 38.04383561643836,
+        "2027": 41.24657534246575,
+        "2028": 40.33606557377049,
+        "2029": 36.11780821917808,
+        "2030": 37.2534435261708
+      },
+      "lumen_yearly_spread_pct_points": 5.483284676996782,
+      "lumen_any_part_of_disk_pct": 39.263698630136986,
+      "lumen_by_observer_height_pct": {
+        "1.0": 33.24246575342466,
+        "2.0": 39.086301369863016,
+        "5.0": 50.12602739726027,
+        "10.0": 50.1958904109589
+      },
+      "lumen_by_horizon_bias_deg_pct": {
+        "-0.5": 41.37534246575343,
+        "-0.2": 40.18904109589041,
+        "+0.0": 39.47397260273973,
+        "+0.2": 38.413698630136984,
+        "+0.5": 36.74520547945205
+      },
+      "pgda_layer": "avg_illumination_85S_60m_pgda_69",
+      "pgda_url": "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_85S_060M_201608.TIF",
+      "pgda": {
+        "centre_pct": 77.72000000000001,
+        "mean_3x3_pct": 62.11333333333333,
+        "min_3x3_pct": 46.34,
+        "max_3x3_pct": 87.06,
+        "pixel_size_m": 60.0
+      },
+      "abs_difference_vs_centre_pct_points": 38.50561643835618,
+      "abs_difference_vs_3x3_mean_pct_points": 22.898949771689495,
+      "within_tolerance": false
+    },
+    {
+      "site_id": "shackleton_ridge",
+      "latitude_deg": -89.54,
+      "longitude_deg_east": 129.0,
+      "mask_height_m": 2.0,
+      "lumen_multi_year_sunlit_pct": 0.0,
+      "lumen_days": 2920,
+      "lumen_yearly_pct": {
+        "2023": 0.0,
+        "2024": 0.0,
+        "2025": 0.0,
+        "2026": 0.0,
+        "2027": 0.0,
+        "2028": 0.0,
+        "2029": 0.0,
+        "2030": 0.0
+      },
+      "lumen_yearly_spread_pct_points": 0.0,
+      "lumen_any_part_of_disk_pct": 0.0,
+      "lumen_by_observer_height_pct": {
+        "1.0": 0.0,
+        "2.0": 0.0,
+        "5.0": 0.0,
+        "10.0": 0.0
+      },
+      "lumen_by_horizon_bias_deg_pct": {
+        "-0.5": 0.0,
+        "-0.2": 0.0,
+        "+0.0": 0.0,
+        "+0.2": 0.0,
+        "+0.5": 0.0
+      },
+      "pgda_layer": "avg_illumination_85S_60m_pgda_69",
+      "pgda_url": "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_85S_060M_201608.TIF",
+      "pgda": {
+        "centre_pct": 0.0,
+        "mean_3x3_pct": 0.0,
+        "min_3x3_pct": 0.0,
+        "max_3x3_pct": 0.0,
+        "pixel_size_m": 60.0
+      },
+      "abs_difference_vs_centre_pct_points": 0.0,
+      "abs_difference_vs_3x3_mean_pct_points": 0.0,
+      "within_tolerance": true
+    }
+  ],
+  "method": "LUMEN: Python reference engine over 2023-01-01..2030-12-29, every UTC day, 2-minute samples, 2 m terrain mask, Sun available at >=50% disk. PGDA: average-illumination raster read at the site (fraction of time illuminated, hourly over an 18.6-year nutation cycle). The spans differ (8 of ~18.6 years) and PGDA's disk treatment is not spelled out, so yearly spread and an any-part-of-disk variant are recorded as the explanation of differences."
+}

@@ -1,0 +1,42 @@
+{
+  "created_utc": "2026-11-15T16:14:50.465896Z",
+  "d_min_m": 30.0,
+  "dispersion_slope_stats": {
+    "max": 15.80751095243544,
+    "p50": 2.6848464778225236,
+    "p95": 6.410733067169225,
+    "pct_below_tolerance": 98.83189436262062,
+    "radius_m": 250.0,
+    "sample_count": 1969,
+    "slope_tolerance_deg": 10.0,
+    "source": "dem_gradient",
+    "unit": "deg"
+  },
+  "downhill_aspect_deg": 14.810387873972331,
+  "ground_normal_me": [
+    0.12639434957202206,
+    0.0565841824229107,
+    -0.9903649320809964
+  ],
+  "near_field_resolution_m": 10.0,
+  "plane_fit": {
+    "baseline_m": 60.0,
+    "dem_source": "polar_10m_lola_pgda_90",
+    "k": 3,
+    "window_dim_m": [
+      70.0,
+      70.0
+    ],
+    "window_px": [
+      7,
+      7
+    ]
+  },
+  "producer": "lumen_pipeline.terrain.pad",
+  "site_id": "im2_athena",
+  "slope_deg": 2.8089403306282548,
+  "under_resolved": true,
+  "uphill_az_deg": 194.81038787397233,
+  "version": "0.1.0",
+  "z0_m": 5321.830261411403
+}

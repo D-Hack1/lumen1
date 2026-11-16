@@ -1,0 +1,187 @@
+/* Owner: Abhinav — Mission Bar. One row, never wraps; long labels collapse by column mode (data-cols). */
+.mission-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  height: var(--slot-mission-bar);
+  min-width: 0;
+  padding: 0 var(--sp-6);
+  background: var(--c-surface1);
+  border-bottom: 1px solid var(--c-hairline);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.mission-bar > * {
+  flex: none;
+}
+
+.mb-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex: 1 1 auto !important;
+  min-width: 0;
+}
+.mb-logo {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-lg);
+  letter-spacing: 0.14em;
+}
+.mb-site {
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+  max-width: 260px;
+}
+
+.mb-time,
+.mb-end,
+.mb-jumps {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.mb-jumps {
+  gap: var(--sp-2);
+}
+
+.mb-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.mb-field__label {
+  color: var(--c-text-faint);
+  font-size: var(--fs-xs);
+}
+.mb-field__unit {
+  color: var(--c-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+}
+.mb-input {
+  width: calc(19ch + 14px);
+  height: 26px;
+  padding: 0 6px;
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-md);
+  background: var(--c-surface2);
+  font-size: var(--fs-sm);
+}
+.mb-input[aria-invalid='true'] {
+  border-color: var(--c-nogo);
+}
+
+.mb-met {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+}
+.mb-met__value {
+  display: inline-block;
+  min-width: 12ch;
+  font-size: var(--fs-sm);
+  color: var(--c-text);
+}
+
+.mb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  height: 26px;
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-md);
+  background: var(--c-surface2);
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.mb-btn:hover {
+  background: var(--c-surface3);
+  color: var(--c-text);
+}
+.mb-btn:active {
+  transform: scale(0.97);
+}
+.mb-kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border: 1px solid var(--c-hairline-strong);
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  color: var(--c-text);
+}
+
+/* Disabled jump (no such event before window end): still focusable so its tooltip explains why. */
+.mb-jump[aria-disabled='true'] {
+  color: var(--c-text-faint);
+  border-style: dashed;
+  background: transparent;
+}
+.mb-jump[aria-disabled='true']:active {
+  transform: none;
+}
+.mb-jump[aria-disabled='true'] .mb-kbd {
+  color: var(--c-text-faint);
+}
+
+/* Verdict chip: a button whose layers (old + new chip) share one grid cell and crossfade in opacity only. */
+.mb-verdict {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-md);
+  background: none;
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.mb-verdict:active {
+  transform: scale(0.97);
+}
+.mb-verdict__stack {
+  display: inline-grid;
+}
+.mb-verdict__layer {
+  grid-area: 1 / 1;
+  display: inline-flex;
+}
+.mb-verdict__layer[data-leaving] {
+  pointer-events: none;
+}
+.mb-verdict__chip {
+  min-width: 76px;
+  justify-content: center;
+}
+.mb-verdict__prov {
+  font-weight: var(--fw-regular);
+  opacity: 0.85;
+}
+
+/* ---------- collapse rules (widest → narrowest) ---------- */
+:root[data-cols='c2'] .mb-long,
+:root[data-cols='c3'] .mb-long,
+:root[data-cols='c4'] .mb-long {
+  display: none;
+}
+:root[data-cols='c3'] .mb-mid,
+:root[data-cols='c4'] .mb-mid {
+  display: none;
+}
+:root[data-cols='c3'] .mission-bar,
+:root[data-cols='c4'] .mission-bar {
+  gap: var(--sp-5);
+  padding: 0 var(--sp-5);
+}
+:root[data-cols='c4'] .mb-site {
+  max-width: 150px;
+}
+:root[data-cols='c4'] .mb-verdict__chip {
+  min-width: 0;
+}

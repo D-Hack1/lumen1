@@ -1,0 +1,103 @@
+/* Owner: Nived — Metric Deck. Tokens only; tabular monospace numerals; no transitions. */
+.metric-deck {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  height: 100%;
+  padding: var(--sp-4);
+  min-width: 0;
+  min-height: 0;
+}
+.metric-deck__hero-label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--c-text-faint);
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.metric-deck__hero {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-2xl);
+  line-height: 1.1;
+  color: var(--c-sun);
+}
+.metric-deck__pm {
+  color: var(--c-text-faint);
+  font-size: var(--fs-md);
+}
+.metric-deck__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-2) var(--sp-5);
+  min-height: 0;
+}
+.metric-deck__tile {
+  min-width: 0;
+}
+.metric-deck__label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--c-text-faint);
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.metric-deck__value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-md);
+  color: var(--c-text);
+}
+
+/* Verdict block: the headline and, when the verdict is not a clean GO, the reasons in plain sentences. */
+.metric-deck__verdict {
+  margin-top: auto;
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--c-hairline);
+  min-height: 0;
+}
+.metric-deck__headline {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--c-text);
+}
+.metric-deck__verdict[data-verdict='NO-GO'] .metric-deck__headline {
+  color: var(--c-nogo);
+}
+.metric-deck__verdict[data-verdict='MARGINAL'] .metric-deck__headline {
+  color: var(--c-marginal);
+}
+.metric-deck__reasons {
+  margin: var(--sp-2) 0 0;
+  padding-left: var(--sp-4);
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.35;
+  overflow: hidden;
+}
+
+/* Optional "Why?" hook (Ask LUMEN): small, quiet, only rendered when MetricDeck gets onWhy. */
+.metric-deck__why {
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 0.7em;
+  line-height: 1.6;
+  opacity: 0.6;
+  cursor: pointer;
+}
+.metric-deck__why:hover,
+.metric-deck__why:focus-visible {
+  opacity: 1;
+}

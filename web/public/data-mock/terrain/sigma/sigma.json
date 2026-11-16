@@ -1,0 +1,29 @@
+{
+  "schema": "sigma_summary",
+  "version": 1,
+  "mock": true,
+  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
+  "tierA_default_deg": 0.1,
+  "tierB_default_deg": 0.5,
+  "tierB_calibrated": [
+    {
+      "max_snap_km": 1,
+      "sigma_deg": 0.3
+    },
+    {
+      "max_snap_km": 2,
+      "sigma_deg": 0.45
+    },
+    {
+      "max_snap_km": 4,
+      "sigma_deg": 0.6
+    }
+  ],
+  "mc": {
+    "clones": 30,
+    "sites": [
+      "im2_athena",
+      "shackleton_ridge"
+    ]
+  }
+}

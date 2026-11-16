@@ -1,0 +1,105 @@
+# CODEOWNERS — enforces WORK_DISTRIBUTION.md §3 (one owner per file, no merge conflicts)
+# Owner: Abhinav
+
+# ---------- Root ----------
+/README.md                         @abhinav
+/CODEOWNERS                        @abhinav
+/.gitignore                        @abhinav
+/.gitattributes                    @gowri
+/.github/workflows/ci-backend.yml  @gowri
+/.github/workflows/ci-frontend.yml @nived
+
+# ---------- Contracts ----------
+/contracts/README.md               @gowri
+/contracts/data_ephemeris.md       @gowri
+/contracts/data_dsn.md             @gowri
+/contracts/data_catalog.md         @gowri
+/contracts/data_golden.md          @gowri
+/contracts/data_validation.md      @gowri
+/contracts/data_glossary.md        @gowri
+/contracts/data_masks.md           @shiva-shakthi
+/contracts/data_tierb.md           @shiva-shakthi
+/contracts/data_terrain_misc.md    @shiva-shakthi
+/contracts/frontend_engine_api.md  @nived
+/contracts/frontend_state_api.md   @abhinav
+/contracts/frontend_content.md     @abhinav
+
+# ---------- Backend ----------
+/pipeline/pyproject.toml           @gowri
+/pipeline/requirements.txt         @gowri
+/pipeline/README_terrain.md        @shiva-shakthi
+/pipeline/config/dem_sources.yaml  @shiva-shakthi
+/pipeline/config/terrain.yaml      @shiva-shakthi
+/pipeline/lumen_pipeline/terrain/  @shiva-shakthi
+/pipeline/scripts/run_crops.py             @shiva-shakthi
+/pipeline/scripts/run_masks.py             @shiva-shakthi
+/pipeline/scripts/run_pad.py               @shiva-shakthi
+/pipeline/scripts/run_dispersion.py        @shiva-shakthi
+/pipeline/scripts/run_tierb.py             @shiva-shakthi
+/pipeline/scripts/run_mc_sigma.py          @shiva-shakthi
+/pipeline/scripts/run_psr.py               @shiva-shakthi
+/pipeline/scripts/run_layers.py            @shiva-shakthi
+/pipeline/scripts/run_regions.py           @shiva-shakthi
+/pipeline/tests/terrain/           @shiva-shakthi
+/pipeline/                         @gowri
+
+# ---------- Frontend ----------
+/web/package.json                  @abhinav
+/web/package-lock.json             @abhinav
+/web/tsconfig.json                 @abhinav
+/web/vite.config.ts                @abhinav
+/web/index.html                    @abhinav
+/web/.prettierrc                   @abhinav
+/web/.prettierignore               @abhinav
+/web/eslint.config.js              @abhinav
+/web/e2e/                          @abhinav
+/web/pwa.config.ts                 @nived
+/web/public/content/quickstart.json @abhinav
+/web/public/content/glossary.json  @gowri
+/web/public/data/terrain/          @shiva-shakthi
+/web/public/data/                  @gowri
+/web/public/data-mock/             @nived
+/web/src/main.tsx                  @abhinav
+/web/src/App.tsx                   @abhinav
+/web/src/app/                      @abhinav
+/web/src/state/                    @abhinav
+/web/src/ui/                       @abhinav
+/web/src/content/                  @abhinav
+/web/src/engine/                   @nived
+/web/src/mocks/                    @nived    # mock engine, forced states, Scan simulator (guide §0 C-3)
+/web/src/perf/                     @nived    # Perf HUD, G8 budgets, React commit counter
+/web/e2e-offline/                  @nived    # airplane-mode test (N-12)
+/web/e2e-perf/                     @nived    # G8 / G13 performance run
+/web/src/features/sidebar/         @abhinav
+/web/src/features/definitions/     @abhinav
+/web/src/features/quickAnswer/     @abhinav
+/web/src/features/guidance/        @abhinav
+/web/src/features/scenarios/       @abhinav
+/web/src/features/methodology/     @abhinav
+/web/src/features/ribbon/          @ebin
+/web/src/features/analysis/        @ebin
+/web/src/features/barcode/         @ebin
+/web/src/features/touchdown/       @ebin
+/web/src/features/compareVisuals/  @ebin
+/web/src/features/sparkline/       @ebin
+/web/src/features/shared/          @ebin   # LayeredCanvas base (Fast Lane), used by all Ebin charts
+/web/src/features/answer/          @nived
+/web/src/features/metrics/         @nived
+/web/src/features/map/             @nived
+/web/src/features/compareResults/  @nived
+
+# ---------- Docs ----------
+/docs/validation.md                @gowri
+/docs/data_sources_ephem.md        @gowri
+/docs/limitations.md               @gowri
+/docs/terrain.md                   @shiva-shakthi
+/docs/data_sources_terrain.md      @shiva-shakthi
+/docs/frontend_architecture.md     @nived
+/docs/ui_guide.md                  @abhinav
+/docs/credits_frontend.md          @abhinav
+/docs/visuals.md                   @ebin
+/docs/ai_usage/abhinav.md          @abhinav
+/docs/ai_usage/ebin.md             @ebin
+/docs/ai_usage/nived.md            @nived
+/docs/ai_usage/gowri.md            @gowri
+/docs/ai_usage/shiva.md            @shiva-shakthi

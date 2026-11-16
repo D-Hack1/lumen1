@@ -1,0 +1,76 @@
+{
+  "gate": "G4",
+  "description": "TypeScript engine versus Python golden vectors",
+  "command": "LUMEN_REQUIRE_PARITY=1 npx vitest run src/engine/__tests__/core.parity.test.ts src/engine/__tests__/golden2.test.ts src/engine/__tests__/golden2NearZone.test.ts src/engine/__tests__/golden2Shackleton.test.ts",
+  "recorded_utc": "2026-11-15T15:18:17Z",
+  "git_commit": "19e4cf35b18f1397c0bbcfd60c8aa5e26ab08c7f",
+  "working_tree_dirty": true,
+  "node": "v22.13.0",
+  "totals": {
+    "tests": 37,
+    "passed": 37,
+    "failed": 0,
+    "skipped_or_todo": 0
+  },
+  "files": [
+    {
+      "file": "core.parity.test.ts",
+      "tests": 8,
+      "passed": 8,
+      "other": 0
+    },
+    {
+      "file": "golden2.test.ts",
+      "tests": 19,
+      "passed": 19,
+      "other": 0
+    },
+    {
+      "file": "golden2NearZone.test.ts",
+      "tests": 3,
+      "passed": 3,
+      "other": 0
+    },
+    {
+      "file": "golden2Shackleton.test.ts",
+      "tests": 7,
+      "passed": 7,
+      "other": 0
+    }
+  ],
+  "golden_sets": {
+    "golden_set1": {
+      "tolerances": {
+        "azimuth_deg": 0.005,
+        "elevation_deg": 0.005,
+        "event_time_s": 60,
+        "metric_percent": 1.0
+      },
+      "cases": 1
+    },
+    "golden_set2_synthetic": {
+      "tolerances": {
+        "angle_deg": 0.005,
+        "delta_t_percent": 5.0,
+        "event_time_s": 10.0
+      },
+      "cases": 19
+    },
+    "golden_set2_near_zone_synthetic": {
+      "tolerances": {
+        "distance_km": 1e-06,
+        "elevation_deg": 1e-06
+      },
+      "cases": 2
+    },
+    "golden_set2_shackleton_preliminary": {
+      "tolerances": {
+        "angle_deg": 1e-05,
+        "distance_km": 0.001,
+        "event_time_s": 10.0
+      },
+      "cases": 6
+    }
+  },
+  "note": "golden_set1 is the Python reference for IM-2 over 30 days on the published ephemeris; the Shackleton set holds PRELIMINARY Python references."
+}

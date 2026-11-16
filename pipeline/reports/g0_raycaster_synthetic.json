@@ -1,0 +1,76 @@
+{
+  "gate": "G0",
+  "description": "Raycaster on synthetic cone/crater DEM",
+  "command": "pytest pipeline/tests/terrain/test_horizon_synthetic.py",
+  "recorded_utc": "2026-11-15T16:06:13Z",
+  "git_commit": "f14aa632d1d0d51615538d36f3eeb2bc39f45b96",
+  "working_tree_dirty": true,
+  "node": "v22.13.0",
+  "criterion_deg": 0.01,
+  "asserted_tolerance_count": 5,
+  "required_tests": [
+    "test_g0_flat_spherical_dem_matches_curvature_and_height_effects",
+    "test_cone_and_crater_have_expected_horizon_behavior",
+    "test_adaptive_peak_refinement_matches_independent_dense_bilinear_reference"
+  ],
+  "tests": [
+    {
+      "test": "test_g0_flat_spherical_dem_matches_curvature_and_height_effects",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_cone_and_crater_have_expected_horizon_behavior",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_dem_marching_starts_at_d_min_and_skips_invalid_samples",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_march_step_starts_at_half_pixel_and_grows_geometrically",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_bilinear_sampling_handles_edges_weights_and_bounds",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_geographic_resolution_cap_uses_local_ground_distance",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_site_elevation_and_observer_height_are_combined",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_invalid_inputs_and_projected_native_crs_are_explicit",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_adaptive_peak_refinement_matches_independent_dense_bilinear_reference",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_bin_chunking_is_bit_identical_to_a_single_unchunked_pass",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_bin_chunking_handles_a_ragged_final_chunk",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_bin_chunking_matches_unchunked_with_nodata_negative_terrain_and_full_production_bins",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_bin_chunking_matches_unchunked_when_every_sample_is_invalid",
+      "outcome": "passed"
+    }
+  ],
+  "totals": {
+    "tests": 13,
+    "passed": 13,
+    "not_passed": 0
+  },
+  "method": "Each required test compares the raycaster with an independent analytic or dense-sampled reference and asserts the maximum error is below 0.01 deg."
+}
