@@ -1,0 +1,176 @@
+{
+  "gate": "G9",
+  "site": "Chandrayaan-3 landing area (NAC_DTM_VIKRAMSITE1)",
+  "dtm_url": "https://pds.lroc.im-ldi.com/data/LRO-L-LROC-5-RDR-V1.0/LROLRC_2001/DATA/SDP/NAC_DTM/VIKRAMSITE1/NAC_DTM_VIKRAMSITE1.TIF",
+  "dtm_crs": "+proj=stere +lat_0=-90 +lat_ts=-69.3 +lon_0=32.3 +x_0=0 +y_0=0 +R=1737400 +units=m +no_defs=True",
+  "pixel_m": 2.999999999999,
+  "terrain_window_m": 9600.0,
+  "evaluated_window_m": 6000.0,
+  "images": {
+    "M1442997156": {
+      "image_mid_utc": "2023-07-03T04:18:23Z",
+      "lumen_sun_elevation_at_site_deg": 16.04772813827473,
+      "sun_check": {
+        "lroc_incidence_at_image_centre_deg": 73.84,
+        "lroc_sun_elevation_deg": 16.159999999999997,
+        "lumen_sun_elevation_at_image_centre_deg": 16.160851326861344,
+        "difference_deg": 0.000851326861347701
+      },
+      "dark_threshold_dn": 40.599999999999994,
+      "median_dn": 116.0,
+      "scores": {
+        "overall_accuracy": 0.9885721247563353,
+        "shadow_iou": 0.052880311452543044,
+        "precision": 0.8689702360588436,
+        "recall": 0.053305351521511016,
+        "predicted_shadow_fraction": 0.0007342597616607383,
+        "observed_shadow_fraction": 0.011969715238841662
+      },
+      "regions": {
+        ">=10px": {
+          "min_region_px": 10,
+          "min_region_m2": 90.0,
+          "observed_regions": 839,
+          "predicted_regions": 48,
+          "observed_regions_matched": 140,
+          "predicted_regions_matched": 48,
+          "region_recall": 0.16686531585220502,
+          "region_precision": 1.0
+        },
+        ">=50px": {
+          "min_region_px": 50,
+          "min_region_m2": 450.0,
+          "observed_regions": 111,
+          "predicted_regions": 4,
+          "observed_regions_matched": 77,
+          "predicted_regions_matched": 4,
+          "region_recall": 0.6936936936936937,
+          "region_precision": 1.0
+        },
+        ">=200px": {
+          "min_region_px": 200,
+          "min_region_m2": 1800.0,
+          "observed_regions": 25,
+          "predicted_regions": 0,
+          "observed_regions_matched": 22,
+          "predicted_regions_matched": 0,
+          "region_recall": 0.88,
+          "region_precision": 0.0
+        }
+      },
+      "threshold_sensitivity": {
+        "0.20x_median": {
+          "overall_accuracy": 0.9938058921645465,
+          "shadow_iou": 0.0838565855470927,
+          "precision": 0.7721518987341772,
+          "recall": 0.08598422797058936,
+          "predicted_shadow_fraction": 0.0007342597616607383,
+          "observed_shadow_fraction": 0.006593768212053617
+        },
+        "0.35x_median": {
+          "overall_accuracy": 0.9885721247563353,
+          "shadow_iou": 0.052880311452543044,
+          "precision": 0.8689702360588436,
+          "recall": 0.053305351521511016,
+          "predicted_shadow_fraction": 0.0007342597616607383,
+          "observed_shadow_fraction": 0.011969715238841662
+        },
+        "0.50x_median": {
+          "overall_accuracy": 0.9758116295894375,
+          "shadow_iou": 0.027402933214819604,
+          "precision": 0.9281560041053712,
+          "recall": 0.027461181853148976,
+          "predicted_shadow_fraction": 0.0007342597616607383,
+          "observed_shadow_fraction": 0.024817125861618536
+        }
+      },
+      "orthophoto_url": "https://pds.lroc.im-ldi.com/data/LRO-L-LROC-5-RDR-V1.0/LROLRC_2001/EXTRAS/BROWSE/NAC_DTM/VIKRAMSITE1/NAC_DTM_VIKRAMSITE1_M1442997156_3M.TIF",
+      "figure": "pipeline/reports/g9_cy3_M1442997156.png"
+    },
+    "M1443025251": {
+      "image_mid_utc": "2023-07-03T12:06:38Z",
+      "lumen_sun_elevation_at_site_deg": 15.242842875432501,
+      "sun_check": {
+        "lroc_incidence_at_image_centre_deg": 74.65,
+        "lroc_sun_elevation_deg": 15.349999999999994,
+        "lumen_sun_elevation_at_image_centre_deg": 15.354640515588581,
+        "difference_deg": 0.004640515588587135
+      },
+      "dark_threshold_dn": 41.65,
+      "median_dn": 119.0,
+      "scores": {
+        "overall_accuracy": 0.989582454130745,
+        "shadow_iou": 0.06615776081424936,
+        "precision": 0.8415926668576339,
+        "recall": 0.06699197373221452,
+        "predicted_shadow_fraction": 0.0008769417817166054,
+        "observed_shadow_fraction": 0.01101665963304596
+      },
+      "regions": {
+        ">=10px": {
+          "min_region_px": 10,
+          "min_region_m2": 90.0,
+          "observed_regions": 749,
+          "predicted_regions": 66,
+          "observed_regions_matched": 156,
+          "predicted_regions_matched": 66,
+          "region_recall": 0.2082777036048064,
+          "region_precision": 1.0
+        },
+        ">=50px": {
+          "min_region_px": 50,
+          "min_region_m2": 450.0,
+          "observed_regions": 113,
+          "predicted_regions": 6,
+          "observed_regions_matched": 81,
+          "predicted_regions_matched": 6,
+          "region_recall": 0.7168141592920354,
+          "region_precision": 1.0
+        },
+        ">=200px": {
+          "min_region_px": 200,
+          "min_region_m2": 1800.0,
+          "observed_regions": 28,
+          "predicted_regions": 0,
+          "observed_regions_matched": 26,
+          "predicted_regions_matched": 0,
+          "region_recall": 0.9285714285714286,
+          "region_precision": 0.0
+        }
+      },
+      "threshold_sensitivity": {
+        "0.20x_median": {
+          "overall_accuracy": 0.9943969675046723,
+          "shadow_iou": 0.1023783653265725,
+          "precision": 0.728731022629619,
+          "recall": 0.1064346079825956,
+          "predicted_shadow_fraction": 0.0008769417817166054,
+          "observed_shadow_fraction": 0.006004200076365025
+        },
+        "0.35x_median": {
+          "overall_accuracy": 0.989582454130745,
+          "shadow_iou": 0.06615776081424936,
+          "precision": 0.8415926668576339,
+          "recall": 0.06699197373221452,
+          "predicted_shadow_fraction": 0.0008769417817166054,
+          "observed_shadow_fraction": 0.01101665963304596
+        },
+        "0.50x_median": {
+          "overall_accuracy": 0.9773617893531078,
+          "shadow_iou": 0.03409395397691343,
+          "precision": 0.911200229160699,
+          "recall": 0.03420761148928391,
+          "predicted_shadow_fraction": 0.0008769417817166054,
+          "observed_shadow_fraction": 0.023359407970097064
+        }
+      },
+      "orthophoto_url": "https://pds.lroc.im-ldi.com/data/LRO-L-LROC-5-RDR-V1.0/LROLRC_2001/EXTRAS/BROWSE/NAC_DTM/VIKRAMSITE1/NAC_DTM_VIKRAMSITE1_M1443025251_3M.TIF",
+      "figure": "pipeline/reports/g9_cy3_M1443025251.png"
+    }
+  },
+  "not_modelled": [
+    "lunar curvature over the window (< 7 m drop at 9.6 km)",
+    "solar disk radius / penumbra (Sun centre used)"
+  ],
+  "command": "python pipeline/scripts/run_g9.py"
+}

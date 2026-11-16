@@ -1,0 +1,42 @@
+{
+  "created_utc": "2026-11-16T10:33:18.843976Z",
+  "d_min_m": 6.0000000000017994,
+  "dispersion_slope_stats": {
+    "max": 33.71923167285649,
+    "p50": 3.28109311329577,
+    "p95": 9.894382738102331,
+    "pct_below_tolerance": 95.16503667481663,
+    "radius_m": 250.0,
+    "sample_count": 49080,
+    "slope_tolerance_deg": 10.0,
+    "source": "dem_gradient",
+    "unit": "deg"
+  },
+  "downhill_aspect_deg": 15.070356125653802,
+  "ground_normal_me": [
+    0.9612141111546811,
+    -0.27232479989011144,
+    0.04366504187478519
+  ],
+  "near_field_resolution_m": 2.0000000000006,
+  "plane_fit": {
+    "baseline_m": 12.000000000003599,
+    "dem_source": "lroc_nac_dtm_apollo14",
+    "k": 3,
+    "window_dim_m": [
+      14.0000000000042,
+      14.0000000000042
+    ],
+    "window_px": [
+      7,
+      7
+    ]
+  },
+  "producer": "lumen_pipeline.terrain.pad",
+  "site_id": "apollo_14",
+  "slope_deg": 6.366814634697538,
+  "under_resolved": false,
+  "uphill_az_deg": 195.07035612565383,
+  "version": "0.1.0",
+  "z0_m": -1062.4861957093872
+}

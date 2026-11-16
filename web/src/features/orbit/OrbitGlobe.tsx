@@ -21,7 +21,9 @@ export interface OrbitGlobeProps {
   hidden?: boolean;
 }
 
-const SIZE = 640;
+const SIZE = 640; // initial buffer size, until the canvas is measured
+/** Pixel budget for the canvas buffer (~1.6x the old 640 x 640): the per-pixel Moon render scales with it. */
+const MAX_PX = 640 * 640 * 1.6;
 const reducedMotion = (): boolean =>
   typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -174,7 +176,8 @@ function OrbitGlobeImpl({ t, pin, focusKey, onPick, hidden }: OrbitGlobeProps, r
       if (!drag) return;
       if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 4) drag.moved = true;
       const c = cam.current;
-      const k = 150 / cv.getBoundingClientRect().width / c.z;
+      const box = cv.getBoundingClientRect();
+      const k = 150 / Math.min(box.width, box.height) / c.z; // the disc is sized from the shorter side
       const lon = drag.lon - (e.clientX - drag.x) * k;
       const lat = Math.max(-89, Math.min(89, drag.lat + (e.clientY - drag.y) * k));
       c.tlon = c.lon = ((lon + 540) % 360) - 180;
@@ -217,6 +220,32 @@ function OrbitGlobeImpl({ t, pin, focusKey, onPick, hidden }: OrbitGlobeProps, r
       camState.raf = 0;
     };
   }, [draw, kick]);
+
+  // Fill the whole stage: size the canvas's pixel buffer to its on-screen box (device pixels, capped at MAX_PX so a drag stays cheap), so
+  // zooming in grows the Moon into the stage instead of clipping it at the edge of a fixed square.
+  useEffect(() => {
+    const cv = canvas.current;
+    if (!cv || typeof ResizeObserver !== 'function') return;
+    const fit = () => {
+      const box = cv.getBoundingClientRect();
+      if (box.width < 2 || box.height < 2) return;
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      let w = box.width * dpr;
+      let h = box.height * dpr;
+      const k = Math.min(1, Math.sqrt(MAX_PX / (w * h)));
+      w = Math.round(w * k);
+      h = Math.round(h * k);
+      if (w === cv.width && h === cv.height) return;
+      cv.width = w;
+      cv.height = h;
+      scratch.current = null; // the moon buffer must match the canvas
+      draw();
+    };
+    const ro = new ResizeObserver(fit);
+    ro.observe(cv);
+    fit();
+    return () => ro.disconnect();
+  }, [draw]);
 
   // Follow the selected site; repaint when time or pin change.
   useEffect(() => {

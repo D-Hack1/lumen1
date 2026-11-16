@@ -37,6 +37,10 @@ const RS = 2.55; // Sun ring radius, in Moon radii
 const ED = 1.85; // Earth distance, in Moon radii
 const ZOOM_DIV = 2.9;
 
+/** Moon disc radius in canvas pixels. Uses the canvas's SHORTER side, so a canvas that fills a wide stage shows the same Moon size at zoom 1
+ *  and zooming in grows into the whole stage (no square inner frame). For a square canvas this equals the original W / 2 / ZOOM_DIV * z. */
+export const discRadius = (W: number, H: number, z: number): number => (Math.min(W, H) / 2 / ZOOM_DIV) * z;
+
 interface Basis {
   d: [number, number, number];
   r: [number, number, number];
@@ -61,7 +65,7 @@ export function globePick(
   px: number,
   py: number,
 ): { lat: number; lon: number } | null {
-  const R = (W / 2 / ZOOM_DIV) * cam.z;
+  const R = discRadius(W, H, cam.z);
   const sx = (px - W / 2) / R;
   const sy = (H / 2 - py) / R;
   const rr = sx * sx + sy * sy;
@@ -88,7 +92,7 @@ export function drawGlobe(
   const cv = ctx.canvas;
   const W = cv.width;
   const H = cv.height;
-  const R = (W / 2 / ZOOM_DIV) * cam.z;
+  const R = discRadius(W, H, cam.z);
   const cx = W / 2;
   const cy = H / 2;
   const { d, r, u } = basis(cam);
@@ -321,7 +325,13 @@ export function drawGlobe(
     const ky = (H / 2 - pad - hh / 2) / Math.max(Math.abs(dy), 1e-6);
     const kk = Math.min(kx, ky);
     const ex = cx + dx * kk;
-    const ey = cy + dy * kk;
+    let ey = cy + dy * kk;
+    // Keep the chip clear of the stage's own controls, which sit over the canvas edges now that it fills the stage
+    // (CSS px, scaled to canvas px): the view toggle / site card top-left, the caption box along the bottom, the zoom buttons bottom-right.
+    const s = W / (cv.clientWidth || W);
+    const bottom = H - (110 * s + hh / 2);
+    if (ey > bottom) ey = bottom;
+    if (ex < 270 * s && ey < 200 * s + hh / 2) ey = 200 * s + hh / 2;
     ctx.fillStyle = 'rgba(18,17,16,0.92)';
     ctx.strokeStyle = col;
     ctx.lineWidth = 1;

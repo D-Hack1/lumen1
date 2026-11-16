@@ -477,8 +477,11 @@
   z-index: 2;
 }
 .lm-globe {
-  width: min(720px, 96%);
-  aspect-ratio: 1 / 1;
+  /* fills the stage: the renderer sizes the Moon from the shorter side, so zooming grows into the whole stage instead of a square frame */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   cursor: grab;
   touch-action: none;
 }

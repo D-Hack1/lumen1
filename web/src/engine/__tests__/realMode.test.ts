@@ -29,11 +29,18 @@ describe.skipIf(!have)('real-mode loaders', () => {
     it(`mask ${id}`, async () => { await loadMask(id); });
   }
   it('pad im2_athena', async () => { await loadPad('im2_athena'); });
-  it('catalog: polar sites carry their published pad slope, coarse-mask sites stay null (never invented)', async () => {
+  it('catalog: sites with a pad file (polar DEMs, LROC NAC DTMs) carry its slope; Blue Ghost and SLIM (no DTM) stay null (never invented)', async () => {
     const { sites } = await loadCatalog();
     const slope = Object.fromEntries(sites.map((s) => [s.id, s.padSlopeDeg]));
-    for (const id of ['im2_athena', 'cy3_shiv_shakti', 'shackleton_ridge', 'shackleton_rim_ridge']) expect(slope[id]).toBe((await loadPad(id)).slopeDeg);
-    for (const id of COARSE_WITH_SIGMA) expect(slope[id]).toBeNull();
+    const withPad = ['im2_athena', 'cy3_shiv_shakti', 'shackleton_ridge', 'shackleton_rim_ridge', 'apollo_11', 'apollo_12', 'apollo_14', 'apollo_15', 'apollo_16', 'apollo_17', 'change6_apollo_basin'];
+    for (const id of withPad) expect(slope[id]).toBe((await loadPad(id)).slopeDeg);
+    for (const id of ['blue_ghost_m1', 'slim_shioli']) expect(slope[id]).toBeNull();
+  });
+  it.each(['apollo_11', 'apollo_12', 'apollo_14', 'apollo_15', 'apollo_16', 'apollo_17', 'change6_apollo_basin'])('pad %s comes from an LROC NAC DTM at <= 5 m/px', async (id) => {
+    const p = await loadPad(id);
+    expect(p.planeFit.demSource).toMatch(/^lroc_nac_dtm_/);
+    expect(p.nearFieldResolutionM).toBeLessThanOrEqual(5);
+    expect(p.underResolved).toBe(false);
   });
   it('layers', async () => { const l = await loadLayers(); expect(l).toBeTruthy(); });
   it('psr raster', async () => {

@@ -1,0 +1,99 @@
+{
+  "site_id": "shackleton_rim_ridge",
+  "pgda_url": "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_85S_060M_201608.TIF",
+  "observer_height_m": 2.0,
+  "days_sampled": 730,
+  "day_step": 4,
+  "site_published_mask_pct": 39.086301369863016,
+  "site_recomputed_vs_published_mask_max_abs_diff_deg": 0.0,
+  "pixels": [
+    {
+      "dr": -1,
+      "dc": -1,
+      "lat": -89.68642946298482,
+      "lon_east": 197.06285717346137,
+      "pgda_pct": 87.06,
+      "lumen_pct": 39.179452054794524,
+      "near_source": "polar_10m_lola_pgda_90"
+    },
+    {
+      "dr": -1,
+      "dc": 0,
+      "lat": -89.68700432638606,
+      "lon_east": 196.71659082126655,
+      "pgda_pct": 49.644000000000005,
+      "lumen_pct": 32.71917808219178,
+      "near_source": "polar_10m_lola_pgda_90"
+    },
+    {
+      "dr": -1,
+      "dc": 1,
+      "lat": -89.6875677162603,
+      "lon_east": 196.3690629297912,
+      "pgda_pct": 46.34,
+      "lumen_pct": 34.10958904109589,
+      "near_source": "polar_10m_lola_pgda_90"
+    },
+    {
+      "dr": 0,
+      "dc": -1,
+      "lat": -89.68453736421381,
+      "lon_east": 196.95740911127112,
+      "pgda_pct": 76.312,
+      "lumen_pct": 50.084931506849315,
+      "near_source": "polar_10m_lola_pgda_90"
+    },
+    {
+      "dr": 0,
+      "dc": 0,
+      "lat": -89.68510877332312,
+      "lon_east": 196.61303337592312,
+      "pgda_pct": 77.72000000000001,
+      "lumen_pct": 37.78904109589041,
+      "near_source": "polar_10m_lola_pgda_90"
+    },
+    {
+      "dr": 0,
+      "dc": 1,
+      "lat": -89.68566876562781,
+      "lon_east": 196.26741807595772,
+      "pgda_pct": 62.964000000000006,
+      "lumen_pct": 30.96301369863014,
+      "near_source": "polar_10m_lola_pgda_90"
+    },
+    {
+      "dr": 1,
+      "dc": -1,
+      "lat": -89.6826442098509,
+      "lon_east": 196.85321878587797,
+      "pgda_pct": 52.94800000000001,
+      "lumen_pct": 33.16027397260274,
+      "near_source": "polar_10m_lola_pgda_90"
+    },
+    {
+      "dr": 1,
+      "dc": 0,
+      "lat": -89.68321220407701,
+      "lon_east": 196.51071557708363,
+      "pgda_pct": 55.528,
+      "lumen_pct": 30.53287671232877,
+      "near_source": "polar_10m_lola_pgda_90"
+    },
+    {
+      "dr": 1,
+      "dc": 1,
+      "lat": -89.68376883779055,
+      "lon_east": 196.16699428701617,
+      "pgda_pct": 50.504000000000005,
+      "lumen_pct": 30.46986301369863,
+      "near_source": "polar_10m_lola_pgda_90"
+    }
+  ],
+  "summary": {
+    "lumen_mean_pct": 35.445357686453576,
+    "pgda_mean_pct": 62.11333333333333,
+    "mean_abs_diff_pct_points": 26.66797564687976,
+    "median_signed_diff_pct_points": -24.99512328767123,
+    "pearson_r": 0.6739514241393971
+  }
+}

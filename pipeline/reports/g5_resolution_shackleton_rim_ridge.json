@@ -1,0 +1,29 @@
+{
+  "site_id": "shackleton_rim_ridge",
+  "observer_height_m": 2.0,
+  "day_step": 4,
+  "days_sampled": 730,
+  "variants": {
+    "published": {
+      "near_source": "polar_10m_lola_pgda_90",
+      "near_resolution_m": 10.0,
+      "sunlit_pct": 39.086301369863016,
+      "horizon_mean_deg": -0.5651781780305707,
+      "horizon_max_deg": 2.1724965572357178
+    },
+    "20m_all": {
+      "near_source": "polar_20m_lola_pgda_90",
+      "near_resolution_m": 20.0,
+      "sunlit_pct": 32.25753424657534,
+      "horizon_mean_deg": 0.19815049419675132,
+      "horizon_max_deg": 4.210773944854736
+    },
+    "240m_all": {
+      "near_source": "regional_240m_lola_pgda_90",
+      "near_resolution_m": 240.0,
+      "sunlit_pct": 26.5986301369863,
+      "horizon_mean_deg": 1.4107354730479953,
+      "horizon_max_deg": 6.11993408203125
+    }
+  }
+}

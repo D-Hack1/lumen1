@@ -55,8 +55,8 @@ The catalogue has **13 sites**. All 13 have a terrain mask: 4 fine (5–60 m) an
 The validation report ([`web/public/data/validation/report.json`](web/public/data/validation/report.json)) records each gate's real status. A gate is PASS only when a recorded check meets its criterion. **Overall status: NOT READY.**
 
 - **8 of 13 gates pass:** frame transformations, interpolation vs SPICE, geometry vs JPL Horizons, DSN elevation vs Horizons, the raycaster vs analytic terrain, browser-vs-Python parity, pad slope vs NASA slope maps, and Windows Table / barcode / CSV integrity.
-- **1 fails (G5):** multi-year sunlight vs NASA's illumination map agrees within 0.6 points at IM-2, Chandrayaan-3 and the old Shackleton row, but at the new Shackleton–de Gerlache ridge site the mask gives 39% against NASA's 78%. The cause is not established and the mask needs a terrain review.
-- **4 are open:** timing on the demo laptop (partly measured), predicted shadows vs a LROC image, a primary source for the Chandrayaan-3 touchdown Sun elevation, and Tier-B uncertainty calibration.
+- **1 fails (G5):** multi-year sunlight vs NASA's illumination map agrees within 0.6 points at IM-2, Chandrayaan-3 and the old Shackleton row, but at the new Shackleton–de Gerlache ridge site the mask gives 39% against NASA's 78%. Diagnostics ruled out a single-pixel effect (LUMEN is ~25 points lower at all nine map pixels around the site) and terrain resolution (coarser terrain makes LUMEN darker, not brighter); the remaining, untested hypothesis is a horizontal offset of this knife-edge crest between the 2016 map's terrain and the 2023 re-adjusted terrain LUMEN uses.
+- **4 are open:** timing on the demo laptop (measured on an unconfirmed machine; site switch is over its 100 ms budget), predicted shadows vs a LROC image (evidence produced — shadows cast on LROC's 3 m DTM of the Chandrayaan-3 area land on the photo's shadows, and LUMEN's Sun matches LROC's incidence angle to 0.005° — awaiting a human visual sign-off), a primary source for the Chandrayaan-3 touchdown Sun elevation (the timeline half is consistent with ISRO's published sleep/wake dates), and Tier-B uncertainty calibration.
 
 ## Scope and known limits
 
@@ -114,9 +114,9 @@ The published data under `web/public/data/` is produced by the scripts in `pipel
 | `run_ephem.py`, `run_dsn.py` | Sun / Earth positions, DSN station elevations |
 | `run_catalog.py` | `catalog/sites.json` from `config/sites.yaml` |
 | `run_masks.py`, `run_masks_global.py` | Terrain masks (polar products, and the global model for non-polar sites) |
-| `run_pad.py`, `run_dispersion.py` | Pad slope and the 11 × 11 dispersion grids |
+| `run_pad.py`, `run_pad_lroc.py`, `run_dispersion.py` | Pad slope (polar DEMs; LROC NAC DTMs for Apollo and Chang'e-6) and the 11 × 11 dispersion grids |
 | (σ) | Monte-Carlo uncertainty is described in [`MC_SIGMA_REPORT.md`](MC_SIGMA_REPORT.md); `run_mc_sigma_site.py` (error-raster sites) and `run_mc_sigma_coarse.py` (assumed-error, coarse-mask sites) generate a site's σ file (`run_mc_sigma.py` is a stub) |
-| `record_ts_evidence.py`, `run_g5.py`, `run_g6.py` | Validation evidence under `pipeline/reports/` |
+| `record_ts_evidence.py`, `run_g5.py`, `g5_pixel_comparison.py`, `run_g6.py`, `run_g7_timeline.py`, `run_g9.py` | Validation evidence under `pipeline/reports/` |
 
 The terrain scripts download elevation windows from NASA archives and cache them in `pipeline/cache/` (not committed).
 

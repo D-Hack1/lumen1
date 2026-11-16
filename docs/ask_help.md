@@ -337,6 +337,12 @@ Source: engine results (tier badge and σ source) and PLAN_FINAL §5.8
 Tags: sigma pending, sigma unavailable, σ unavailable, σ pending, terrain mask, no plus minus, uncertainty missing, badge, tier badge, no range, where did the range go
 "Terrain mask · σ unavailable" means the site uses a real terrain skyline, but no terrain uncertainty (σ) was computed for it, and LUMEN does not make one up. Without σ, LUMEN cannot compute the ± on event times or the [low, high] ranges on percentages, so it shows the nominal values and says why there is no ±. Two kinds of σ exist, both preliminary Monte-Carlo (30 clones). Sites on NASA's polar elevation models use NASA's published per-pixel error map (an RMS height error, Barker et al. 2023) as one σ. The other sites use NASA's global 237 m model, which has no published error raster, so their σ assumes a constant 1 m one-σ elevation error (the accuracy of individual LOLA measurements). That is a lower bound: it leaves out the error from filling the gaps between LOLA tracks, so the real uncertainty there may be larger; the badge says "assumed 1 m DEM error (lower bound)". That σ is an assumption, not a measurement.
 
+## Why does a site say "Unconfirmed"?
+Kind: concept
+Source: engine verdict (verdict.ts) and docs/limitations.md
+Tags: unconfirmed, pending verdict, no verdict, blue ghost, slim, pad slope, no data yet, why not go, why not judged
+"Unconfirmed" means nothing failed, but one requirement could not be judged. The verdict checks sunlit time, link time, the longest night and the pad slope. When the window falls mostly in lunar daylight, sunlight and night pass, so a site with no pad-slope data is left Unconfirmed ("Pad slope: no data yet") instead of being called Go. Pad slope needs a lander-scale terrain model: the polar sites use NASA's polar LOLA models and the Apollo and Chang'e-6 sites use LROC's 2–5 m stereo terrain models, but no such model covers Blue Ghost (Mare Crisium) or SLIM (Shioli), and LUMEN does not make one up. On dates whose window includes a long lunar night, those sites are judged No-go like the others.
+
 ## What does "smooth Moon" mean on a site?
 Kind: concept
 Source: live pages (Stand here) and PLAN_FINAL §4.2

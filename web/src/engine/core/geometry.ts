@@ -74,6 +74,27 @@ export function bodyGeometry(position: Vec3, site: Site): BodyGeometry {
   return { distanceKm, ...directionToAzEl(local) };
 }
 
+/**
+ * Per-site memo of body geometry by epoch. The geometry depends only on (ephemeris, site, time), never on the horizon, so the nominal,
+ * -sigma and +sigma passes and every event refinement of one request share it instead of recomputing the Hermite interpolation and the
+ * frame rotation. Keyed weakly on the Site object (one per request), so it is dropped with the request; capped so it cannot grow unbounded.
+ * The cached values are exactly what the uncached call returns (same function, same inputs).
+ */
+const GEOMETRY_CACHE_MAX = 250_000;
+const geometryCache = new WeakMap<Site, { eph: Ephemeris; byT: Map<number, BodyGeometry[]> }>();
+const BODY_INDEX: Record<BodyId, number> = { sun: 0, earth: 1 };
+
 export function bodyAt(eph: Ephemeris, body: BodyId, tMs: number, site: Site): BodyGeometry {
-  return bodyGeometry(hermitePositions(eph, tMs)[body], site);
+  let c = geometryCache.get(site);
+  if (!c || c.eph !== eph) {
+    c = { eph, byT: new Map() };
+    geometryCache.set(site, c);
+  }
+  let g = c.byT.get(tMs);
+  if (!g) {
+    const p = hermitePositions(eph, tMs);
+    g = [bodyGeometry(p.sun, site), bodyGeometry(p.earth, site)];
+    if (c.byT.size < GEOMETRY_CACHE_MAX) c.byT.set(tMs, g);
+  }
+  return g[BODY_INDEX[body]];
 }

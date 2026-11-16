@@ -14,10 +14,24 @@ to one elevation threshold; Tier-B snap error is up to about 2.8 km in the 4 km 
 - The validation report (`web/public/data/validation/report.json`, shown on the Methodology page) is **NOT_READY**: 8 of 13 gates pass
   (G0, G1, G2, G3, G3b, G4, G6, G11); G5 fails; G8 and G9 are pending; G7 and G10 are blocked. A gate is PASS only when a recorded check meets
   its criterion.
-- **G7** (Chandrayaan-3 Sun elevation): the 8.75° ± 0.25° reference value has no primary source in the repository, so agreement with it is not
-  independent validation.
-- **G8** (performance on the demo laptop) has not been measured on the demo machine. Per-frame costs measured during development (tilt drag
-  p95 0.9 ms; slip-drag preview p95 3.5 ms; hover/scrub below 1 ms) are well inside the budgets, but are not the gate evidence.
+- **G5** (multi-year sunlight vs NASA's illumination map) FAILS at the Shackleton–de Gerlache ridge site only (LUMEN 39 %, map 78 %; the
+  other three sites agree within 0.6 points). Ruled out: a single-pixel/footprint effect (LUMEN is lower than the map at all nine map pixels
+  around the site, mean 35 % vs 62 %, `pipeline/reports/g5_pixels_shackleton_rim_ridge.json`), terrain resolution (10 m / 20 m / 240 m
+  terrain give 39 / 32 / 27 %, `g5_resolution_shackleton_rim_ridge.json`), the disk definition and a ±0.5° horizon bias. Untested: a horizontal
+  offset of this knife-edge crest between the 2016 map's terrain and the 2023 re-adjusted DEMs. Treat this site's sunlight as unvalidated.
+- **G7** (Chandrayaan-3): BLOCKED on its quantitative half — the 8.75° ± 0.25° touchdown Sun elevation has no primary source (LUMEN computes
+  8.61°). The qualitative half is evaluated against ISRO's own timeline (isro.gov.in, "September 04, 2023: The lander and rover are in sleep
+  mode. Awaiting their awakening around September 22, 2023"): LUMEN's terrain sunset at the site is 4 Sep 05:45 UTC, the Sun drops below 6°
+  on 3 Sep, and the next sunrise is 20 Sep — consistent (`pipeline/reports/g7_timeline.json`).
+- **G8** (performance on the demo laptop): the machine is not confirmed to be the demo laptop. Latest live measurement (i5-13420H, headless
+  Chromium): site switch p50 160 ms / p95 210 ms (budget 100 ms — over, because every site now runs the three-pass ± bounds), hover and
+  slip drag within one 60 Hz frame. Scan and Quick Answer are not in the live pages, so they cannot be timed.
+- **G9** (predicted shadows vs an LROC image): evidence produced, PENDING a human visual sign-off. At the Chandrayaan-3 landing area, shadows
+  cast on LROC's 3 m NAC DTM by LUMEN's Sun were compared with the two LROC orthophotos made from the same stereo images (same grid, no hand
+  alignment). LUMEN's Sun elevation matches LROC's reported incidence angle to 0.001–0.005°; every predicted shadow region lands on a dark
+  region in the photo, and 88–93 % of dark regions ≥ 1,800 m² are predicted; small shadows from craters/boulders below the DTM's resolution
+  are missed (figures: `pipeline/reports/g9_cy3_*.png`). To sign off, add `"visual_signoff": {"by": ..., "date_utc": ...}` to
+  `pipeline/reports/g9_cy3_shadows.json` and rebuild the report.
 
 ## Uncertainty (σ, ±)
 - σ is **preliminary** Monte-Carlo (30 clones) and exists for all 13 catalogue sites. For the four fine-terrain sites (IM-2, Chandrayaan-3, `shackleton_ridge`, `shackleton_rim_ridge`) it perturbs the DEM with the published error raster, which Barker et al. 2023 (§3) define as an RMS per-pixel height error, used as one σ. The 50 m correlation length is not physically calibrated (`MC_SIGMA_REPORT.md`).
@@ -26,12 +40,13 @@ to one elevation threshold; Tier-B snap error is up to about 2.8 km in the 4 km 
 ## Data coverage
 - **Terrain masks:** fine (5–60 m) for IM-2, Chandrayaan-3 and the Shackleton ridge sites; coarse (~237 m, NASA global LDEM_128) for
   Apollo 11/12/14/15/16/17, SLIM, Chang'e-6 and Blue Ghost. Custom points outside a mask use a smooth-Moon estimate and are labelled as one. The Tier-B regional grid (80–90°S) is not produced, so custom points near the pole have no terrain.
-- **Pad slope and dispersion grids** exist only for the polar sites with fine terrain: pad files for IM-2, Chandrayaan-3 and both Shackleton
-  ridge sites (validated against PGDA slope rasters, gate G6 PASS; IM-2's is flagged under-resolved), and 11 × 11 dispersion grids for IM-2,
-  Chandrayaan-3 and the Shackleton-rim site. The verdict uses the pad file's slope for the slope requirement.
-- **"Unconfirmed" on the coarse-mask sites.** The nine coarse-mask sites have no pad slope (237 m terrain cannot resolve a lander pad, and
-  none is invented), so their slope requirement is always "no data". When the 14-day window catches a long lunar night they are judged
-  No-go; when it falls mostly in daylight nothing fails and the verdict is **Unconfirmed** ("Pad slope: no data yet"). This is expected.
+- **Pad slope** (the verdict's slope requirement) comes from a lander-scale terrain model: for IM-2, Chandrayaan-3 and both Shackleton ridge
+  sites from the polar LOLA DEMs (validated against PGDA slope rasters, gate G6 PASS; IM-2's is flagged under-resolved), and for Apollo
+  11/12/14/15/16/17 and Chang'e-6 from LROC NAC stereo DTMs at 2–5 m (NASA PDS, `pipeline/scripts/run_pad_lroc.py`). 11 × 11 dispersion grids
+  exist for IM-2, Chandrayaan-3 and the Shackleton-rim site only.
+- **"Unconfirmed" on Blue Ghost and SLIM.** No LROC NAC DTM covers these two sites, and the global models (237 m, 59 m) cannot resolve a
+  lander pad, so they have no pad slope and none is invented. When the 14-day window catches a long lunar night they are judged No-go; when
+  it falls mostly in daylight nothing fails and the verdict is **Unconfirmed** ("Pad slope: no data yet"). This is expected, not a bug.
 - **Catalogue:** 13 sites. The Artemis candidate regions are not in the catalogue yet; unverified rows are deliberately not shown as verified.
 - **Shackleton connecting ridge:** the catalogue coordinates (−89.54°, 129.0°E; source: USGS navigation grid and NASA CLPS material) read
   **0 % average illumination** on NASA's illumination map, so the engine correctly reports 0 % sunlit there. The mask itself is a faithful

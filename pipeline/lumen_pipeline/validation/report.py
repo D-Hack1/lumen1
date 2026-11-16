@@ -96,15 +96,43 @@ def _gate(identifier: str, description: str, status: str, **fields: Any) -> dict
     return {"id": identifier, "description": description, "status": status, **fields}
 
 
+def default_g9_report_path() -> Path:
+    """Return the checked-in G9 (predicted shadows vs LROC image) evidence."""
+    return Path(__file__).resolve().parents[2] / "reports" / "g9_cy3_shadows.json"
+
+
+def _g9_gate(path: Path) -> dict[str, Any]:
+    """G9's criterion is VISUAL agreement, a human judgment. The script records figures and numbers; the gate is PASS only once a person
+    has looked at the figures and recorded a sign-off ("visual_signoff": {"by": ..., "date_utc": ..., "note": ...}) in the artifact."""
+    description, criterion = "Tier-2 predicted shadows versus LROC image", "visual agreement"
+    if not path.exists():
+        return _gate("G9", description, "PENDING", criterion=criterion, reason="Shadow prediction vs LROC image has not been produced (python pipeline/scripts/run_g9.py).")
+    try:
+        r = json.loads(path.read_text(encoding="utf-8"))
+        value = {
+            img: {
+                "image_mid_utc": v["image_mid_utc"],
+                "sun_elevation_vs_lroc_incidence_diff_deg": v["sun_check"]["difference_deg"],
+                "pixel_precision": v["scores"]["precision"],
+                "regions": v["regions"],
+                "figure": v.get("figure"),
+            }
+            for img, v in r["images"].items()
+        }
+        signoff = r.get("visual_signoff")
+        common = {"criterion": criterion, "value": value, "artifact_paths": [_relative(path), *[v.get("figure") for v in r["images"].values() if v.get("figure")]],
+                  "provenance": f"{r['site']}; DTM and orthophotos from NASA PDS ({r['dtm_url']}); Sun from LUMEN's ephemeris.",
+                  "test_commands": [r["command"]]}
+        if signoff:
+            return _gate("G9", description, "PASS", visual_signoff=signoff, **common)
+        return _gate("G9", description, "PENDING", reason="Evidence recorded (figures and region agreement); awaiting a human visual sign-off in the artifact.", **common)
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+        return _gate("G9", description, "BLOCKED", reason=f"Invalid G9 artifact: {error}", artifact_paths=[_relative(path)])
+
+
 def _pending_gates() -> list[dict[str, Any]]:
     return [
-        _gate(
-            "G9",
-            "Tier-2 predicted shadows versus LROC image",
-            "PENDING",
-            criterion="visual agreement",
-            reason="Tier-2 shadow prediction and LROC-image comparison have not been produced.",
-        ),
+        _g9_gate(default_g9_report_path()),
         _gate(
             "G10",
             "Tier-B uncertainty calibration against Tier-A event times",
@@ -273,6 +301,18 @@ def _g7_gate(path: Path) -> dict[str, Any]:
         )
     try:
         report = json.loads(path.read_text(encoding="utf-8"))
+        # The qualitative half of G7, checked against ISRO's own timeline (scripts/run_g7_timeline.py). It is recorded as evidence only: the
+        # gate's status still follows the quantitative 8.75 deg claim's source provenance, which is unresolved.
+        timeline_path = path.with_name("g7_timeline.json")
+        timeline = json.loads(timeline_path.read_text(encoding="utf-8")) if timeline_path.exists() else None
+        timeline_value = None if timeline is None else {
+            "consistent_with_isro_timeline": timeline["consistent"],
+            "isro_source": timeline["isro_source"],
+            "lumen_terrain_sunset_utc": timeline["lumen_terrain_sunset_utc"],
+            "lumen_sun_below_6deg_utc": timeline["lumen_sun_below_6deg_utc"],
+            "lumen_next_terrain_sunrise_utc": timeline["lumen_next_terrain_sunrise_utc"],
+            "checks": timeline["checks"],
+        }
         return _gate(
             "G7",
             "Chandrayaan-3 touchdown Sun elevation and timeline",
@@ -288,10 +328,11 @@ def _g7_gate(path: Path) -> dict[str, Any]:
                     "absolute_error_deg": report["absolute_error_deg"],
                 },
                 "timeline_status": report["qualitative_timeline_check"]["status"],
+                "primary_sourced_timeline": timeline_value,
                 "im2_touchdown_conditions": report["im2_touchdown_conditions"],
             },
             timestamp_utc=report["timestamp_utc"],
-            artifact_paths=[_relative(path)],
+            artifact_paths=[_relative(path), *([_relative(timeline_path)] if timeline is not None else [])],
             provenance=report["reference"]["source_metadata"],
             test_commands=["pytest tests/gowri/test_g7.py"],
         )
@@ -525,19 +566,41 @@ def _g5_gate(path: Path) -> dict[str, Any]:
             for r in rows
         }
         extra: dict[str, Any] = {}
+        # Diagnostics for an out-of-tolerance site (scripts/g5_pixel_comparison.py, scripts/g5_resolution_test.py), if recorded.
+        diagnostics: dict[str, Any] = {}
+        diag_paths: list[str] = []
+        for site in outside:
+            d: dict[str, Any] = {}
+            px = path.with_name(f"g5_pixels_{site}.json")
+            if px.exists():
+                pr = json.loads(px.read_text(encoding="utf-8"))
+                d["map_3x3_pixels"] = {**{k: round(v, 3) for k, v in pr["summary"].items()},
+                                       "lumen_range_pct": [round(min(p["lumen_pct"] for p in pr["pixels"]), 1), round(max(p["lumen_pct"] for p in pr["pixels"]), 1)]}
+                diag_paths.append(_relative(px))
+            rs = path.with_name(f"g5_resolution_{site}.json")
+            if rs.exists():
+                rr = json.loads(rs.read_text(encoding="utf-8"))
+                d["terrain_resolution_sunlit_pct"] = {k: round(v["sunlit_pct"], 1) for k, v in rr["variants"].items()}
+                diag_paths.append(_relative(rs))
+            if d:
+                diagnostics[site] = d
         if outside:
             extra["reason"] = (
                 "Outside the " + f"{tolerance:g}-point tolerance: " + ", ".join(f"{site} ({diffs[site]:.1f} points)" for site in outside)
-                + ". Not explained away: the neighbouring map pixels there span a wide range and the result moves with observer height (see value), "
-                "and a constant horizon bias of +/-0.5 degrees moves it only a few points (see value), so a small DEM bias does not explain it either; "
-                "the cause is not established and the site's mask needs a terrain-owner review."
+                + ". Not explained away: a constant horizon bias of +/-0.5 degrees moves it only a few points and observer height only partly (see value). "
+                + ("Ruled out by the recorded diagnostics: a single-pixel/footprint effect (LUMEN is lower than the map at all nine map pixels around the "
+                   "site, by a similar amount) and terrain resolution (coarser terrain makes LUMEN darker, not brighter). Remaining hypothesis, untested: a "
+                   "horizontal offset of this knife-edge crest between the 2016 map's DEM and the 2023 re-adjusted DEMs LUMEN uses. " if diagnostics else "")
+                + "The cause is not established and the site's mask needs a terrain-owner review."
             )
+        if diagnostics:
+            extra["diagnostics"] = diagnostics
         return _gate(
             "G5", G5_DESCRIPTION, "PASS" if meets else "FAIL", criterion=G5_CRITERION + f" (read as <= {G5_TOLERANCE_POINTS:g} percentage points)",
             value={"sites_compared": len(rows), "max_difference_points": round(max(diffs.values()), 1) if diffs else None, "per_site": per_site},
-            artifact_paths=[_relative(path)],
+            artifact_paths=[_relative(path), *diag_paths],
             provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]}. {report['method']}",
-            test_commands=["python pipeline/scripts/run_g5.py"],
+            test_commands=["python pipeline/scripts/run_g5.py", *(["python pipeline/scripts/g5_pixel_comparison.py", "python pipeline/scripts/g5_resolution_test.py"] if diag_paths else [])],
             **extra,
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:

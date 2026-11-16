@@ -75,13 +75,13 @@
         "kernels": [
           {
             "filename": "naif0012.tls",
-            "sha256": "3c2c786080569f0336b7c090866acc0f0b38a935db51c15da54de1efc10bfa17",
-            "size_bytes": 5232
+            "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+            "size_bytes": 5257
           },
           {
             "filename": "pck00011.tpc",
-            "sha256": "8fd7588e258d49362198381b039c6d577db7e6f9be35dacfe43220698669f1eb",
-            "size_bytes": 135542
+            "sha256": "3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1",
+            "size_bytes": 131226
           },
           {
             "filename": "de421.bsp",
@@ -95,8 +95,8 @@
           },
           {
             "filename": "moon_080317.tf",
-            "sha256": "3a5bf575b1b946349b703719853c760db3b3902a6fce750bb721bb93c474cd00",
-            "size_bytes": 22042
+            "sha256": "78732477b96f9863e7b0d65bcee3c22b8707ca5ed0db56d1173319cb2e8c7993",
+            "size_bytes": 21437
           }
         ],
         "reference": {
@@ -122,33 +122,33 @@
         "orthogonality_error_max_abs": 1e-09
       },
       "value": {
-        "determinant_deviation_max_abs": 4.440892098500626e-16,
-        "max_angular_residual_deg": 4.412742011943044e-15,
-        "max_direction_error_deg": 2.0497873685405026e-09,
-        "max_direction_error_rad": 3.57755385468222e-11,
-        "max_matrix_error": 3.480837840186268e-11,
+        "determinant_deviation_max_abs": 5.551115123125783e-16,
+        "max_angular_residual_deg": 7.077001655868533e-15,
+        "max_direction_error_deg": 2.8492010027216694e-09,
+        "max_direction_error_rad": 4.972793854861705e-11,
+        "max_matrix_error": 4.83396100925404e-11,
         "me_to_pa": {
           "determinant_deviation": 4.440892098500626e-16,
           "matrix_max_abs_error": 3.3306690738754696e-16,
-          "max_angular_residual_deg": 4.412742011943044e-15,
-          "max_angular_residual_rad": 7.701687714948505e-17,
-          "orthogonality_error_max_abs": 6.661338147750939e-16,
-          "rms_angular_residual_deg": 2.4383191144083034e-15
+          "max_angular_residual_deg": 7.077001655868533e-15,
+          "max_angular_residual_rad": 1.2351698006399657e-16,
+          "orthogonality_error_max_abs": 8.881784197001252e-16,
+          "rms_angular_residual_deg": 4.094170645903539e-15
         },
-        "minimum_determinant": 0.9999999999999996,
-        "orthogonality_error_max_abs": 6.661338147750939e-16,
+        "minimum_determinant": 0.9999999999999994,
+        "orthogonality_error_max_abs": 8.881784197001252e-16,
         "pa_me_surface_offset_m": 874.7474688514714,
         "pa_to_me": {
           "determinant_deviation": 4.440892098500626e-16,
           "matrix_max_abs_error": 3.3306690738754696e-16,
-          "max_angular_residual_deg": 4.239636467986046e-15,
-          "max_angular_residual_rad": 7.399561545397967e-17,
-          "orthogonality_error_max_abs": 6.661338147750939e-16,
-          "rms_angular_residual_deg": 2.4403360275477766e-15
+          "max_angular_residual_deg": 6.971862830601259e-15,
+          "max_angular_residual_rad": 1.2168196139140364e-16,
+          "orthogonality_error_max_abs": 7.771561172376096e-16,
+          "rms_angular_residual_deg": 4.094962193947901e-15
         },
-        "rms_angular_residual_deg": 2.439327779433973e-15,
-        "round_trip_vector_error_m": 1.149714193796099e-09,
-        "site_transform_error_m": 2.3798309528663596e-05
+        "rms_angular_residual_deg": 4.094566439053152e-15,
+        "round_trip_vector_error_m": 1.3643481118758194e-09,
+        "site_transform_error_m": 3.304957419553763e-05
       }
     },
     {
@@ -249,9 +249,9 @@
       },
       "value": {
         "comparison_count": 200,
-        "max_azimuth_error_deg": 0.000837971840269347,
-        "max_earth_range_error_km": 0.2253940497757867,
-        "max_elevation_error_deg": 0.0001461610999413665
+        "max_azimuth_error_deg": 0.00023945728560192947,
+        "max_earth_range_error_km": 0.17853414587443694,
+        "max_elevation_error_deg": 3.654559600835272e-05
       }
     },
     {
@@ -294,13 +294,13 @@
         "decoded_artifact": {
           "comparison_count": 45,
           "max_decoded_elevation_error_deg": 0.278154289042746,
-          "max_direct_geometry_error_deg": 0.080130259755272,
-          "max_quantization_error_deg": 0.2493276315233306,
+          "max_direct_geometry_error_deg": 0.076823908627901,
+          "max_quantization_error_deg": 0.24669511040067071,
           "proposed_artifact_tolerance_deg": 0.35,
           "quantization_half_step_deg": 0.25,
           "status": "PROPOSED_NOT_LOCKED"
         },
-        "max_moon_elevation_error_deg": 0.080130259755272
+        "max_moon_elevation_error_deg": 0.076823908627901
       }
     },
     {
@@ -337,16 +337,40 @@
     },
     {
       "artifact_paths": [
-        "pipeline/reports/g5_multiyear_vs_pgda.json"
+        "pipeline/reports/g5_multiyear_vs_pgda.json",
+        "pipeline/reports/g5_pixels_shackleton_rim_ridge.json",
+        "pipeline/reports/g5_resolution_shackleton_rim_ridge.json"
       ],
       "criterion": "within a few percent; differences explained (read as <= 5 percentage points)",
       "description": "Multi-year averages versus independent PGDA map pixels",
+      "diagnostics": {
+        "shackleton_rim_ridge": {
+          "map_3x3_pixels": {
+            "lumen_mean_pct": 35.445,
+            "lumen_range_pct": [
+              30.5,
+              50.1
+            ],
+            "mean_abs_diff_pct_points": 26.668,
+            "median_signed_diff_pct_points": -24.995,
+            "pearson_r": 0.674,
+            "pgda_mean_pct": 62.113
+          },
+          "terrain_resolution_sunlit_pct": {
+            "20m_all": 32.3,
+            "240m_all": 26.6,
+            "published": 39.1
+          }
+        }
+      },
       "id": "G5",
       "provenance": "Recorded 2026-11-15T17:45:11Z at commit fb87cad5ba. LUMEN: Python reference engine over 2023-01-01..2030-12-29, every UTC day, 2-minute samples, 2 m terrain mask, Sun available at >=50% disk. PGDA: average-illumination raster read at the site (fraction of time illuminated, hourly over an 18.6-year nutation cycle). The spans differ (8 of ~18.6 years) and PGDA's disk treatment is not spelled out, so yearly spread and an any-part-of-disk variant are recorded as the explanation of differences.",
-      "reason": "Outside the 5-point tolerance: shackleton_rim_ridge (38.5 points). Not explained away: the neighbouring map pixels there span a wide range and the result moves with observer height (see value), and a constant horizon bias of +/-0.5 degrees moves it only a few points (see value), so a small DEM bias does not explain it either; the cause is not established and the site's mask needs a terrain-owner review.",
+      "reason": "Outside the 5-point tolerance: shackleton_rim_ridge (38.5 points). Not explained away: a constant horizon bias of +/-0.5 degrees moves it only a few points and observer height only partly (see value). Ruled out by the recorded diagnostics: a single-pixel/footprint effect (LUMEN is lower than the map at all nine map pixels around the site, by a similar amount) and terrain resolution (coarser terrain makes LUMEN darker, not brighter). Remaining hypothesis, untested: a horizontal offset of this knife-edge crest between the 2016 map's DEM and the 2023 re-adjusted DEMs LUMEN uses. The cause is not established and the site's mask needs a terrain-owner review.",
       "status": "FAIL",
       "test_commands": [
-        "python pipeline/scripts/run_g5.py"
+        "python pipeline/scripts/run_g5.py",
+        "python pipeline/scripts/g5_pixel_comparison.py",
+        "python pipeline/scripts/g5_resolution_test.py"
       ],
       "value": {
         "max_difference_points": 38.5,
@@ -486,7 +510,8 @@
     },
     {
       "artifact_paths": [
-        "pipeline/reports/g7_cy3.json"
+        "pipeline/reports/g7_cy3.json",
+        "pipeline/reports/g7_timeline.json"
       ],
       "calculation_status": "COMPUTED",
       "description": "Chandrayaan-3 touchdown Sun elevation and timeline",
@@ -550,6 +575,23 @@
           "timestamp_precision": "second",
           "timestamp_utc": "2025-03-06T17:28:50Z"
         },
+        "primary_sourced_timeline": {
+          "checks": {
+            "next_sunrise_minus_isro_wake_estimate_days": -1.9704861111111112,
+            "next_sunrise_within_2_days_of_around_22_sep": true,
+            "sun_up_at_touchdown": true,
+            "terrain_sunset_on_or_after_isro_sleep_date": true
+          },
+          "consistent_with_isro_timeline": true,
+          "isro_source": {
+            "heading": "September 04, 2023",
+            "quote": "The lander and rover are in sleep mode. Awaiting their awakening around September 22, 2023.",
+            "url": "https://www.isro.gov.in/Chandrayaan3.html"
+          },
+          "lumen_next_terrain_sunrise_utc": "2023-09-20T00:42:30Z",
+          "lumen_sun_below_6deg_utc": "2023-09-03T05:39:00Z",
+          "lumen_terrain_sunset_utc": "2023-09-04T05:45:07Z"
+        },
         "timeline_status": "SOURCE_UNVERIFIED",
         "unverified_planned_comparison": {
           "absolute_error_deg": 0.13785994964322157,
@@ -565,40 +607,127 @@
       "criterion": "site <100 ms; slip <16 ms/frame; hover <4 ms; Scan <300 ms; Quick Answer <150 ms",
       "description": "Performance on the demo laptop",
       "id": "G8",
-      "provenance": "Recorded 2026-11-15T16:09:40Z at commit f14aa632d1; siteSwitchMs is click to the engine's new numbers on screen, end to end (worker evaluation included), headless Chromium. hoverToFrameMs is pointer event to the next animation frame; it is dominated by the 60 Hz frame wait and is NOT the 4 ms pointer-to-overlay-drawn measurement of the old harness. slipDragFrameMs is the frame time while dragging the slip slider; 16.7 ms is one 60 Hz frame (no dropped frames). Scan and Quick Answer are not part of the live pages, so they cannot be timed there. This machine is not confirmed to be the demo laptop.",
-      "reason": "Partly measured on 13th Gen Intel(R) Core(TM) i5-13420H; not promoted: site switch p95 194 ms (budget 100 ms); not measurable in the live app: scanStage1, scanFirstStage2, quickAnswer; hover is measured to the next frame, not to overlay-drawn; the measuring machine is not confirmed to be the demo laptop.",
+      "provenance": "Recorded 2026-11-16T10:57:35Z at commit e0707a4976; siteSwitchMs is click to the engine's new numbers on screen, end to end (worker evaluation included), headless Chromium. hoverToFrameMs is pointer event to the next animation frame; it is dominated by the 60 Hz frame wait and is NOT the 4 ms pointer-to-overlay-drawn measurement of the old harness. slipDragFrameMs is the frame time while dragging the slip slider; 16.7 ms is one 60 Hz frame (no dropped frames). Scan and Quick Answer are not part of the live pages, so they cannot be timed there. This machine is not confirmed to be the demo laptop.",
+      "reason": "Partly measured on 13th Gen Intel(R) Core(TM) i5-13420H; not promoted: site switch p95 210 ms (budget 100 ms); not measurable in the live app: scanStage1, scanFirstStage2, quickAnswer; hover is measured to the next frame, not to overlay-drawn; the measuring machine is not confirmed to be the demo laptop.",
       "status": "PENDING",
       "test_commands": [
         "LUMEN_G8_OUT=<file> npx playwright test -c e2e/playwright.real.config.ts livePerf"
       ],
       "value": {
         "hover_to_next_frame_ms": {
-          "max": 31.63,
+          "max": 14.7,
           "n": 300,
-          "p50": 14.2,
-          "p95": 15
+          "p50": 13,
+          "p95": 14.1
         },
         "site_switch_ms": {
-          "max": 193.5,
+          "max": 210,
           "n": 8,
-          "p50": 137.8,
-          "p95": 193.5
+          "p50": 159.9,
+          "p95": 210
         },
         "site_switch_p50_over_budget": true,
         "slip_drag_frame_ms": {
           "max": 16.8,
-          "n": 217,
+          "n": 182,
           "p50": 16.7,
-          "p95": 16.7
+          "p95": 16.8
         }
       }
     },
     {
+      "artifact_paths": [
+        "pipeline/reports/g9_cy3_shadows.json",
+        "pipeline/reports/g9_cy3_M1442997156.png",
+        "pipeline/reports/g9_cy3_M1443025251.png"
+      ],
       "criterion": "visual agreement",
       "description": "Tier-2 predicted shadows versus LROC image",
       "id": "G9",
-      "reason": "Tier-2 shadow prediction and LROC-image comparison have not been produced.",
-      "status": "PENDING"
+      "provenance": "Chandrayaan-3 landing area (NAC_DTM_VIKRAMSITE1); DTM and orthophotos from NASA PDS (https://pds.lroc.im-ldi.com/data/LRO-L-LROC-5-RDR-V1.0/LROLRC_2001/DATA/SDP/NAC_DTM/VIKRAMSITE1/NAC_DTM_VIKRAMSITE1.TIF); Sun from LUMEN's ephemeris.",
+      "reason": "Evidence recorded (figures and region agreement); awaiting a human visual sign-off in the artifact.",
+      "status": "PENDING",
+      "test_commands": [
+        "python pipeline/scripts/run_g9.py"
+      ],
+      "value": {
+        "M1442997156": {
+          "figure": "pipeline/reports/g9_cy3_M1442997156.png",
+          "image_mid_utc": "2023-07-03T04:18:23Z",
+          "pixel_precision": 0.8689702360588436,
+          "regions": {
+            ">=10px": {
+              "min_region_m2": 90.0,
+              "min_region_px": 10,
+              "observed_regions": 839,
+              "observed_regions_matched": 140,
+              "predicted_regions": 48,
+              "predicted_regions_matched": 48,
+              "region_precision": 1.0,
+              "region_recall": 0.16686531585220502
+            },
+            ">=200px": {
+              "min_region_m2": 1800.0,
+              "min_region_px": 200,
+              "observed_regions": 25,
+              "observed_regions_matched": 22,
+              "predicted_regions": 0,
+              "predicted_regions_matched": 0,
+              "region_precision": 0.0,
+              "region_recall": 0.88
+            },
+            ">=50px": {
+              "min_region_m2": 450.0,
+              "min_region_px": 50,
+              "observed_regions": 111,
+              "observed_regions_matched": 77,
+              "predicted_regions": 4,
+              "predicted_regions_matched": 4,
+              "region_precision": 1.0,
+              "region_recall": 0.6936936936936937
+            }
+          },
+          "sun_elevation_vs_lroc_incidence_diff_deg": 0.000851326861347701
+        },
+        "M1443025251": {
+          "figure": "pipeline/reports/g9_cy3_M1443025251.png",
+          "image_mid_utc": "2023-07-03T12:06:38Z",
+          "pixel_precision": 0.8415926668576339,
+          "regions": {
+            ">=10px": {
+              "min_region_m2": 90.0,
+              "min_region_px": 10,
+              "observed_regions": 749,
+              "observed_regions_matched": 156,
+              "predicted_regions": 66,
+              "predicted_regions_matched": 66,
+              "region_precision": 1.0,
+              "region_recall": 0.2082777036048064
+            },
+            ">=200px": {
+              "min_region_m2": 1800.0,
+              "min_region_px": 200,
+              "observed_regions": 28,
+              "observed_regions_matched": 26,
+              "predicted_regions": 0,
+              "predicted_regions_matched": 0,
+              "region_precision": 0.0,
+              "region_recall": 0.9285714285714286
+            },
+            ">=50px": {
+              "min_region_m2": 450.0,
+              "min_region_px": 50,
+              "observed_regions": 113,
+              "observed_regions_matched": 81,
+              "predicted_regions": 6,
+              "predicted_regions_matched": 6,
+              "region_precision": 1.0,
+              "region_recall": 0.7168141592920354
+            }
+          },
+          "sun_elevation_vs_lroc_incidence_diff_deg": 0.004640515588587135
+        }
+      }
     },
     {
       "criterion": "at least about 68 percent inside reported delta-t or inflate sigma",

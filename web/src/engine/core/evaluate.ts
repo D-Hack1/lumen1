@@ -143,7 +143,7 @@ function refineWindows(
   const opsUp = samples.map((s) => s.sun.up && s.linkUp);
   const at = (t: number) => stateAt(eph, site, horizon, d, t, dsn);
   const linkTransitions = applied ? detectTransitions(startMs, endMs, (t) => at(t).linkUp, 'linkDown', 'linkUp', { times, values: linkUp }) : [];
-  const opsTransitions = detectTransitions(startMs, endMs, (t) => at(t).sun.up && at(t).linkUp, 'opsEnd', 'opsStart', { times, values: opsUp });
+  const opsTransitions = detectTransitions(startMs, endMs, (t) => { const s = at(t); return s.sun.up && s.linkUp; }, 'opsEnd', 'opsStart', { times, values: opsUp });
   const sun = windowsFromEvents('sun', startMs, endMs, sunUp[0], sunEvents, { downEvent: 'sunset', upEvent: 'shadowExit', peakElevationDeg: peakOf('sun', sunEl) });
   const earth = windowsFromEvents('earth', startMs, endMs, earthUp[0], earthEvents, { downEvent: 'earthset', upEvent: 'earthrise', peakElevationDeg: peakOf('earth', earthEl) });
   const link = applied ? windowsFromEvents('link', startMs, endMs, linkUp[0], linkTransitions, { downEvent: 'linkDown', upEvent: 'linkUp', peakElevationDeg: peakOf('earth', earthEl) }) : earth;

@@ -2,38 +2,38 @@
   "measured": {
     "siteSwitchMs": {
       "n": 8,
-      "p50": 137.8,
-      "p95": 193.5,
-      "max": 193.5
+      "p50": 159.9,
+      "p95": 210,
+      "max": 210
     },
     "hoverToFrameMs": {
       "n": 300,
-      "p50": 14.2,
-      "p95": 15,
-      "max": 31.63
+      "p50": 13,
+      "p95": 14.1,
+      "max": 14.7
     },
     "slipDragFrameMs": {
-      "n": 217,
+      "n": 182,
       "p50": 16.7,
-      "p95": 16.7,
+      "p95": 16.8,
       "max": 16.8
     }
   },
   "machine": {
-    "platform": "win32",
-    "release": "10.0.26200",
+    "platform": "linux",
+    "release": "7.2.15-200.fc44.x86_64",
     "cpu": "13th Gen Intel(R) Core(TM) i5-13420H",
     "logical_cpus": 12,
-    "total_mem_gb": 16.8,
-    "node": "v22.13.0"
+    "total_mem_gb": 16.4,
+    "node": "v24.18.1"
   },
   "viewport": "1440x810",
   "browser": "Playwright Chromium (headless)",
   "data": "real",
   "gate": "G8",
   "description": "Performance of the live app on the machine it was measured on",
-  "recorded_utc": "2026-11-15T16:09:40Z",
-  "git_commit": "f14aa632d1d0d51615538d36f3eeb2bc39f45b96",
+  "recorded_utc": "2026-11-16T10:57:35Z",
+  "git_commit": "e0707a4976903053123894b5cd3d2372175bd0ba",
   "command": "LUMEN_G8_OUT=<file> npx playwright test -c e2e/playwright.real.config.ts livePerf",
   "budgets_ms": {
     "siteSwitch": 100,
@@ -54,5 +54,6 @@
     "slipDragFrameMs is the frame time while dragging the slip slider; 16.7 ms is one 60 Hz frame (no dropped frames).",
     "Scan and Quick Answer are not part of the live pages, so they cannot be timed there.",
     "This machine is not confirmed to be the demo laptop."
-  ]
+  ],
+  "note": "Re-measured after the engine geometry memo (core/geometry.ts bodyAt). Since 2026-11-16 every catalogue site has sigma, so every site switch now runs the three-pass (nominal, -sigma, +sigma) bounds; on 2026-11-15 the coarse sites ran a single pass."
 }

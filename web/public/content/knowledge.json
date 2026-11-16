@@ -348,16 +348,6 @@
    "metrics": []
   },
   {
-   "id": "limitation:validation",
-   "kind": "limitation",
-   "title": "Validation",
-   "summary": "- The validation report (web/public/data/validation/report.json, shown on the Methodology page) is NOT_READY: 8 of 13 gates pass (G0, G1, G2, G3, G3b, G4, G6, G11); G5 fails; G8 and G9 are pending; G7 and G10 are blocked. A gate is PASS onl",
-   "body": "- The validation report (web/public/data/validation/report.json, shown on the Methodology page) is NOT_READY: 8 of 13 gates pass (G0, G1, G2, G3, G3b, G4, G6, G11); G5 fails; G8 and G9 are pending; G7 and G10 are blocked. A gate is PASS only when a recorded check meets its criterion. - G7 (Chandrayaan-3 Sun elevation): the 8.75° ± 0.25° reference value has no primary source in the repository, so agreement with it is not independent validation. - G8 (performance on the demo laptop) has not been measured on the demo machine. Per-frame costs measured during development (tilt drag p95 0.9 ms; slip-drag preview p95 3.5 ms; hover/scrub below 1 ms) are well inside the budgets, but are not the gate evidence.",
-   "source": "docs/limitations.md",
-   "anchor": "validation",
-   "metrics": []
-  },
-  {
    "id": "limitation:interface",
    "kind": "limitation",
    "title": "Interface",
@@ -1541,6 +1531,27 @@
     "tier badge",
     "no range",
     "where did the range go"
+   ]
+  },
+  {
+   "id": "help:why-does-a-site-say-unconfirmed",
+   "kind": "concept",
+   "title": "Why does a site say \"Unconfirmed\"?",
+   "summary": "\"Unconfirmed\" means nothing failed, but one requirement could not be judged. The verdict checks sunlit time, link time, the longest night and the pad slope. When the window falls mostly in lunar daylight, sunlight and night pass, so a site with no pad-slope data is left Unconfirmed (\"Pad slope: no data yet\") instead of being called Go. Pad slope needs a lander-scale terrain model: the polar sites use NASA's polar LOLA models and the Apollo and Chang'e-6 sites use LROC's 2–5 m stereo terrain models, but no such model covers Blue Ghost (Mare Crisium) or SLIM (Shioli), and LUMEN does not make one up. On dates whose window includes a long lunar night, those sites are judged No-go like the others.",
+   "body": "\"Unconfirmed\" means nothing failed, but one requirement could not be judged. The verdict checks sunlit time, link time, the longest night and the pad slope. When the window falls mostly in lunar daylight, sunlight and night pass, so a site with no pad-slope data is left Unconfirmed (\"Pad slope: no data yet\") instead of being called Go. Pad slope needs a lander-scale terrain model: the polar sites use NASA's polar LOLA models and the Apollo and Chang'e-6 sites use LROC's 2–5 m stereo terrain models, but no such model covers Blue Ghost (Mare Crisium) or SLIM (Shioli), and LUMEN does not make one up. On dates whose window includes a long lunar night, those sites are judged No-go like the others.",
+   "source": "engine verdict (verdict.ts) and docs/limitations.md",
+   "anchor": "why-does-a-site-say-unconfirmed",
+   "metrics": [],
+   "tags": [
+    "unconfirmed",
+    "pending verdict",
+    "no verdict",
+    "blue ghost",
+    "slim",
+    "pad slope",
+    "no data yet",
+    "why not go",
+    "why not judged"
    ]
   },
   {
