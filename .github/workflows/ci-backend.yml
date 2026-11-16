@@ -41,28 +41,14 @@ jobs:
           python-version: "3.11"
           cache: pip
           cache-dependency-path: pipeline/pyproject.toml
+      - name: Cache verified SPICE kernels
+        uses: actions/cache@v4
+        with:
+          path: pipeline/kernels
+          key: ${{ runner.os }}-spice-de421-${{ hashFiles('pipeline/scripts/provision_kernels.py') }}
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e ".[dev]"
-      - name: Download locked SPICE kernels
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p kernels
-          declare -A urls=(
-            [naif0012.tls]=https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls
-            [pck00011.tpc]=https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00011.tpc
-            [de421.bsp]=https://naif.jpl.nasa.gov/pub/naif/MAVEN/kernels/spk/de421.bsp
-            [moon_pa_de421_1900-2050.bpc]=https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/moon_pa_de421_1900-2050.bpc
-            [moon_080317.tf]=https://naif.jpl.nasa.gov/pub/naif/generic_kernels/fk/satellites/moon_080317.tf
-          )
-          for filename in "${!urls[@]}"; do
-            curl --fail --location --retry 3 --retry-all-errors --output "kernels/$filename" "${urls[$filename]}"
-            test -s "kernels/$filename"
-          done
-          grep -q '^KPL/LSK' kernels/naif0012.tls
-          grep -q '^KPL/PCK' kernels/pck00011.tpc
-          grep -q '^KPL/FK' kernels/moon_080317.tf
-          test "$(head -c 7 kernels/de421.bsp)" = "DAF/SPK"
-          test "$(head -c 7 kernels/moon_pa_de421_1900-2050.bpc)" = "DAF/PCK"
+      - name: Provision and verify locked SPICE kernels
+        run: python scripts/provision_kernels.py
       - run: ruff check .
       - run: pytest
