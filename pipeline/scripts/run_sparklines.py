@@ -31,6 +31,11 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=default_output_path())
     parser.add_argument("--start-utc", default=DEFAULT_START_UTC)
     parser.add_argument("--end-utc", default=DEFAULT_END_UTC)
+    parser.add_argument(
+        "--max-sites",
+        type=int,
+        help="compute at most this many unfinished rows, retaining a resumable checkpoint",
+    )
     args = parser.parse_args()
     metadata = build_sparklines(
         args.sites,
@@ -39,8 +44,14 @@ def main() -> None:
         args.terrain_root,
         start_utc=args.start_utc,
         end_utc=args.end_utc,
+        max_sites=args.max_sites,
     )
-    print(f"wrote {args.output} ({metadata['shape']})")
+    if metadata.get("complete") is False:
+        print(
+            f"checkpointed {len(metadata['sites'])} rows; remaining: {', '.join(metadata['remaining_sites'])}"
+        )
+    else:
+        print(f"wrote {args.output} ({metadata['shape']})")
 
 
 if __name__ == "__main__":

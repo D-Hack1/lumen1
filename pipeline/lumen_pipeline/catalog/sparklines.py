@@ -10,7 +10,9 @@ requested UTC days, rather than regenerating an annual cache for each site.
 from __future__ import annotations
 
 import json
+import os
 import struct
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -18,7 +20,7 @@ from typing import Any
 import numpy as np
 import yaml
 
-from lumen_pipeline.common.binio import write_array
+from lumen_pipeline.common.binio import read_array, write_array
 from lumen_pipeline.common.frames import site_position_km, site_rotation_matrix
 from lumen_pipeline.common.timeutil import format_utc, parse_utc
 from lumen_pipeline.ephem.ephemeris import STEP_SECONDS
@@ -27,10 +29,10 @@ from lumen_pipeline.reference.visibility import FiniteSegmentTree, Horizon, avai
 from lumen_pipeline.terrain.masks import _site_coordinates
 
 DEFAULT_START_UTC = "2023-01-01T00:00:00Z"
-# The checked-in hourly ephemeris ends at 2030-12-31T23:00Z. A full UTC day
-# needs samples through 23:58, so the final computable exclusive boundary is
-# the preceding midnight until ephemeris coverage is extended.
-DEFAULT_END_UTC = "2030-12-31T00:00:00Z"
+# The published catalog contract covers three full UTC years. Extending this
+# range requires an intentional artifact update, rather than invalidating its
+# deterministic rows during a routine catalog rebuild.
+DEFAULT_END_UTC = "2026-01-01T00:00:00Z"
 COORDINATE_FRAME = "MOON_ME_DE421"
 OBSERVER_HEIGHT_M = 2.0
 SAMPLE_SECONDS = 120
@@ -53,7 +55,14 @@ def default_terrain_root() -> Path:
 
 
 def default_output_path() -> Path:
-    return Path(__file__).resolve().parents[3] / "web" / "public" / "data" / "catalog" / "sparklines.bin"
+    return (
+        Path(__file__).resolve().parents[3]
+        / "web"
+        / "public"
+        / "data"
+        / "catalog"
+        / "sparklines.bin"
+    )
 
 
 def _utc_day(value: str) -> datetime:
@@ -97,7 +106,9 @@ def _mask_horizon(
         latitude = float(metadata["latitude_deg"])
         longitude = float(metadata["longitude_deg_east"])
         bin_width = float(metadata["bin_width_deg"])
-        numeric_metadata = tuple(float(metadata[key]) for key in ("slope_deg", "uphill_azimuth_deg", "d_min_m"))
+        numeric_metadata = tuple(
+            float(metadata[key]) for key in ("slope_deg", "uphill_azimuth_deg", "d_min_m")
+        )
     except (TypeError, ValueError):
         return None
     if metadata["coordinate_frame"] != COORDINATE_FRAME:
@@ -166,11 +177,17 @@ def _daily_percentages(
                 h00[:, None] * ephemeris.nodes[indices, offset : offset + 3]
                 + h10[:, None] * STEP_SECONDS * ephemeris.nodes[indices, offset + 3 : offset + 6]
                 + h01[:, None] * ephemeris.nodes[indices + 1, offset : offset + 3]
-                + h11[:, None] * STEP_SECONDS * ephemeris.nodes[indices + 1, offset + 3 : offset + 6]
+                + h11[:, None]
+                * STEP_SECONDS
+                * ephemeris.nodes[indices + 1, offset + 3 : offset + 6]
             )
-        topocentric = positions - site_position_km(latitude_deg, longitude_deg_east, OBSERVER_HEIGHT_M)
+        topocentric = positions - site_position_km(
+            latitude_deg, longitude_deg_east, OBSERVER_HEIGHT_M
+        )
         distance = np.linalg.norm(topocentric, axis=2)
-        directions = (topocentric / distance[:, :, None]) @ site_rotation_matrix(latitude_deg, longitude_deg_east).T
+        directions = (topocentric / distance[:, :, None]) @ site_rotation_matrix(
+            latitude_deg, longitude_deg_east
+        ).T
         azimuth = np.degrees(np.arctan2(directions[:, :, 0], directions[:, :, 1])) % 360.0
         elevation = np.degrees(np.arcsin(directions[:, :, 2]))
     else:
@@ -181,21 +198,115 @@ def _daily_percentages(
         if distance is None or azimuth is None or elevation is None:
             et = float(ets[index])
             sun = ephemeris.body_at("sun", et, latitude_deg, longitude_deg_east, OBSERVER_HEIGHT_M)
-            earth = ephemeris.body_at("earth", et, latitude_deg, longitude_deg_east, OBSERVER_HEIGHT_M)
-            sun_distance, sun_azimuth, sun_elevation = sun.distance_km, sun.azimuth_deg, sun.elevation_deg
-            earth_distance, earth_azimuth, earth_elevation = earth.distance_km, earth.azimuth_deg, earth.elevation_deg
+            earth = ephemeris.body_at(
+                "earth", et, latitude_deg, longitude_deg_east, OBSERVER_HEIGHT_M
+            )
+            sun_distance, sun_azimuth, sun_elevation = (
+                sun.distance_km,
+                sun.azimuth_deg,
+                sun.elevation_deg,
+            )
+            earth_distance, earth_azimuth, earth_elevation = (
+                earth.distance_km,
+                earth.azimuth_deg,
+                earth.elevation_deg,
+            )
         else:
-            sun_distance, sun_azimuth, sun_elevation = distance[index, 0], azimuth[index, 0], elevation[index, 0]
-            earth_distance, earth_azimuth, earth_elevation = distance[index, 1], azimuth[index, 1], elevation[index, 1]
+            sun_distance, sun_azimuth, sun_elevation = (
+                distance[index, 0],
+                azimuth[index, 0],
+                elevation[index, 0],
+            )
+            earth_distance, earth_azimuth, earth_elevation = (
+                distance[index, 1],
+                azimuth[index, 1],
+                elevation[index, 1],
+            )
         sun_up += availability(
-            "sun", sun_elevation, sun_azimuth, sun_distance, horizon, disk_threshold=SUN_DISK_THRESHOLD
+            "sun",
+            sun_elevation,
+            sun_azimuth,
+            sun_distance,
+            horizon,
+            disk_threshold=SUN_DISK_THRESHOLD,
         )[2]
         earth_up += availability(
-            "earth", earth_elevation, earth_azimuth, earth_distance, horizon,
-            disk_threshold=EARTH_DISK_THRESHOLD, margin_deg=EARTH_MARGIN_DEG,
+            "earth",
+            earth_elevation,
+            earth_azimuth,
+            earth_distance,
+            horizon,
+            disk_threshold=EARTH_DISK_THRESHOLD,
+            margin_deg=EARTH_MARGIN_DEG,
         )[2]
     # Integer half-up rounding keeps bytes deterministic and avoids banker's rounding.
     return ((sun_up * 100 + samples // 2) // samples, (earth_up * 100 + samples // 2) // samples)
+
+
+def _checkpoint_paths(destination: Path) -> tuple[Path, Path]:
+    return destination.with_suffix(".partial.npy"), destination.with_suffix(".partial.json")
+
+
+def _save_checkpoint(destination: Path, rows: list[np.ndarray], metadata: dict[str, Any]) -> None:
+    data_path, metadata_path = _checkpoint_paths(destination)
+    temporary_data = data_path.with_name(data_path.name + ".tmp")
+    temporary_metadata = metadata_path.with_name(metadata_path.name + ".tmp")
+    with temporary_data.open("wb") as stream:
+        np.save(
+            stream, np.stack(rows) if rows else np.empty((0, 2, metadata["days"]), dtype=np.uint8)
+        )
+    temporary_metadata.write_text(
+        json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    os.replace(temporary_data, data_path)
+    os.replace(temporary_metadata, metadata_path)
+
+
+def _load_checkpoint(
+    destination: Path, *, start_utc: str, days: int
+) -> tuple[list[np.ndarray], dict[str, Any]] | None:
+    data_path, metadata_path = _checkpoint_paths(destination)
+    if not data_path.is_file() or not metadata_path.is_file():
+        return None
+    try:
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        data = np.load(data_path, allow_pickle=False)
+        if (
+            metadata["start_utc"] != start_utc
+            or metadata["days"] != days
+            or data.shape != (len(metadata["sites"]), 2, days)
+        ):
+            return None
+        return [np.asarray(row, dtype=np.uint8) for row in data], metadata
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+        return None
+
+
+def _existing_rows(
+    destination: Path, *, start_utc: str, days: int
+) -> tuple[list[np.ndarray], dict[str, str]]:
+    try:
+        data, metadata = read_array(destination)
+        if (
+            metadata.get("start_utc") != start_utc
+            or metadata.get("days") != days
+            or data.ndim != 3
+            or data.shape[1:] != (2, days)
+        ):
+            return [], {}
+        sites = metadata.get("sites")
+        provenance = metadata.get("provenance")
+        if (
+            not isinstance(sites, list)
+            or not isinstance(provenance, dict)
+            or len(sites) != data.shape[0]
+        ):
+            return [], {}
+        return [np.asarray(row, dtype=np.uint8) for row in data], {
+            str(site): str(provenance[site]) for site in sites
+        }
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+        return [], {}
 
 
 def build_sparklines(
@@ -206,6 +317,7 @@ def build_sparklines(
     *,
     start_utc: str = DEFAULT_START_UTC,
     end_utc: str = DEFAULT_END_UTC,
+    max_sites: int | None = None,
 ) -> dict[str, Any]:
     """Write daily UTC-boundary catalog series for the requested half-open range.
 
@@ -220,7 +332,9 @@ def build_sparklines(
     source = yaml.safe_load(Path(sites_path or default_sites_path()).read_text(encoding="utf-8"))
     ephemeris_binary = Path(ephemeris_path or default_ephemeris_path())
     ephemeris = Ephemeris.from_file(ephemeris_binary)
-    ephemeris_metadata = json.loads(ephemeris_binary.with_suffix(".json").read_text(encoding="utf-8"))
+    ephemeris_metadata = json.loads(
+        ephemeris_binary.with_suffix(".json").read_text(encoding="utf-8")
+    )
     ephemeris_start = parse_utc(ephemeris_metadata["start_utc"])
     ephemeris_end = parse_utc(ephemeris_metadata["end_utc"])
     if start < ephemeris_start or end > ephemeris_end:
@@ -228,14 +342,21 @@ def build_sparklines(
 
     days = (end - start).days
     terrain = Path(terrain_root or default_terrain_root())
-    rows: list[np.ndarray] = []
-    site_ids: list[str] = []
-    provenance: dict[str, str] = {}
+    destination = Path(output_path or default_output_path())
+    checkpoint = _load_checkpoint(destination, start_utc=format_utc(start), days=days)
+    if checkpoint is None:
+        rows, provenance = _existing_rows(destination, start_utc=format_utc(start), days=days)
+        site_ids = list(provenance)
+    else:
+        rows, checkpoint_metadata = checkpoint
+        site_ids = list(checkpoint_metadata["sites"])
+        provenance = dict(checkpoint_metadata["provenance"])
     excluded_sites: dict[str, str] = {}
     sites = source.get("sites") if isinstance(source, dict) else None
     if not isinstance(sites, list):
         raise TypeError("sites source must contain a sites list")
     seen_ids: set[str] = set()
+    completed = 0
     for site in sites:
         if not isinstance(site, dict) or not isinstance(site.get("id"), str):
             raise TypeError("each site must have a string id")
@@ -247,8 +368,15 @@ def build_sparklines(
         if not -90.0 <= latitude_deg <= 90.0 or not -180.0 <= longitude_deg_east <= 360.0:
             raise ValueError(f"{site_id} has invalid computation coordinates")
         if site_id == "shackleton_ridge":
-            excluded_sites[site_id] = "not published: preliminary terrain and unresolved target coordinates"
+            excluded_sites[site_id] = (
+                "not published: preliminary terrain and unresolved target coordinates"
+            )
             continue
+        if site_id in site_ids:
+            continue
+        if max_sites is not None and completed >= max_sites:
+            break
+        site_started = time.monotonic()
         horizon = _mask_horizon(site, terrain, latitude_deg, longitude_deg_east)
         if horizon is None:
             horizon = Horizon(observer_height_m=OBSERVER_HEIGHT_M)
@@ -268,11 +396,35 @@ def build_sparklines(
             row[:, day] = (sunlit, link)
         site_ids.append(site_id)
         rows.append(row)
+        completed += 1
+        _save_checkpoint(
+            destination,
+            rows,
+            {
+                "sites": site_ids,
+                "provenance": provenance,
+                "start_utc": format_utc(start),
+                "days": days,
+            },
+        )
+        print(
+            f"[{site_id}] sparkline complete in {time.monotonic() - site_started:.1f}s ({len(site_ids)} rows)"
+        )
+
+    expected_ids = [str(site["id"]) for site in sites if site["id"] != "shackleton_ridge"]
+    if site_ids != expected_ids:
+        return {
+            "complete": False,
+            "sites": site_ids,
+            "remaining_sites": [site_id for site_id in expected_ids if site_id not in site_ids],
+        }
 
     data = np.stack(rows) if rows else np.empty((0, 2, days), dtype=np.uint8)
-    destination = Path(output_path or default_output_path())
+    staging = destination.parent / ".sparklines-stage"
+    staging.mkdir(parents=True, exist_ok=True)
+    staged_destination = staging / destination.name
     metadata = write_array(
-        destination,
+        staged_destination,
         data,
         fields=FIELDS,
         units="percent",
@@ -289,5 +441,11 @@ def build_sparklines(
             "excluded_sites": excluded_sites,
         }
     )
-    destination.with_suffix(".json").write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    staged_destination.with_suffix(".json").write_text(
+        json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    os.replace(staged_destination, destination)
+    os.replace(staged_destination.with_suffix(".json"), destination.with_suffix(".json"))
+    for path in _checkpoint_paths(destination):
+        path.unlink(missing_ok=True)
     return metadata

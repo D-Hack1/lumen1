@@ -13,21 +13,39 @@
   "offset": null,
   "producer": "lumen_pipeline.catalog.sparklines",
   "provenance": {
+    "apollo_11": "verified site-matched terrain mask",
+    "apollo_12": "verified site-matched terrain mask",
+    "apollo_14": "verified site-matched terrain mask",
+    "apollo_15": "verified site-matched terrain mask",
+    "apollo_16": "verified site-matched terrain mask",
+    "apollo_17": "verified site-matched terrain mask",
     "blue_ghost_m1": "smooth-sphere estimate; terrain unavailable",
+    "change6_apollo_basin": "verified site-matched terrain mask",
     "cy3_shiv_shakti": "smooth-sphere estimate; terrain unavailable",
-    "im2_athena": "smooth-sphere estimate; terrain unavailable"
+    "im2_athena": "smooth-sphere estimate; terrain unavailable",
+    "shackleton_rim_ridge": "verified site-matched terrain mask",
+    "slim_shioli": "verified site-matched terrain mask"
   },
   "scale": null,
-  "sha256": "6770730622b86021f34369dd5beb3584e8bb298578f7a309df9db75bfe5d5b81",
+  "sha256": "01564e60c87451691b35a31db048c607404f8d43cee977c301334962ecb18c20",
   "shape": [
-    3,
+    12,
     2,
     1096
   ],
   "sites": [
     "cy3_shiv_shakti",
     "im2_athena",
-    "blue_ghost_m1"
+    "blue_ghost_m1",
+    "apollo_11",
+    "apollo_12",
+    "apollo_14",
+    "apollo_15",
+    "apollo_16",
+    "apollo_17",
+    "slim_shioli",
+    "change6_apollo_basin",
+    "shackleton_rim_ridge"
   ],
   "start_utc": "2023-01-01T00:00:00Z",
   "units": "percent",

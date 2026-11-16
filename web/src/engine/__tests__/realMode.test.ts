@@ -76,8 +76,8 @@ describe.skipIf(!have)('real-mode loaders', () => {
     for (let i = 0; i < s.sigmaDeg.length; i++) expect(Number.isFinite(s.sigmaDeg[i])).toBe(Number.isFinite(m.elevDeg[i]));
   });
   it('sigma: a measured-raster site does not claim an assumed error', async () => { expect((await loadSigma('im2_athena')).assumedErrorM).toBeNull(); });
-  // 11 x 11 slope micro-grids (50 m spacing) are published for the Tier-A sites that have a pad crop.
-  it.each(['im2_athena', 'cy3_shiv_shakti', 'shackleton_rim_ridge'])('dispersion: %s is a valid 11 x 11 grid at 50 m with finite slopes', async (id) => {
+  // 11 x 11 slope micro-grids (50 m spacing) are published only where a verified near-field DEM exists.
+  it.each(['im2_athena', 'cy3_shiv_shakti', 'shackleton_rim_ridge', 'apollo_11', 'apollo_12', 'apollo_14', 'apollo_15', 'apollo_16', 'apollo_17', 'change6_apollo_basin'])('dispersion: %s is a valid 11 x 11 grid at 50 m with finite slopes', async (id) => {
     const d = await loadDispersion(id);
     expect(d.nodes).toEqual([11, 11]);
     expect(d.spacingM).toBe(50);

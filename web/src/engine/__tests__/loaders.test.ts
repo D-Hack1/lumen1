@@ -31,7 +31,7 @@ describe('real catalog (Gowri build_catalog output)', () => {
       }
       const im2 = c.sites.find((s) => s.id === 'im2_athena')!;
       expect(im2.touchdownUtc).toBe(Date.parse('2025-03-06T17:28:50Z'));
-      expect(Object.keys(c.sparklines).sort()).toEqual(['blue_ghost_m1', 'cy3_shiv_shakti', 'im2_athena']);
+      expect(Object.keys(c.sparklines).sort()).toEqual(['apollo_11', 'apollo_12', 'apollo_14', 'apollo_15', 'apollo_16', 'apollo_17', 'blue_ghost_m1', 'change6_apollo_basin', 'cy3_shiv_shakti', 'im2_athena', 'shackleton_rim_ridge', 'slim_shioli']);
       expect(c.sparklines.im2_athena!.sunlitPct).toHaveLength(1096);
       expect(c.sparklines.im2_athena!.linkPct).toHaveLength(1096);
       expect(new Date(c.sparklines.im2_athena!.startUtc).toISOString()).toBe('2023-01-01T00:00:00.000Z');
