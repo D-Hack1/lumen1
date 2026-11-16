@@ -1,6 +1,8 @@
 import json
+from copy import deepcopy
 
 import numpy as np
+import pytest
 
 from lumen_pipeline.ephem.ephemeris import hermite_position
 from lumen_pipeline.reference.events import Event, detect_events
@@ -12,6 +14,70 @@ from lumen_pipeline.validation.golden import (
     default_ephemeris_path,
     default_output_path,
 )
+
+
+def _assert_exact(expected, actual) -> None:
+    """Require an exact fixture match, including JSON value types and ordering."""
+    if isinstance(expected, dict):
+        assert expected.keys() == actual.keys()
+        for key in expected:
+            _assert_exact(expected[key], actual[key])
+    elif isinstance(expected, list):
+        assert len(expected) == len(actual)
+        for expected_item, actual_item in zip(expected, actual, strict=True):
+            _assert_exact(expected_item, actual_item)
+    else:
+        assert type(expected) is type(actual)
+        assert actual == expected
+
+
+def _assert_computed_float(expected, actual) -> None:
+    assert type(expected) is float
+    assert type(actual) is float
+    assert actual == pytest.approx(expected, rel=0.0, abs=1e-10)
+
+
+def _assert_golden_set1_equivalent(expected, actual) -> None:
+    """Allow repr noise only in computed geometry, metrics, and render values."""
+    assert expected.keys() == actual.keys()
+    for key in ("version", "set", "description", "metric_method", "tolerances", "provenance"):
+        _assert_exact(expected[key], actual[key])
+    assert len(expected["cases"]) == len(actual["cases"])
+    for expected_case, actual_case in zip(expected["cases"], actual["cases"], strict=True):
+        assert expected_case.keys() == actual_case.keys()
+        for key in ("id", "input", "events", "ops_events", "link_metric_source", "unavailable"):
+            _assert_exact(expected_case[key], actual_case[key])
+        assert expected_case["metrics"].keys() == actual_case["metrics"].keys()
+        for metric_id, expected_metric in expected_case["metrics"].items():
+            actual_metric = actual_case["metrics"][metric_id]
+            if expected_metric is None:
+                _assert_exact(expected_metric, actual_metric)
+                continue
+            assert expected_metric.keys() == actual_metric.keys()
+            for bound in ("lo", "value", "hi"):
+                if expected_metric[bound] is None:
+                    _assert_exact(expected_metric[bound], actual_metric[bound])
+                else:
+                    _assert_computed_float(expected_metric[bound], actual_metric[bound])
+        assert len(expected_case["windows"]) == len(actual_case["windows"])
+        for expected_window, actual_window in zip(expected_case["windows"], actual_case["windows"], strict=True):
+            assert expected_window.keys() == actual_window.keys()
+            for key in ("type", "start_utc", "end_utc", "flags"):
+                _assert_exact(expected_window[key], actual_window[key])
+            for key in ("duration_h", "peak_elevation_deg"):
+                _assert_computed_float(expected_window[key], actual_window[key])
+        assert len(expected_case["render_samples_hourly"]) == len(actual_case["render_samples_hourly"])
+        for expected_sample, actual_sample in zip(
+            expected_case["render_samples_hourly"], actual_case["render_samples_hourly"], strict=True
+        ):
+            assert expected_sample.keys() == actual_sample.keys()
+            _assert_exact(expected_sample["utc"], actual_sample["utc"])
+            for body in ("sun", "earth"):
+                assert expected_sample[body].keys() == actual_sample[body].keys()
+                _assert_exact(expected_sample[body]["up"], actual_sample[body]["up"])
+                for key, expected_value in expected_sample[body].items():
+                    if key != "up":
+                        _assert_computed_float(expected_value, actual_sample[body][key])
 
 
 def test_hermite_interpolation_recovers_constant_velocity_motion():
@@ -151,11 +217,32 @@ def test_golden_set_is_reproducible_and_declares_missing_dependencies(tmp_path):
 
     assert json.loads(first_path.read_text(encoding="utf-8")) == first
     assert first_path.read_bytes() == second_path.read_bytes()
-    assert first_path.read_bytes() == default_output_path().read_bytes()
+    _assert_golden_set1_equivalent(
+        json.loads(default_output_path().read_text(encoding="utf-8")), first
+    )
     case = first["cases"][0]
     assert case["input"]["terrain_mode"] == "smooth_sphere_pending_im2_mask"
     assert "dsn" in case["unavailable"]
     assert case["metrics"]["energyPerDayWh"]["value"] is None
+
+
+def test_golden_set1_comparator_rejects_scientific_and_structural_changes():
+    expected = json.loads(default_output_path().read_text(encoding="utf-8"))
+    for mutate in (
+        lambda payload: payload["cases"][0]["input"].update(latitude_deg=-84.79060000001),
+        lambda payload: payload["cases"][0]["events"][0].update(utc="2025-03-19T11:21:10Z"),
+        lambda payload: payload["cases"][0]["windows"].pop(),
+        lambda payload: payload["cases"][0]["windows"][0]["flags"].__setitem__(
+            "partial_start", not payload["cases"][0]["windows"][0]["flags"]["partial_start"]
+        ),
+        lambda payload: payload["cases"][0]["render_samples_hourly"][0]["sun"].update(
+            elevation_deg=999.0
+        ),
+    ):
+        actual = deepcopy(expected)
+        mutate(actual)
+        with pytest.raises(AssertionError):
+            _assert_golden_set1_equivalent(expected, actual)
 
 
 def test_golden_set_v2_has_refined_metrics_and_explicit_no_dsn_fallback():
