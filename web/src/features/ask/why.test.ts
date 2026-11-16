@@ -36,11 +36,11 @@ function series(sigma: number, ratePerH = 0.02): Series {
 const b = (value: number | null, lo: number | null = null, hi: number | null = null) => ({ value, lo, hi });
 
 function result(over: Partial<ScenarioResult> & { sigmaSource?: string; dtMs?: number | null; sigma?: number } = {}): ScenarioResult {
-  const { sigmaSource = 'terrain mask, σ pending', dtMs = null, sigma = 0, ...rest } = over;
+  const { sigmaSource = 'terrain mask, σ unavailable', dtMs = null, sigma = 0, ...rest } = over;
   return {
     status: 'ready',
     error: null,
-    meta: { siteId: 'test_site', tier: 'A', tierBadge: 'Terrain mask · σ pending', sigmaSource, snapDistanceKm: null, definitionsSummary: 'Sun ≥ 50% disk; link = Earth + DSN', dataVersions: {}, mock: false },
+    meta: { siteId: 'test_site', tier: 'A', tierBadge: 'Terrain mask · σ unavailable', sigmaSource, snapDistanceKm: null, definitionsSummary: 'Sun ≥ 50% disk; link = Earth + DSN', dataVersions: {}, mock: false },
     verdict: 'MARGINAL',
     verdictReasons: ['Sunlit 62% is below the 70% requirement'],
     verdictRequirements: [{ id: 'sunlit', status: 'marginal' }],
@@ -82,9 +82,9 @@ describe('today’s real-mode result: no σ, no ± → says WHY, invents nothing
   const w = explain('sunClearanceDeg', result());
   it('has no number after a ±', () => expect(text(w)).not.toMatch(/±\s*\d/));
   it('quotes the σ source and the tier badge', () => {
-    expect(text(w)).toContain('terrain mask, σ pending');
-    expect(text(w)).toContain('Terrain mask · σ pending');
-    expect(text(w)).toContain("isn't available for this site yet");
+    expect(text(w)).toContain('terrain mask, σ unavailable');
+    expect(text(w)).toContain('Terrain mask · σ unavailable');
+    expect(text(w)).toContain("isn't available for this site");
   });
   it('still reports the derived clearance rate, labelled as derived', () => expect(text(w)).toMatch(/0\.020 °\/h .*derived from the series/));
   it('metric ranges say there is none', () => expect(text(explain('sunlitPct', result()))).toContain('No ± range:'));
@@ -150,7 +150,7 @@ describe('not ready', () => {
 
 describe('reasonNoPm', () => {
   it('distinguishes pending-σ from a smooth-sphere estimate', () => {
-    expect(reasonNoPm(result({ sigmaSource: 'terrain mask, σ pending' }))).toContain("isn't available");
+    expect(reasonNoPm(result({ sigmaSource: 'terrain mask, σ unavailable' }))).toContain("isn't available");
     expect(reasonNoPm(result({ sigmaSource: 'smooth-sphere estimate; terrain unavailable' }))).toContain('smooth-sphere estimate because terrain data is unavailable');
   });
 });

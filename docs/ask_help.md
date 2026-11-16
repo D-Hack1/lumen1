@@ -11,7 +11,7 @@ changes results), `concept` (background), `status` (what is and isn't connected 
 Kind: status
 Source: live pages ("Design preview · sample values" labels)
 Tags: real, sample, fake, mock, placeholder, accurate, trust, preview, data
-It depends on the mode LUMEN is running in. With real data, the pages wait for the ephemeris, Deep Space Network series and terrain masks and show numbers from the real calculation engine; Stand here says where each view comes from ("Real engine · terrain mask", or "smooth Moon" when a site or array height has no terrain data). Without real data the pages show the design's sample values and say so ("Design preview · sample values"). Sites with a validated terrain mask (IM-2 and Chandrayaan-3) use a default horizon uncertainty of 0.1° (badge "Terrain mask · σ default"), so they show ± values and [low, high] ranges; this default is a planning value from the plan, not a measured or calibrated uncertainty. Other sites show "σ pending" or the smooth-Moon label and no ±. The engine itself is checked against reference data (see the validation report).
+It depends on the mode LUMEN is running in. With real data, the pages wait for the ephemeris, Deep Space Network series and terrain masks and show numbers from the real calculation engine; Stand here says where each view comes from ("Real engine · terrain mask", or "smooth Moon" when a site or array height has no terrain data). Without real data the pages show the design's sample values and say so ("Design preview · sample values"). Sites with a Monte-Carlo terrain uncertainty (preliminary; for the coarse-mask sites it assumes a constant 1 m elevation error) show ± values and [low, high] ranges. Any site without one shows "σ unavailable" or the smooth-Moon label and no ±. The engine itself is checked against reference data (see the validation report).
 
 ## What questions can LUMEN answer?
 Kind: concept
@@ -323,7 +323,7 @@ LUMEN has a set of validation gates (G0 to G11) with results in the validation r
 Kind: howto
 Source: live pages (Stand here, "Numbers for this window")
 Tags: numbers for this window, numbers, metrics, tiles, panel, results, verdict, summary, clearance, sunlit, link, longest night, comm gap, ops hours, psr
-Below the panorama, Stand here lists the engine's numbers for the chosen site and array height over 30 days from 8 Feb 2027: Sun clearance and disk, Earth elevation and margin, sunlit %, link %, the longest night, the longest communications gap, operating hours and the distance to the nearest permanently shadowed region. Above them are the verdict, the reasons for it, and a badge saying what the numbers rest on (for example "Terrain mask · σ pending").
+Below the panorama, Stand here lists the engine's numbers for the chosen site and array height over 30 days from 8 Feb 2027: Sun clearance and disk, Earth elevation and margin, sunlit %, link %, the longest night, the longest communications gap, operating hours and the distance to the nearest permanently shadowed region. Above them are the verdict, the reasons for it, and a badge saying what the numbers rest on (for example "Terrain mask · σ unavailable").
 
 ## What does the "Why?" button next to a number do?
 Kind: howto
@@ -331,11 +331,11 @@ Source: live pages (Stand here) and Ask LUMEN
 Tags: why button, why, explain this number, why this number, tile, button, what does why do, explain, understand a number
 It opens Ask LUMEN on an explanation of that exact number, for the same site and array height you are looking at: what the quantity means, its value, whether it has a ± (and if not, why not), the definitions it used, and the engine's own verdict reasons. You can also press / and ask, for example, "why is this ± so big?".
 
-## Why is there no ± on my numbers? (What does "σ pending" mean?)
+## Why is there no ± on my numbers? (What does "σ unavailable" mean?)
 Kind: concept
 Source: engine results (tier badge and σ source) and PLAN_FINAL §5.8
-Tags: sigma pending, σ pending, terrain mask, no plus minus, uncertainty missing, badge, tier badge, no range, where did the range go
-"Terrain mask · σ pending" means the site uses a real terrain skyline, but the terrain uncertainty (σ) for it is not available yet. Without σ, LUMEN cannot compute the ± on event times or the [low, high] ranges on percentages, so it shows the nominal values and says why there is no ±, instead of inventing one. "Terrain mask · σ default" means a default uncertainty of 0.1° (the plan's Tier-A value) is in use, so the ± and ranges appear; the default is a planning assumption, not a measurement, and is replaced when Monte-Carlo or calibrated σ is available. Right now IM-2 and Chandrayaan-3 have the default; other sites do not have σ yet.
+Tags: sigma pending, sigma unavailable, σ unavailable, σ pending, terrain mask, no plus minus, uncertainty missing, badge, tier badge, no range, where did the range go
+"Terrain mask · σ unavailable" means the site uses a real terrain skyline, but no terrain uncertainty (σ) was computed for it, and LUMEN does not make one up. Without σ, LUMEN cannot compute the ± on event times or the [low, high] ranges on percentages, so it shows the nominal values and says why there is no ±. Two kinds of σ exist, both preliminary Monte-Carlo (30 clones). Sites on NASA's polar elevation models use the published error raster as a one-σ magnitude (unverified assumption). The other sites use NASA's global 237 m model, which has no published error raster, so their σ assumes a constant 1 m one-σ elevation error (LOLA's commonly quoted vertical accuracy); the badge says "assumed 1 m DEM error". That σ is an assumption, not a measurement.
 
 ## What does "smooth Moon" mean on a site?
 Kind: concept

@@ -42,14 +42,13 @@ test.describe('the site list tags (real data)', () => {
   test('tags come from the engine and say why a site cannot be judged', async ({ page }) => {
     await page.goto('/#orbit');
     const tag = (name: RegExp) => page.locator('.lm-site').filter({ hasText: name }).locator('.lm-tag');
-    // sites outside the polar products now have a coarse mask from NASA's global elevation model, but no σ yet
-    for (const n of [/Apollo 11/, /Apollo 17/, /SLIM/, /Chang'e-6/, /Blue Ghost/]) {
-      await expect(tag(n)).toHaveText('σ pending', { timeout: 60_000 });
-    }
-    // sites with terrain AND σ are judged for real: never "Unconfirmed" any more
-    for (const n of [/IM-2/, /Chandrayaan-3/, /Shackleton conne/, /Rim|Shackleton-de Gerlache/]) {
+    // sites with terrain AND σ (measured-raster or assumed-error Monte-Carlo) are judged for real: never "Unconfirmed" any more
+    for (const n of [/IM-2/, /Chandrayaan-3/, /Shackleton conne/, /Rim|Shackleton-de Gerlache/, /Apollo 11/, /Apollo 12/, /Apollo 14/, /Apollo 15/, /Apollo 16/, /Apollo 17/, /SLIM/, /Chang'e-6/]) {
       await expect(tag(n)).not.toHaveText(/Unconfirmed|Checking/, { timeout: 60_000 });
     }
+    // Blue Ghost has terrain AND σ, but no pad-slope data (Tier C), so the verdict stays "Unconfirmed" for THAT reason, not σ
+    await expect(tag(/Blue Ghost/)).not.toHaveText(/σ unavailable|Checking/, { timeout: 60_000 });
+    await expect(tag(/Blue Ghost/)).toHaveAttribute('title', /Pad slope: no data yet/);
     console.log('TAGS', JSON.stringify(await page.locator('.lm-site').evaluateAll((els) => els.map((e) => (e.querySelector('.lm-site__name')?.textContent ?? '') + ' = ' + (e.querySelector('.lm-tag')?.textContent ?? '')))));
   });
 });

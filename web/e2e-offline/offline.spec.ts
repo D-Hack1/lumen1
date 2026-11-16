@@ -1,6 +1,6 @@
 // Owner: Nived
 // N-12 done-criterion: "airplane-mode test passes". Production build, real data.
-// Oracle for the numbers shown offline: Gowri's golden set 1 (IM-2 at touchdown: Sun +2.46 deg, Earth +11.19 deg).
+// Oracle for the numbers shown offline: the same page's numbers computed online moments before (the live pages, not the unmounted cockpit).
 import { expect, test, type Page } from '@playwright/test';
 
 /** Wait until the service worker is active AND the precache holds the real data files. */
@@ -38,30 +38,33 @@ test('the app, real data and the engine all work with no network at all', async 
     if (new URL(r.url()).origin === new URL(page.url()).origin) failed.push(r.url());
   });
 
-  // 1. First load, online: real data arrives and the service worker installs.
-  await page.goto('/');
-  await expect(page.locator('[data-slot="answer"] .answer-strip[data-sun-state]')).toBeVisible({ timeout: 30_000 });
+  // 1. First load, online, on the live Stand here page: real data arrives, the engine answers and the service worker installs.
+  const nums = page.locator('.lm-nums__value');
+  await page.goto('/#stand-here');
+  await expect(page.locator('[data-testid="stand-here-details"] tbody tr').first()).toBeVisible({ timeout: 60_000 });
+  await expect(nums.first()).toBeVisible({ timeout: 60_000 });
+  const onlineNumbers = await nums.allInnerTexts();
   await waitForPrecache(page);
 
-  // 2. Airplane mode, then a hard reload: everything must come from the cache.
+  // 2. Airplane mode, then a hard reload: everything must come from the cache, and the worker must compute the SAME numbers.
   recordOnline = false;
   expect(okOnline.size).toBeGreaterThan(5); // we really did observe the online load
   await context.setOffline(true);
   failed.length = 0;
   await page.reload();
-  const answer = page.locator('[data-slot="answer"]');
-  await expect(answer.locator('.answer-strip[data-sun-state]')).toBeVisible({ timeout: 30_000 });
-  await expect(answer).toContainText('+2.46°'); // real Sun elevation at IM-2 touchdown (golden), computed offline by the worker
-  await expect(page.locator('[data-slot="metricDeck"]')).toContainText('+2.46°');
+  await expect(page.locator('[data-testid="stand-here-details"] tbody tr').first()).toBeVisible({ timeout: 60_000 });
+  await expect(nums.first()).toBeVisible({ timeout: 60_000 });
+  await expect.poll(() => nums.allInnerTexts(), { timeout: 30_000 }).toEqual(onlineNumbers);
 
   // 3. The raw data files are served from the cache too (no network behind them).
   const status = await page.evaluate(async () => (await fetch('/data/ephem/ephem.bin')).status);
   expect(status).toBe(200);
 
-  // 4. A feature that needs the worker + ephemeris + catalog: the Scan on the Compare view.
-  await page.getByRole('tab', { name: 'Compare' }).click();
-  await expect(page.locator('[data-slot="scan"]')).toContainText('Stage 2', { timeout: 30_000 });
-  await expect(page.locator('[data-slot="scan"] tbody tr').first()).toBeVisible();
+  // 4. A feature that needs the worker + ephemeris + catalog + masks for every site: the Orbit page's verdict tags.
+  await page.goto('/#orbit');
+  const tags = page.locator('.lm-site .lm-tag');
+  await expect(tags.first()).toBeVisible({ timeout: 60_000 });
+  await expect.poll(async () => (await tags.allInnerTexts()).filter((t) => /Checking/.test(t)).length, { timeout: 60_000 }).toBe(0);
 
   // 5. Everything that worked online still worked offline.
   const broke = failed.filter((u) => okOnline.has(u));

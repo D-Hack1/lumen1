@@ -29,8 +29,8 @@ test.describe('Why? on Stand here explains the numbers on screen', () => {
     await expect(card).toContainText('Sun clearance', { timeout: 30_000 });
     await expect(card).toContainText(shown);
     const text = await card.innerText();
-    if (/σ pending/.test(text)) {
-      expect(text).not.toMatch(/±\s*\d/); // σ pending: no ± number anywhere, and the clearance rate is derived from the series
+    if (/σ unavailable/.test(text)) {
+      expect(text).not.toMatch(/±\s*\d/); // σ unavailable: no ± number anywhere, and the clearance rate is derived from the series
       expect(text).toMatch(/derived from the series/);
     } else {
       // σ is available (Monte-Carlo σ for IM-2): the ± comes from the result and the card names its source — never hard-coded.

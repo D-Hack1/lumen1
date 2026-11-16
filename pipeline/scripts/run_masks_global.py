@@ -26,10 +26,15 @@ from rasterio.warp import Resampling, reproject
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from lumen_pipeline.terrain.crops import CropSpec, TerrainCrop, TerrainCrops  # noqa: E402
-from lumen_pipeline.terrain.dem_io import DemWindow  # noqa: E402
-from lumen_pipeline.terrain.masks import NearFieldUnavailable, _site, _site_coordinates, generate_tier_a_mask  # noqa: E402
-from lumen_pipeline.terrain.summaries import write_terrain_summary  # noqa: E402
+from lumen_pipeline.terrain.crops import CropSpec, TerrainCrop, TerrainCrops
+from lumen_pipeline.terrain.dem_io import DemWindow
+from lumen_pipeline.terrain.masks import (
+    NearFieldUnavailable,
+    _site,
+    _site_coordinates,
+    generate_tier_a_mask,
+)
+from lumen_pipeline.terrain.summaries import write_terrain_summary
 
 LBL_URL = "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_128.lbl"
 SOURCE_KEY = "lola_gdr_ldem_128_pds"

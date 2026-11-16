@@ -22,8 +22,8 @@ import yaml
 from pyproj import Transformer
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from lumen_pipeline.terrain.dem_io import LUNAR_SPHERICAL_CRS  # noqa: E402
-from lumen_pipeline.terrain.masks import _site, _site_coordinates  # noqa: E402
+from lumen_pipeline.terrain.dem_io import LUNAR_SPHERICAL_CRS
+from lumen_pipeline.terrain.masks import _site, _site_coordinates
 
 ROOT = Path(__file__).resolve().parents[2]
 TOLERANCE_DEG = 3.0
@@ -73,7 +73,7 @@ def main() -> None:
         print(site_id, f"pad {pad['slope_deg']:.2f}  pgda {ref['centre_deg']:.2f} (3x3 mean {ref['mean_3x3_deg']:.2f})  diff {diff:.2f}")
     report = {
         "gate": "G6", "description": "Pad slope versus PGDA slope rasters", "criterion_deg": TOLERANCE_DEG,
-        "recorded_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "recorded_utc": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip(),
         "command": "python pipeline/scripts/run_g6.py", "sites": rows,
         "method": "PGDA slope raster read over HTTP at the site; centre pixel compared with the published pad slope. The baselines differ (70 m plane fit vs 20 m / 60 m pixel slope).",

@@ -1,0 +1,65 @@
+{
+  "assumed_error_m": 1.0,
+  "bin_width_deg": 0.1,
+  "binary": {
+    "array_order": "c_contiguous_height_major",
+    "byte_order": "little",
+    "float_encoding": "ieee754-binary32",
+    "format_version": 1,
+    "layout": "header_then_sigma",
+    "magic": "LUMENSGM"
+  },
+  "clone_count": 30,
+  "convergence_20_vs_30": {
+    "correlation_length_m": 50.0,
+    "max_abs_diff_deg": 0.013429170474410057,
+    "max_sigma_30_deg": 0.04741029813885689,
+    "mean_abs_diff_deg": 0.0006078427541069686,
+    "mean_sigma_30_deg": 0.006277714390307665
+  },
+  "created_utc": "2026-11-16T08:09:49.901790Z",
+  "dem_source": {
+    "resolution_m": 236.901,
+    "source_key": "lola_gdr_ldem_128_pds",
+    "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_128.lbl"
+  },
+  "error_model": "assumed_uniform",
+  "error_model_basis": "No per-pixel error raster is published for LDEM_128 (PDS LOLA GDR cylindrical/img + float_img contain only .img/.lbl/.xml; PGDA products 78 and 90 cover only 60S-pole). The DEM was therefore perturbed by a CONSTANT 1-sigma elevation error of 1 m, taken from LOLA's commonly quoted ~1 m absolute vertical accuracy (cited as Mazarico et al. 2013 in secondary text; the primary paper and LDEM_128's own accuracy were NOT read). The error is assumed Gaussian, 1-sigma, and uniform over the window.",
+  "git_commit": "5fe9cb05a397eefb214d6c8190ae6865d00c83de",
+  "height_order_m": [
+    1.0,
+    2.0,
+    5.0,
+    10.0
+  ],
+  "notes": "PRELIMINARY ASSUMED-ERROR Monte-Carlo: constant 1 m 1-sigma DEM error (no error raster exists for LDEM_128); not a measured uncertainty.",
+  "orchestration_script": "pipeline/scripts/run_mc_sigma_coarse.py",
+  "perturbation_model": {
+    "base_seed": 20260515,
+    "construction": "white noise smoothed by a Gaussian kernel, renormalized to unit variance, scaled by the constant assumed error",
+    "kind": "spatially_correlated_gaussian_field",
+    "note": "The correlation length (50 m) is below the 237 m pixel size, so the field is effectively uncorrelated between pixels.",
+    "selected_length_is_physically_calibrated": false,
+    "selected_length_m": 50.0
+  },
+  "preliminary": true,
+  "producer": "lumen_pipeline.terrain.mc_sigma",
+  "production_ready": false,
+  "ray_range_km": 250.0,
+  "shape": [
+    4,
+    3600
+  ],
+  "site_id": "change6_apollo_basin",
+  "source": "monte_carlo",
+  "status": "PRELIMINARY -- ASSUMED-ERROR sigma, not a measured uncertainty; see error_model",
+  "unit": "deg",
+  "validation_status": {
+    "ddof": 1,
+    "nan_pattern_matches_nominal_mask": true,
+    "nominal_reproduces_published_mask_max_abs_diff_deg": 7.450580596923828e-09,
+    "note": "Re-running the production mask generator on the current DEM window reproduces this nominal exactly, but not the published mask bit for bit (difference above). Sigma is a spread, so this small nominal offset is not expected to matter; the published mask was not regenerated."
+  },
+  "version": "1.0.0",
+  "vertical_datum_caveat": "The vertical datum of LDEM_128 relative to the 1,737,400 m sphere follows its PDS label (OFFSET=1737400); sigma is a spread statistic and is unaffected by a constant offset."
+}

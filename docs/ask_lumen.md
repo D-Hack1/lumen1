@@ -28,7 +28,7 @@ is calculated), **decision** (why a choice was made), **concept** (background), 
 
 ## Rules that keep it honest
 - A **±** is only stated when the result has one (`dtMs != null`, `lo/hi != null`). Otherwise the line says why there is
-  none, quoting `meta.sigmaSource` and `meta.tierBadge` (today: "Terrain mask · σ pending").
+  none, quoting `meta.sigmaSource` and `meta.tierBadge` (today: "Terrain mask · σ unavailable").
 - The clearance rate is **derived** from `series.sunClearanceDeg` per `stepMs`; σ is read from `series.sigmaBandDeg`.
   Nothing is hard-coded, and no site's real numbers appear in the knowledge file or the tests.
 - Verdict reasons, definitions and glossary text are **quoted**, not paraphrased.
@@ -49,7 +49,7 @@ there is no page result; it falls back to the app's store result and says that i
    (`knowledgeFresh.test.ts` fails if you forget.)
 3. When someone reports a question that failed, add it to `questions.test.ts` (`MUST_FIND`, or `MUST_BE_FIRST`), then fix
    the content or tags — not the test.
-4. Update the **status** entries ("Are the numbers on the pages real?", "σ pending") when the data situation changes.
+4. Update the **status** entries ("Are the numbers on the pages real?", "σ unavailable") when the data situation changes.
    The how-to entries describe the live pages; update them when the interface changes.
 
 ## Wiring (all done)
@@ -71,5 +71,5 @@ questions it must NOT answer, knowledge freshness) · `web/e2e/ask.spec.ts` (liv
 - It only knows what is written down; anything else gets "I don't have an answer" plus examples. It is not a language model.
 - The box's own wording is Planner wording (the live pages have no persona switch).
 - No Methodology route yet, so sources are shown as text, not links.
-- σ is the Tier-A DEFAULT (0.1°, "σ default") for IM-2 and CY-3 only, so ± values appear for them; other sites still say "σ pending".
+- σ is preliminary Monte-Carlo (30 clones). Fine-terrain sites use the published error raster; coarse-mask sites assume a constant 1 m DEM error (badge says so). A site without σ says "σ unavailable".
   It is a planning value, not Monte-Carlo or calibrated. When real σ replaces it, the ± sentences fill in without changes here.

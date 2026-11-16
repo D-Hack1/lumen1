@@ -245,13 +245,13 @@ export function buildScenarioResult(
         bw && sigma
           ? `Terrain mask · σ ${sigmaSourceLabel(sigma)}`
           : terrainHorizon
-            ? `${coarse ? `Coarse terrain mask (${Math.round(mask!.meta.nearFieldResolutionM)} m)` : 'Terrain mask'} · σ pending`
+            ? `${coarse ? `Coarse terrain mask (${Math.round(mask!.meta.nearFieldResolutionM)} m)` : 'Terrain mask'} · σ unavailable`
             : 'Smooth-Moon horizon · terrain pending',
       sigmaSource:
         bw && sigma
           ? sigmaSourceLabel(sigma)
           : terrainHorizon
-            ? `${coarse ? 'coarse terrain mask' : 'terrain mask'}, σ pending`
+            ? `${coarse ? 'coarse terrain mask' : 'terrain mask'}, σ unavailable`
             : 'smooth-sphere estimate; terrain unavailable',
       snapDistanceKm: null,
       definitionsSummary: `Sun available = ≥${Math.round(d.sunDiskThreshold * 100)}% disk above the horizon${d.minSunElevationOpsDeg > 0 ? ` and ≥${d.minSunElevationOpsDeg}° elevation` : ''} @${req.heightM} m · Link = Earth ≥${d.earthMarginDeg}° above the horizon${ev.dsnApplied ? ` + DSN ≥${d.dsnMaskDeg}°` : ' (DSN not applied)'}`,

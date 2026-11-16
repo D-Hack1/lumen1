@@ -24,11 +24,11 @@ import yaml
 from pyproj import Transformer
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from lumen_pipeline.catalog import sparklines as S  # noqa: E402
-from lumen_pipeline.common.timeutil import parse_utc  # noqa: E402
-from lumen_pipeline.reference.interp import Ephemeris  # noqa: E402
-from lumen_pipeline.reference.visibility import FiniteSegmentTree, Horizon, availability  # noqa: E402
-from lumen_pipeline.terrain.dem_io import LUNAR_SPHERICAL_CRS  # noqa: E402
+from lumen_pipeline.catalog import sparklines as S
+from lumen_pipeline.common.timeutil import parse_utc
+from lumen_pipeline.reference.interp import Ephemeris
+from lumen_pipeline.reference.visibility import FiniteSegmentTree, Horizon
+from lumen_pipeline.terrain.dem_io import LUNAR_SPHERICAL_CRS
 
 ROOT = Path(__file__).resolve().parents[2]
 TOLERANCE_PCT_POINTS = 5.0
@@ -118,7 +118,7 @@ def main() -> None:
         print(site_id, f"LUMEN {lumen:.1f}%  (any-part {rows[-1]['lumen_any_part_of_disk_pct']:.1f}%, yearly spread {rows[-1]['lumen_yearly_spread_pct_points']:.1f})  PGDA {pgda['centre_pct']:.1f}% (3x3 {pgda['mean_3x3_pct']:.1f}, {pgda['min_3x3_pct']:.1f}-{pgda['max_3x3_pct']:.1f})")
     report = {
         "gate": "G5", "description": "Multi-year averages versus independent PGDA map pixels", "criterion_pct_points": TOLERANCE_PCT_POINTS,
-        "recorded_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "recorded_utc": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip(),
         "command": "python pipeline/scripts/run_g5.py", "sites": rows,
         "method": "LUMEN: Python reference engine over 2023-01-01..2030-12-29, every UTC day, 2-minute samples, 2 m terrain mask, Sun available at >=50% disk. PGDA: average-illumination raster read at the site "

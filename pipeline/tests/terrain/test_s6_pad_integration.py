@@ -92,7 +92,7 @@ class _Reader:
 
 def test_run_site_publishes_pad_statistics_for_im2_without_inventing_dispersion(tmp_path, monkeypatch):
     # With no configured defaults the dispersion statistics must stay explicitly unavailable.
-    monkeypatch.setattr(run_pad, "_pad_defaults", lambda: {})
+    monkeypatch.setattr(run_pad, "_pad_defaults", dict)
     products = {
         "site_specific_5m_lola_pgda_78": _product("site_specific_5m_lola_pgda_78", 5.0, "80S-90S"),
     }

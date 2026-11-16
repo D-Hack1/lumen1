@@ -29,9 +29,9 @@ describe('polar pin', () => {
 });
 
 describe('site list tags come from the engine verdict and say why a site is not judged', () => {
-  it('no terrain -> "No terrain data"; mask without σ -> "σ pending"; plain pending stays "Unconfirmed"', () => {
+  it('no terrain -> "No terrain data"; mask without σ -> "σ unavailable"; plain pending stays "Unconfirmed"', () => {
     expect(tagFromResult(result('PENDING', 'Smooth-Moon horizon · terrain pending')).label).toBe('No terrain data');
-    expect(tagFromResult(result('PENDING', 'Terrain mask · σ pending')).label).toBe('σ pending');
+    expect(tagFromResult(result('PENDING', 'Terrain mask · σ unavailable')).label).toBe('σ unavailable');
     expect(tagFromResult(result('PENDING', 'Terrain mask · σ Monte-Carlo, 30 clones')).label).toBe('Unconfirmed');
   });
   it('a real verdict keeps its own label, tone and first reason', () => {

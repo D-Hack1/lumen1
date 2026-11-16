@@ -202,7 +202,7 @@ export function tagFromResult(r: ScenarioResult): SiteTag {
   let label = TAG[verdict].label;
   if (verdict === 'PENDING') {
     if (badge.startsWith('Smooth-Moon')) label = 'No terrain data';
-    else if (badge.includes('σ pending')) label = 'σ pending';
+    else if (badge.includes('σ unavailable')) label = 'σ unavailable';
   }
   return {
     verdict,

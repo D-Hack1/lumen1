@@ -21,7 +21,7 @@ const req = (over: Partial<ScenarioRequest> = {}): ScenarioRequest => ({
 });
 /** SYNTHETIC: a constant sigma (deg) on every bin of every height, shaped like the contract's (4, 3600) array. Not production data. */
 const syntheticSigma = (siteId: string, deg: number, over: Partial<Sigma> = {}): Sigma => ({
-  siteId, source: 'default', cloneCount: null, sigmaDeg: new Float32Array(4 * 3600).fill(deg), notes: null, mock: false, ...over,
+  siteId, source: 'default', cloneCount: null, sigmaDeg: new Float32Array(4 * 3600).fill(deg), notes: null, assumedErrorM: null, mock: false, ...over,
 });
 
 describe('sigma wiring (synthetic sigma)', () => {
@@ -39,7 +39,7 @@ describe('sigma wiring (synthetic sigma)', () => {
     const r = buildScenarioResult(eph, req(), null, mask, null);
     expect(r.metrics!.sunlitPct.lo).toBeNull();
     expect(r.events.every((e) => e.dtMs === null)).toBe(true);
-    expect(r.meta!.tierBadge).toBe('Terrain mask · σ pending');
+    expect(r.meta!.tierBadge).toBe('Terrain mask · σ unavailable');
     expect(r.verdict).toBe('PENDING');
   });
 
@@ -108,7 +108,7 @@ describe('sigma wiring (synthetic sigma)', () => {
     // and an unusable sigma leaves the result exactly as "sigma pending"
     const r = buildScenarioResult(eph, req(), null, mask, neg);
     expect(r.metrics!.sunlitPct.lo).toBeNull();
-    expect(r.meta!.tierBadge).toBe('Terrain mask · σ pending');
+    expect(r.meta!.tierBadge).toBe('Terrain mask · σ unavailable');
   });
 
   it('sigmaAtAzimuth interpolates between bin centres and wraps through north', () => {

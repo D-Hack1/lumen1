@@ -9,10 +9,13 @@ import { loadMask } from '../data/masks';
 import { loadLayers } from '../data/layers';
 import { loadPad } from '../data/pad';
 import { loadPsr } from '../data/psr';
-import { loadSigma } from '../data/sigma';
+import { loadSigma, sigmaSourceLabel } from '../data/sigma';
 import { loadDispersion } from '../data/dispersion';
 import { setDataMode } from '../data/source';
 import { PUBLIC, stubFetch } from './helpers';
+
+/** Coarse-mask sites that have an assumed-error Monte-Carlo sigma published. Add a site here only after its sigma file exists. */
+const COARSE_WITH_SIGMA = ['apollo_11', 'apollo_12', 'apollo_14', 'apollo_15', 'apollo_16', 'apollo_17', 'slim_shioli', 'change6_apollo_basin', 'blue_ghost_m1'] as const;
 
 const have = existsSync(join(PUBLIC, 'data/catalog/sites.json'));
 beforeAll(() => { stubFetch(); setDataMode('real'); });
@@ -47,7 +50,17 @@ describe.skipIf(!have)('real-mode loaders', () => {
     expect(s.sigmaDeg.length).toBe(m.elevDeg.length);
     for (let i = 0; i < s.sigmaDeg.length; i++) expect(Number.isFinite(s.sigmaDeg[i])).toBe(Number.isFinite(m.elevDeg[i])); // contract 10.6: same finite/NaN pattern
   });
-  it('sigma: a site with no sigma artifact (Blue Ghost, Tier C) is a 404, so no ± is invented for it', async () => { await expect(loadSigma('blue_ghost_m1')).rejects.toThrow(/404/); });
+  // Coarse-mask sites: sigma is Monte-Carlo with an ASSUMED constant 1 m DEM error (no error raster exists for LDEM_128); it must say so.
+  it.each(COARSE_WITH_SIGMA)('sigma: %s is Monte-Carlo (30 clones) with a declared ASSUMED DEM error, and matches its mask', async (id) => {
+    const [s, m] = await Promise.all([loadSigma(id), loadMask(id)]);
+    expect(s.source).toBe('monte_carlo');
+    expect(s.cloneCount).toBe(30);
+    expect(s.mock).toBe(false);
+    expect(s.assumedErrorM).toBe(1);
+    expect(sigmaSourceLabel(s)).toContain('assumed 1 m DEM error');
+    for (let i = 0; i < s.sigmaDeg.length; i++) expect(Number.isFinite(s.sigmaDeg[i])).toBe(Number.isFinite(m.elevDeg[i]));
+  });
+  it('sigma: a measured-raster site does not claim an assumed error', async () => { expect((await loadSigma('im2_athena')).assumedErrorM).toBeNull(); });
   // 11 x 11 slope micro-grids (50 m spacing) are published for the Tier-A sites that have a pad crop.
   it.each(['im2_athena', 'cy3_shiv_shakti', 'shackleton_rim_ridge'])('dispersion: %s is a valid 11 x 11 grid at 50 m with finite slopes', async (id) => {
     const d = await loadDispersion(id);
@@ -69,6 +82,7 @@ describe.skipIf(!have)('coarse masks from the global elevation model', () => {
     let finite = 0;
     for (let i = 0; i < m.elevDeg.length; i++) if (Number.isFinite(m.elevDeg[i])) finite++;
     expect(finite / m.elevDeg.length).toBeGreaterThan(0.99);
-    expect(await loadSigma(id).then(() => 'has σ', () => 'no σ')).toBe('no σ'); // no σ is invented for them
+    const expected = (COARSE_WITH_SIGMA as readonly string[]).includes(id) ? 'has σ' : 'no σ'; // no σ is invented where none was computed
+    expect(await loadSigma(id).then(() => 'has σ', () => 'no σ')).toBe(expected);
   });
 });

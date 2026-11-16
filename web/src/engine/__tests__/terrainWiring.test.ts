@@ -44,8 +44,8 @@ describe('terrain mask wiring (real Shackleton mask)', () => {
     expect(r.events.filter((e) => e.type === 'sunset' || e.type === 'shadowExit')).toEqual([]);
     expect(r.answer!.sun.up).toBe(false);
     expect(r.answer!.sun.nextEventT).toBeNull();
-    expect(r.meta!.tierBadge).toBe('Terrain mask · σ pending');
-    expect(r.meta!.sigmaSource).toBe('terrain mask, σ pending');
+    expect(r.meta!.tierBadge).toBe('Terrain mask · σ unavailable');
+    expect(r.meta!.sigmaSource).toBe('terrain mask, σ unavailable');
     expect(r.verdict).not.toBe('GO');
     expect(r.verdictReasons.join(' ')).not.toMatch(/smooth-Moon/);
   });
@@ -91,7 +91,7 @@ describe('terrain mask wiring (real Shackleton mask)', () => {
     const smooth = buildScenarioResult(eph, im2);
     const terrain = buildScenarioResult(eph, im2, null, imMask);
     expect(Math.abs(terrain.metrics!.sunlitPct.value! - smooth.metrics!.sunlitPct.value!)).toBeGreaterThan(0.001);
-    expect(terrain.meta!.tierBadge).toBe('Terrain mask · σ pending');
+    expect(terrain.meta!.tierBadge).toBe('Terrain mask · σ unavailable');
     expect(terrain.meta!.tierBadge).not.toBe(smooth.meta!.tierBadge);
     expect(terrain.metrics!.sunlitPct.lo).toBeNull(); // still no sigma, so no +/-
   });

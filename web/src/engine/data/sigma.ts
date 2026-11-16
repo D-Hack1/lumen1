@@ -13,6 +13,8 @@ export interface Sigma {
   /** (4, 3600) height-major, degrees, >= 0; NaN where the mask is unavailable. */
   sigmaDeg: Float32Array;
   notes: string | null;
+  /** Set when the DEM error was an ASSUMED constant 1-sigma (metres), not a published error raster. Null for measured-raster sigma. */
+  assumedErrorM: number | null;
   /** Synthetic/mock artifact: never used for real results (same rule as masks). */
   mock: boolean;
 }
@@ -25,6 +27,8 @@ interface RawSigma {
   unit: string;
   notes?: string;
   mock?: boolean;
+  error_model?: string;
+  assumed_error_m?: number;
   shape: number[];
   height_order_m: number[];
   binary: { magic: string; format_version: number; byte_order: string; array_order: string };
@@ -54,7 +58,8 @@ export function parseSigma(id: string, bin: ArrayBuffer, j: RawSigma): Sigma {
   for (let i = 0; i < sigmaDeg.length; i++) {
     if (!Number.isNaN(sigmaDeg[i]) && sigmaDeg[i] < 0) bad(id, `negative sigma at index ${i}`);
   }
-  return { siteId: id, source: j.source, cloneCount: j.clone_count ?? null, sigmaDeg, notes: j.notes ?? null, mock: j.mock === true };
+  const assumedErrorM = j.error_model === 'assumed_uniform' && typeof j.assumed_error_m === 'number' && j.assumed_error_m > 0 ? j.assumed_error_m : null;
+  return { siteId: id, source: j.source, cloneCount: j.clone_count ?? null, sigmaDeg, notes: j.notes ?? null, assumedErrorM, mock: j.mock === true };
 }
 
 /** Gate 6: finite sigma wherever the mask is valid, NaN wherever it is not. */
@@ -86,8 +91,10 @@ export function loadSigma(siteId: string): Promise<Sigma> {
 }
 
 /** How the result labels its sigma (ResultMeta.sigmaSource), from the artifact's declared source (data_masks.md §8). */
-export function sigmaSourceLabel(s: Pick<Sigma, 'source' | 'cloneCount' | 'notes'>): string {
-  if (s.source === 'monte_carlo') return `Monte-Carlo, ${s.cloneCount} clones`;
+export function sigmaSourceLabel(s: Pick<Sigma, 'source' | 'cloneCount' | 'notes'> & { assumedErrorM?: number | null }): string {
+  if (s.source === 'monte_carlo') {
+    return s.assumedErrorM ? `Monte-Carlo, ${s.cloneCount} clones, assumed ${s.assumedErrorM} m DEM error` : `Monte-Carlo, ${s.cloneCount} clones`;
+  }
   if (s.source === 'calibrated') return `calibrated: ${s.notes}`;
   return 'default';
 }

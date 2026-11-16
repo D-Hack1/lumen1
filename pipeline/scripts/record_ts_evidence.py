@@ -59,7 +59,7 @@ def _vitest(files: list[str], env: dict[str, str]) -> dict:
 
 def _common() -> dict:
     return {
-        "recorded_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "recorded_utc": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "git_commit": _git("rev-parse", "HEAD"),
         "working_tree_dirty": bool(_git("status", "--porcelain", "--", "web/src", "web/public/data", "pipeline/lumen_pipeline")),
         "node": subprocess.run(["node", "--version"], capture_output=True, text=True).stdout.strip(),

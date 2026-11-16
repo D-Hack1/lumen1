@@ -92,7 +92,7 @@ export function reasonNoPm(r: ScenarioResult): string {
   const src = r.meta?.sigmaSource?.trim();
   if (!r.meta) return 'no result is loaded yet';
   const tier = r.meta.tierBadge ? ` (${r.meta.tierBadge})` : '';
-  if (src && /pending/i.test(src)) return `terrain uncertainty (σ) isn't available for this site yet — σ source: “${src}”${tier}`;
+  if (src && /pending|σ unavailable/i.test(src)) return `terrain uncertainty (σ) isn't available for this site — σ source: “${src}”${tier}`;
   if (src && /smooth/i.test(src)) return `this site uses a smooth-sphere estimate because terrain data is unavailable — σ source: “${src}”${tier}`;
   if (src) return `no bounds were computed for it — σ source: “${src}”${tier}`;
   return `no bounds were computed for it${tier}`;

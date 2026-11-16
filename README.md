@@ -14,7 +14,7 @@ It runs entirely in the browser (an offline-capable PWA, no server), and it says
 | | |
 |---|---|
 | ![Orbit page: the Moon with Sun and Earth, the curated site list with verdict tags, and the selected site's numbers](docs/images/orbit.png) | ![Stand here page: the real-terrain panorama with the Sun and Earth paths and a time scrubber](docs/images/stand-here.png) |
-| **Orbit.** The Moon, Sun and Earth for a chosen date, a south-pole view with real cast shadows, a coordinate box to drop a pin, and the curated sites with a verdict tag each (Go / Marginal / No-go, "σ pending" or "No terrain data"). | **Stand here.** The skyline from a site, drawn from its real terrain mask, with the Sun's and Earth's paths for the month, a Play / scrub bar, and the engine's numbers for the window. |
+| **Orbit.** The Moon, Sun and Earth for a chosen date, a south-pole view with real cast shadows, a coordinate box to drop a pin, and the curated sites with a verdict tag each (Go / Marginal / No-go, "σ unavailable" or "No terrain data"). | **Stand here.** The skyline from a site, drawn from its real terrain mask, with the Sun's and Earth's paths for the month, a Play / scrub bar, and the engine's numbers for the window. |
 | ![Compare page: up to four sites side by side over a 14-day window](docs/images/compare.png) | ![Slip explorer: sunlight and DSN contact for a landing that slips by N days](docs/images/slip-explorer.png) |
 | **Compare.** Up to four sites over the same 14-day window: time in sunlight, longest dark stretch, Earth above the horizon and DSN contact. (The "Ridge" column is the older Shackleton row, whose catalogue coordinates sit in permanent shadow, so it reads 0% sunlit.) | **Slip explorer.** What a later landing does to sunlight and DSN contact: slide the slip from 0 to 27 days and see the best window. |
 
@@ -48,7 +48,7 @@ All numbers come from the files in `web/public/data/`; nothing is typed in by ha
 
 Full citations: [`docs/data_sources_terrain.md`](docs/data_sources_terrain.md), [`docs/credits_frontend.md`](docs/credits_frontend.md).
 
-The catalogue has **13 sites**. All 13 have a terrain mask: 4 fine (5–60 m) and 9 coarse (about 237 m, labelled "coarse" in the app, so sunrise and sunset there are approximate). Uncertainty (σ) exists for 3 sites and is preliminary. A pin dropped outside a mask uses a smooth-Moon estimate and is labelled as one; inside the south-polar map it takes its lit / shadow state from the map.
+The catalogue has **13 sites**. All 13 have a terrain mask: 4 fine (5–60 m) and 9 coarse (about 237 m, labelled "coarse" in the app, so sunrise and sunset there are approximate). Uncertainty (σ) exists for 4 sites (IM-2, Chandrayaan-3, two Shackleton ridge sites) and is preliminary; the 9 coarse-mask sites show "σ unavailable" because NASA publishes no error raster for the global model they use. A pin dropped outside a mask uses a smooth-Moon estimate and is labelled as one; inside the south-polar map it takes its lit / shadow state from the map.
 
 ## Validation, stated plainly
 
@@ -62,7 +62,7 @@ The validation report ([`web/public/data/validation/report.json`](web/public/dat
 
 LUMEN computes **geometric** Sun and Earth availability, DSN coverage and a generic power estimate. It does **not** compute link budgets, data rates, thermal survival or vehicle-specific array performance. The elevation model bounds the near-field horizon; lander-scale rocks are not modelled; DSN visibility uses one elevation threshold. No claim is made about any mission's status or schedule.
 
-Not done yet: the Tier-B regional terrain grid for custom points near the pole, σ for all but three sites, the Artemis candidate regions in the catalogue, and a free-form date range. Details: [`docs/limitations.md`](docs/limitations.md).
+Not done yet: the Tier-B regional terrain grid for custom points near the pole, a measured σ for the nine coarse-mask sites (theirs assumes a constant 1 m error), the Artemis candidate regions in the catalogue, and a free-form date range. Details: [`docs/limitations.md`](docs/limitations.md).
 
 ## Repository layout
 
@@ -107,7 +107,7 @@ The published data under `web/public/data/` is produced by the scripts in `pipel
 | `run_catalog.py` | `catalog/sites.json` from `config/sites.yaml` |
 | `run_masks.py`, `run_masks_global.py` | Terrain masks (polar products, and the global model for non-polar sites) |
 | `run_pad.py`, `run_dispersion.py` | Pad slope and the 11 × 11 dispersion grids |
-| (σ) | Monte-Carlo uncertainty is described in [`MC_SIGMA_REPORT.md`](MC_SIGMA_REPORT.md); the script that generated the published σ files is not in the repository (`run_mc_sigma.py` is a stub) |
+| (σ) | Monte-Carlo uncertainty is described in [`MC_SIGMA_REPORT.md`](MC_SIGMA_REPORT.md); `run_mc_sigma_site.py` (error-raster sites) and `run_mc_sigma_coarse.py` (assumed-error, coarse-mask sites) generate a site's σ file (`run_mc_sigma.py` is a stub) |
 | `record_ts_evidence.py`, `run_g5.py`, `run_g6.py` | Validation evidence under `pipeline/reports/` |
 
 The terrain scripts download elevation windows from NASA archives and cache them in `pipeline/cache/` (not committed).

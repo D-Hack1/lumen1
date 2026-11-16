@@ -2,9 +2,12 @@
 # Precomputes the south-pole terrain horizon maps used by web/src/features/orbit (24 azimuths, 0.1° units).
 # Usage: python orbit_polar_horizons.py <dir containing H768.npy>   (H768.npy = LOLA 80 m heights resampled to 768x768 over the 80S disc)
 # Writes dem.png, hor.png (+ illum inputs) into that dir; copy results to web/public/content/orbit/ as polar_*.png.
-import numpy as np, time
-from PIL import Image
 import sys
+import time
+
+import numpy as np
+from PIL import Image
+
 base=sys.argv[1].replace('\\','/').rstrip('/')+'/'
 H=np.load(base+'H768.npy').astype(np.float64)
 N=768; R=1737400.0; px=608000.0/N
