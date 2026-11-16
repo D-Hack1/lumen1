@@ -1,7 +1,7 @@
 // Owner: Nived
 // Loader: terrain/pad/<id>.json (data_terrain_misc.md §1, contract 0.1.0). Convention: downhill_aspect_deg is the
 // steepest-DESCENT azimuth; uphill_az_deg = (downhill + 180) mod 360 (see contract §1.4).
-import { DataError, fetchJson } from './source';
+import { DataError, dataUrl, fetchJson } from './source';
 
 export interface Pad {
   siteId: string;
@@ -72,11 +72,13 @@ export function parsePad(id: string, j: Raw): Pad {
 const cache = new Map<string, Promise<Pad>>();
 
 export function loadPad(siteId: string): Promise<Pad> {
-  let p = cache.get(siteId);
+  // Keyed by data source as well as site: a real pad must never be served for a mock request (or vice versa) after a mode switch.
+  const key = `${dataUrl('')}${siteId}`;
+  let p = cache.get(key);
   if (!p) {
     p = fetchJson<Raw>(`terrain/pad/${siteId}.json`).then((j) => parsePad(siteId, j));
-    cache.set(siteId, p);
-    p.catch(() => cache.delete(siteId));
+    cache.set(key, p);
+    p.catch(() => cache.delete(key));
   }
   return p;
 }

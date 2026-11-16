@@ -60,6 +60,9 @@ export function SurfacePage() {
 
   const QUICK = SITES.slice(0, 4);
   const options: Site[] = QUICK.some((s) => s.id === site.id) ? [...QUICK] : [...QUICK, site];
+  // Every site (the catalog in real mode), grouped as on the Orbit page; a custom pin is listed too so the select can show it.
+  const all: Site[] = SITES.some((s) => s.id === site.id) ? [...SITES] : [...SITES, site];
+  const groups = all.reduce<Map<string, Site[]>>((acc, s) => acc.set(s.group || 'Other', [...(acc.get(s.group || 'Other') ?? []), s]), new Map());
   const sunX = azToX(m.sunAz);
   const sunY = yOf(m.sunEl);
   const earthX = azToX(m.earthAz);
@@ -98,6 +101,17 @@ export function SurfacePage() {
               {SHORT[s.id] ?? s.short}
             </button>
           ))}
+          <select className="lm-segs__all" aria-label="All sites" value={site.id} onChange={(e) => L.selectSite(e.target.value)}>
+            {[...groups].map(([g, list]) => (
+              <optgroup key={g} label={g}>
+                {list.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
         </div>
       </div>
 

@@ -72,3 +72,15 @@ test.describe('Stand here → Details (real data)', () => {
     expect(errs).toEqual([]);
   });
 });
+
+test('Stand here lists EVERY catalog site, and picking one from the list switches the page to it', async ({ page }) => {
+  await page.goto('/#stand-here');
+  await page.waitForSelector('[data-testid="stand-here-details"]', { timeout: 60_000 });
+  const all = page.getByRole('combobox', { name: 'All sites' });
+  await expect(all.locator('option')).toHaveCount(13, { timeout: 30_000 });
+  await all.selectOption({ label: 'Apollo 15 (Hadley-Apennine)' });
+  await expect(page.locator('h1')).toHaveText('Apollo 15 (Hadley-Apennine)');
+  await expect(page.locator('.lm-nums__value').first()).toBeVisible({ timeout: 60_000 });
+  await all.selectOption({ label: "Chang'e-6 (Apollo basin, far side)" });
+  await expect(page.locator('h1')).toHaveText("Chang'e-6 (Apollo basin, far side)");
+});

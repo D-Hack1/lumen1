@@ -66,6 +66,19 @@
   background: var(--fg);
   color: var(--bg);
 }
+.lm-segs__all {
+  height: 38px;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid var(--line2);
+  background: var(--raise);
+  color: var(--fg2);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
 .lm-linkbtn {
   display: flex;
   align-items: center;

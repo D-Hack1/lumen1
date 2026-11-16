@@ -1,6 +1,7 @@
 // Owner: Nived
 // Loader: catalog/sites.json + catalog/sparklines.{json,bin}.
 import { loadBinArray, utcExtra } from './binArray';
+import { loadPad } from './pad';
 import { DataError, fetchJson } from './source';
 import type { SiteRecord, Sparkline } from '../types';
 
@@ -92,6 +93,17 @@ async function doLoad(): Promise<Catalog> {
       mock: raw.mock === true,
     };
   });
+  // The catalog builder leaves terrain "pending", but a site with a published, validated pad file (terrain/pad/<id>.json, gate G6) has a
+  // real pad slope: use it so the verdict can judge the slope requirement. No pad file (coarse-mask sites, custom points) => stays null.
+  if (raw.mock !== true) {
+    await Promise.all(
+      sites.map(async (site) => {
+        if (site.padSlopeDeg != null) return;
+        const pad = await loadPad(site.id).catch(() => null);
+        if (pad && !pad.mock) site.padSlopeDeg = pad.slopeDeg;
+      }),
+    );
+  }
   return { sites, sparklines: await loadSparklines(sites).catch(() => ({})) };
 }
 

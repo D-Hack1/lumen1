@@ -8,6 +8,7 @@ import { loadEphem } from '../data/ephem';
 import { loadMask } from '../data/masks';
 import { loadLayers } from '../data/layers';
 import { loadPad } from '../data/pad';
+import { loadCatalog } from '../data/catalog';
 import { loadPsr } from '../data/psr';
 import { loadSigma, sigmaSourceLabel } from '../data/sigma';
 import { loadDispersion } from '../data/dispersion';
@@ -28,6 +29,12 @@ describe.skipIf(!have)('real-mode loaders', () => {
     it(`mask ${id}`, async () => { await loadMask(id); });
   }
   it('pad im2_athena', async () => { await loadPad('im2_athena'); });
+  it('catalog: polar sites carry their published pad slope, coarse-mask sites stay null (never invented)', async () => {
+    const { sites } = await loadCatalog();
+    const slope = Object.fromEntries(sites.map((s) => [s.id, s.padSlopeDeg]));
+    for (const id of ['im2_athena', 'cy3_shiv_shakti', 'shackleton_ridge', 'shackleton_rim_ridge']) expect(slope[id]).toBe((await loadPad(id)).slopeDeg);
+    for (const id of COARSE_WITH_SIGMA) expect(slope[id]).toBeNull();
+  });
   it('layers', async () => { const l = await loadLayers(); expect(l).toBeTruthy(); });
   it('psr raster', async () => {
     const r = await loadPsr();
