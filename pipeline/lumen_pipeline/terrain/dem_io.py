@@ -12,7 +12,7 @@ import warnings
 import zipfile
 from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
@@ -73,6 +73,10 @@ class DemMetadataError(DemError):
 
 class DemRangeError(DemError):
     """Raised when normalized DEM values fail the R3 range safeguards."""
+
+
+class LocalDemError(DemError):
+    """Raised when a purported local DEM lacks verified acquisition metadata."""
 
 
 @dataclass(frozen=True)
@@ -185,6 +189,29 @@ class CacheKey:
 
 def _default_config_path() -> Path:
     return Path(__file__).resolve().parents[2] / "config" / "dem_sources.yaml"
+
+
+def local_dem_path(product: DemProduct, directory: str | os.PathLike[str] | None = None) -> Path | None:
+    """Return a verified local acquisition, never an arbitrary same-named file."""
+    configured = directory if directory is not None else os.environ.get("LUMEN_DEM_DIR")
+    if not configured:
+        return None
+    root = Path(configured)
+    path = root / Path(product.url).name
+    manifest = path.with_suffix(path.suffix + ".lumen.json")
+    if not path.is_file() or not manifest.is_file():
+        return None
+    try:
+        record = json.loads(manifest.read_text(encoding="utf-8"))
+        if (
+            record.get("source_url") != product.url
+            or record.get("size_bytes") != path.stat().st_size
+            or record.get("sha256") != _checksum(path)
+        ):
+            return None
+    except (OSError, ValueError, TypeError):
+        return None
+    return path
 
 
 def _coerce_product(key: str, values: Mapping[str, Any]) -> DemProduct:
@@ -665,7 +692,8 @@ class DemReader:
         selected = self._product(product)
         if not selected.is_verified:
             raise DemMetadataError(f"{selected.key}: product is not verified for activation")
-        return selected
+        local = local_dem_path(selected)
+        return replace(selected, url=str(local)) if local is not None else selected
 
     @contextmanager
     def _open(self, source: str) -> Iterator[DatasetReader]:
