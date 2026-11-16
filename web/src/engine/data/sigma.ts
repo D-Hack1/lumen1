@@ -15,6 +15,8 @@ export interface Sigma {
   notes: string | null;
   /** Set when the DEM error was an ASSUMED constant 1-sigma (metres), not a published error raster. Null for measured-raster sigma. */
   assumedErrorM: number | null;
+  /** True when the sidecar declares the assumed error a lower bound (then the true uncertainty is likely larger). */
+  assumedErrorIsLowerBound?: boolean;
   /** Synthetic/mock artifact: never used for real results (same rule as masks). */
   mock: boolean;
 }
@@ -29,6 +31,7 @@ interface RawSigma {
   mock?: boolean;
   error_model?: string;
   assumed_error_m?: number;
+  error_magnitude_is_lower_bound?: boolean;
   shape: number[];
   height_order_m: number[];
   binary: { magic: string; format_version: number; byte_order: string; array_order: string };
@@ -59,7 +62,7 @@ export function parseSigma(id: string, bin: ArrayBuffer, j: RawSigma): Sigma {
     if (!Number.isNaN(sigmaDeg[i]) && sigmaDeg[i] < 0) bad(id, `negative sigma at index ${i}`);
   }
   const assumedErrorM = j.error_model === 'assumed_uniform' && typeof j.assumed_error_m === 'number' && j.assumed_error_m > 0 ? j.assumed_error_m : null;
-  return { siteId: id, source: j.source, cloneCount: j.clone_count ?? null, sigmaDeg, notes: j.notes ?? null, assumedErrorM, mock: j.mock === true };
+  return { siteId: id, source: j.source, cloneCount: j.clone_count ?? null, sigmaDeg, notes: j.notes ?? null, assumedErrorM, assumedErrorIsLowerBound: assumedErrorM != null && j.error_magnitude_is_lower_bound === true, mock: j.mock === true };
 }
 
 /** Gate 6: finite sigma wherever the mask is valid, NaN wherever it is not. */
@@ -91,9 +94,10 @@ export function loadSigma(siteId: string): Promise<Sigma> {
 }
 
 /** How the result labels its sigma (ResultMeta.sigmaSource), from the artifact's declared source (data_masks.md §8). */
-export function sigmaSourceLabel(s: Pick<Sigma, 'source' | 'cloneCount' | 'notes'> & { assumedErrorM?: number | null }): string {
+export function sigmaSourceLabel(s: Pick<Sigma, 'source' | 'cloneCount' | 'notes'> & { assumedErrorM?: number | null; assumedErrorIsLowerBound?: boolean }): string {
   if (s.source === 'monte_carlo') {
-    return s.assumedErrorM ? `Monte-Carlo, ${s.cloneCount} clones, assumed ${s.assumedErrorM} m DEM error` : `Monte-Carlo, ${s.cloneCount} clones`;
+    if (!s.assumedErrorM) return `Monte-Carlo, ${s.cloneCount} clones`;
+    return `Monte-Carlo, ${s.cloneCount} clones, assumed ${s.assumedErrorM} m DEM error${s.assumedErrorIsLowerBound ? ' (lower bound)' : ''}`;
   }
   if (s.source === 'calibrated') return `calibrated: ${s.notes}`;
   return 'default';

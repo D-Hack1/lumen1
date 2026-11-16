@@ -64,7 +64,8 @@ describe.skipIf(!have)('real-mode loaders', () => {
     expect(s.cloneCount).toBe(30);
     expect(s.mock).toBe(false);
     expect(s.assumedErrorM).toBe(1);
-    expect(sigmaSourceLabel(s)).toContain('assumed 1 m DEM error');
+    expect(s.assumedErrorIsLowerBound).toBe(true);
+    expect(sigmaSourceLabel(s)).toContain('assumed 1 m DEM error (lower bound)');
     for (let i = 0; i < s.sigmaDeg.length; i++) expect(Number.isFinite(s.sigmaDeg[i])).toBe(Number.isFinite(m.elevDeg[i]));
   });
   it('sigma: a measured-raster site does not claim an assumed error', async () => { expect((await loadSigma('im2_athena')).assumedErrorM).toBeNull(); });

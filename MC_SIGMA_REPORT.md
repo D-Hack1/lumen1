@@ -105,27 +105,30 @@ Every sidecar JSON encodes `"preliminary": true`, `"production_ready": false`, a
 
 ## 8. Addendum (2026-11-16): the nine coarse-mask sites — ASSUMED-error σ
 
-Apollo 11/12/14/15/16/17, SLIM, Chang'e-6 and Blue Ghost have coarse masks from NASA's global LDEM_128 (236.9 m/px). **No per-pixel error raster exists for that model**, so the method above (perturb by the DEM's own `_ERR`) cannot be applied. What was checked:
+Apollo 11/12/14/15/16/17, SLIM, Chang'e-6 and Blue Ghost have coarse masks from NASA's global LDEM_128 (236.9 m/px). **No per-pixel error raster exists for that model**, so the method above (perturb by the DEM's own `_ERR`) cannot be applied. Checked:
 
 - PDS LOLA GDR [`cylindrical/img`](https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/) and `float_img/` hold only `ldem_128.img/.lbl/.xml`; the label mentions no uncertainty.
-- [PGDA product 90](https://pgda.gsfc.nasa.gov/products/90) `_ERR` rasters cover 60°S–pole only; [PGDA product 78](https://pgda.gsfc.nasa.gov/products/78) covers named south-pole sites only (none of the nine).
+- [PGDA product 90](https://pgda.gsfc.nasa.gov/products/90) `_ERR` rasters cover 60°S–pole only; [PGDA product 78](https://pgda.gsfc.nasa.gov/products/78) covers named south-pole sites only; [SLDEM2015 / PGDA product 54](https://pgda.gsfc.nasa.gov/products/54) (60°S–60°N) publishes no per-pixel error map either.
 
-At the project owner's explicit request, σ was produced anyway with a stated assumption, by `pipeline/scripts/run_mc_sigma_coarse.py`:
+At the project owner's explicit request σ was produced with a stated assumption, by `pipeline/scripts/run_mc_sigma_coarse.py`:
 
-- the DEM is perturbed by a **constant 1 m one-σ elevation error** (LOLA's commonly quoted ~1 m vertical accuracy, cited as Mazarico et al. 2013 in secondary text; the primary paper and LDEM_128's own accuracy were **not** read);
-- 50 m correlation length (below the 237 m pixel, so effectively uncorrelated between pixels), 30 clones, `ddof=1`, seed 20260515 — same machinery as above, unmodified;
-- each sidecar records `error_model: "assumed_uniform"`, `assumed_error_m: 1.0`, `preliminary: true`; the app labels it "Monte-Carlo, 30 clones, assumed 1 m DEM error".
+- the DEM is perturbed by a **constant 1 m one-σ elevation error** — LOLA's ~1 m absolute vertical accuracy from orbit-overlap analysis (Mazarico et al. 2013, as cited by Barker et al. 2016, Icarus 273, 346–355);
+- **this is a lower bound**: it is the accuracy of individual LOLA measurements, not of the gridded 237 m model. It leaves out gridding/interpolation error between ground tracks, which Barker et al. (2023, §3) show dominates gridded-DEM height error and grows with effective resolution. No published figure for LDEM_128's gridded error was found; for scale only, the merged SLDEM2015 has a stated typical vertical accuracy of 3–4 m (Barker et al. 2016) — a different product;
+- every site was therefore also run at **3.5 m** (sensitivity; recorded in each sidecar's `sensitivity_assumed_error`, not published as σ);
+- 50 m correlation length (below the 237 m pixel, so effectively uncorrelated between pixels), 30 clones, `ddof=1`, seed 20260515; sidecars record `error_model: "assumed_uniform"`, `assumed_error_m: 1.0`, `error_magnitude_is_lower_bound: true`, `preliminary: true`. The app labels it "assumed 1 m DEM error (lower bound)".
 
-| Site | σ mean (deg) | σ max (deg) | 20-vs-30 max \|Δ\| (deg) | nominal vs published mask max \|Δ\| (deg) |
+| Site | σ mean @1 m (deg) | σ max @1 m (deg) | σ mean @3.5 m (deg) | σ max @3.5 m (deg) |
 |---|---|---|---|---|
-| `apollo_11` | 0.01275 | 0.06916 | 0.00644 | 0.0112 |
-| `apollo_12` | 0.01585 | 0.06892 | 0.00841 | 0.0650 |
-| `apollo_14` | 0.01627 | 0.05356 | 0.00771 | 0.0000 |
-| `apollo_15` | 0.00713 | 0.04886 | 0.00676 | 0.0000 |
-| `apollo_16` | 0.00805 | 0.06027 | 0.00770 | 0.0000 |
-| `apollo_17` | 0.00388 | 0.01039 | 0.00267 | 0.0000 |
-| `slim_shioli` | 0.00750 | 0.03035 | 0.00645 | 0.0000 |
-| `change6_apollo_basin` | 0.00628 | 0.04741 | 0.01343 | 0.0000 |
-| `blue_ghost_m1` | 0.01638 | 0.06209 | 0.00798 | 0.0000 |
+| `apollo_11` | 0.0127 | 0.0692 | 0.0530 | 0.1974 |
+| `apollo_12` | 0.0158 | 0.0689 | 0.0663 | 0.1644 |
+| `apollo_14` | 0.0163 | 0.0536 | 0.0532 | 0.1479 |
+| `apollo_15` | 0.0071 | 0.0489 | 0.0229 | 0.1396 |
+| `apollo_16` | 0.0081 | 0.0603 | 0.0290 | 0.1683 |
+| `apollo_17` | 0.0039 | 0.0104 | 0.0130 | 0.0363 |
+| `slim_shioli` | 0.0075 | 0.0303 | 0.0251 | 0.0876 |
+| `change6_apollo_basin` | 0.0063 | 0.0474 | 0.0311 | 0.1302 |
+| `blue_ghost_m1` | 0.0164 | 0.0621 | 0.0592 | 0.1674 |
 
-**Caveats.** (1) This σ is an assumption, not a measured uncertainty. (2) The published Apollo 11 and Apollo 12 masks do not reproduce bit-for-bit from the current code and DEM window (the production generator reproduces the recomputed nominal exactly, so the difference is in the published masks); σ was computed with the tolerance raised and the actual difference recorded in each sidecar; the masks were not regenerated. (3) Coarse runs peak below 1 GB RSS and ~4 s per clone, so all nine ran in parallel; the slow step is the first HTTP read of the LDEM_128 window.
+σ grows roughly in proportion to the assumed error (3.2–5× for 3.5×), so the published 1 m σ may understate the true terrain uncertainty at these sites by a similar factor.
+
+**Masks.** The published Apollo 11 and Apollo 12 masks previously did not reproduce from the current code (max difference 0.011° and 0.065°). Both were regenerated with `run_masks_global.py`; all nine now reproduce exactly (difference ≤ 1e-10°, float32 rounding) and σ was published with the strict 0.001° check. Coarse runs peak below 1 GB RSS and ~4 s per clone, so they run in parallel; the slow step is the first HTTP read of the LDEM_128 window (~13 min).
