@@ -29,6 +29,9 @@ from lumen_pipeline.validation.horizons_client import (
     run_g3b,
     run_g3b_artifact,
 )
+from lumen_pipeline.validation.sigma_calibration import (
+    default_output_path as default_g10_report_path,
+)
 
 REPORT_VERSION = 1
 G2_TOLERANCE_DEG = 0.001
@@ -36,7 +39,14 @@ G2_TOLERANCE_DEG = 0.001
 
 def default_output_path() -> Path:
     """Return the Gowri-owned validation report consumed by the application."""
-    return Path(__file__).resolve().parents[3] / "web" / "public" / "data" / "validation" / "report.json"
+    return (
+        Path(__file__).resolve().parents[3]
+        / "web"
+        / "public"
+        / "data"
+        / "validation"
+        / "report.json"
+    )
 
 
 def default_g7_report_path() -> Path:
@@ -103,10 +113,17 @@ def default_g9_report_path() -> Path:
 
 def _g9_gate(path: Path) -> dict[str, Any]:
     """G9's criterion is VISUAL agreement, a human judgment. The script records figures and numbers; the gate is PASS only once a person
-    has looked at the figures and recorded a sign-off ("visual_signoff": {"by": ..., "date_utc": ..., "note": ...}) in the artifact."""
+    has looked at the figures and recorded a sign-off ("visual_signoff": {"by": ..., "date_utc": ..., "note": ...}) in the artifact.
+    """
     description, criterion = "Tier-2 predicted shadows versus LROC image", "visual agreement"
     if not path.exists():
-        return _gate("G9", description, "PENDING", criterion=criterion, reason="Shadow prediction vs LROC image has not been produced (python pipeline/scripts/run_g9.py).")
+        return _gate(
+            "G9",
+            description,
+            "PENDING",
+            criterion=criterion,
+            reason="Shadow prediction vs LROC image has not been produced (python pipeline/scripts/run_g9.py).",
+        )
     try:
         r = json.loads(path.read_text(encoding="utf-8"))
         value = {
@@ -120,28 +137,86 @@ def _g9_gate(path: Path) -> dict[str, Any]:
             for img, v in r["images"].items()
         }
         signoff = r.get("visual_signoff")
-        common = {"criterion": criterion, "value": value, "artifact_paths": [_relative(path), *[v.get("figure") for v in r["images"].values() if v.get("figure")]],
-                  "provenance": f"{r['site']}; DTM and orthophotos from NASA PDS ({r['dtm_url']}); Sun from LUMEN's ephemeris.",
-                  "test_commands": [r["command"]]}
+        common = {
+            "criterion": criterion,
+            "value": value,
+            "artifact_paths": [
+                _relative(path),
+                *[v.get("figure") for v in r["images"].values() if v.get("figure")],
+            ],
+            "provenance": f"{r['site']}; DTM and orthophotos from NASA PDS ({r['dtm_url']}); Sun from LUMEN's ephemeris.",
+            "test_commands": [r["command"]],
+        }
         if signoff:
             return _gate("G9", description, "PASS", visual_signoff=signoff, **common)
-        return _gate("G9", description, "PENDING", reason="Evidence recorded (figures and region agreement); awaiting a human visual sign-off in the artifact.", **common)
+        return _gate(
+            "G9",
+            description,
+            "PENDING",
+            reason="Evidence recorded (figures and region agreement); awaiting a human visual sign-off in the artifact.",
+            **common,
+        )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
-        return _gate("G9", description, "BLOCKED", reason=f"Invalid G9 artifact: {error}", artifact_paths=[_relative(path)])
+        return _gate(
+            "G9",
+            description,
+            "BLOCKED",
+            reason=f"Invalid G9 artifact: {error}",
+            artifact_paths=[_relative(path)],
+        )
 
 
 def _pending_gates() -> list[dict[str, Any]]:
     return [
         _g9_gate(default_g9_report_path()),
-        _gate(
-            "G10",
-            "Tier-B uncertainty calibration against Tier-A event times",
-            "BLOCKED",
-            criterion="at least about 68 percent inside reported delta-t or inflate sigma",
-            reason="Requires Shivha's Monte Carlo sigma artifacts and Tier-B calibration inputs.",
-            required_artifacts=["web/public/data/terrain/sigma/", "web/public/data/terrain/tierb/"],
-        ),
+        _g10_gate(default_g10_report_path()),
     ]
+
+
+def _g10_gate(path: Path) -> dict[str, Any]:
+    description = "Tier-B uncertainty calibration against Tier-A event times"
+    if not path.is_file():
+        return _gate(
+            "G10",
+            description,
+            "BLOCKED",
+            criterion="at least 68 percent inside reported delta-t after calibration",
+            reason="Authentic Tier-B event and sigma calibration artifact is missing.",
+            required_artifacts=["web/public/data/terrain/sigma/", "web/public/data/terrain/tierb/"],
+            artifact_paths=[_relative(path)],
+        )
+    try:
+        record = json.loads(path.read_text(encoding="utf-8"))
+        if (
+            record.get("status") != "PASS"
+            or record.get("coverage_after", 0.0) < 0.68
+            or not record.get("provenance")
+        ):
+            return _gate(
+                "G10",
+                description,
+                "BLOCKED",
+                criterion="at least 68 percent inside reported delta-t after calibration",
+                reason=record.get("reason", "Calibration artifact is incomplete or not authentic."),
+                artifact_paths=[_relative(path)],
+                value=record,
+            )
+        return _gate(
+            "G10",
+            description,
+            "PASS",
+            criterion="at least 68 percent inside reported delta-t after calibration",
+            artifact_paths=[_relative(path)],
+            value=record,
+        )
+    except (OSError, TypeError, ValueError, json.JSONDecodeError) as error:
+        return _gate(
+            "G10",
+            description,
+            "BLOCKED",
+            reason=f"Invalid G10 calibration artifact: {error}",
+            artifact_paths=[_relative(path)],
+        )
 
 
 def _g2_gate(document_path: Path) -> dict[str, Any]:
@@ -177,7 +252,11 @@ def _g2_gate(document_path: Path) -> dict[str, Any]:
         "Hourly Hermite interpolation versus direct SpiceyPy",
         "PASS" if epochs == 10_000 and maximum < G2_TOLERANCE_DEG else "FAIL",
         criterion=f"< {G2_TOLERANCE_DEG} deg across 10,000 epochs",
-        value={"epochs": epochs, "max_sun_direction_error_deg": sun, "max_earth_direction_error_deg": earth},
+        value={
+            "epochs": epochs,
+            "max_sun_direction_error_deg": sun,
+            "max_earth_direction_error_deg": earth,
+        },
         artifact_paths=[_relative(document_path)],
         provenance="Recorded deterministic G2 run, seed 421.",
         test_commands=["pytest tests/gowri/test_ephem.py"],
@@ -199,7 +278,9 @@ def _fixture_metadata(paths: list[Path]) -> list[dict[str, str]]:
 
 
 def _g3_gate(fixtures_dir: Path) -> dict[str, Any]:
-    paths = [fixture_path(site, body, fixtures_dir) for site in SITE_CASES for body in ("sun", "earth")]
+    paths = [
+        fixture_path(site, body, fixtures_dir) for site in SITE_CASES for body in ("sun", "earth")
+    ]
     config_path = default_sites_path()
     try:
         comparisons = run_g3(fixtures_dir)
@@ -249,7 +330,9 @@ def _g3b_gate(fixtures_dir: Path) -> dict[str, Any]:
         if len(comparisons) != 45:
             raise ValueError(f"expected 45 comparisons, found {len(comparisons)}")
         if len(artifact_comparisons) != 45:
-            raise ValueError(f"expected 45 decoded DSN comparisons, found {len(artifact_comparisons)}")
+            raise ValueError(
+                f"expected 45 decoded DSN comparisons, found {len(artifact_comparisons)}"
+            )
         return _gate(
             "G3b",
             "DSS Moon-centre elevation versus NASA/JPL Horizons",
@@ -257,7 +340,9 @@ def _g3b_gate(fixtures_dir: Path) -> dict[str, Any]:
             criterion="Moon elevation < 0.1 deg",
             value={
                 "comparison_count": len(comparisons),
-                "max_moon_elevation_error_deg": max(item.elevation_error_deg for item in comparisons),
+                "max_moon_elevation_error_deg": max(
+                    item.elevation_error_deg for item in comparisons
+                ),
                 "decoded_artifact": {
                     "comparison_count": len(artifact_comparisons),
                     "max_direct_geometry_error_deg": max(
@@ -275,7 +360,11 @@ def _g3b_gate(fixtures_dir: Path) -> dict[str, Any]:
                 },
             },
             tolerances={"moon_elevation_deg": DSN_ELEVATION_TOLERANCE_DEG},
-            artifact_paths=[*[_relative(path) for path in paths], _relative(artifact), _relative(artifact.with_suffix(".json"))],
+            artifact_paths=[
+                *[_relative(path) for path in paths],
+                _relative(artifact),
+                _relative(artifact.with_suffix(".json")),
+            ],
             provenance=_fixture_metadata(paths),
             test_commands=["pytest tests/gowri/test_horizons.py tests/gowri/test_dsn.py"],
         )
@@ -286,7 +375,11 @@ def _g3b_gate(fixtures_dir: Path) -> dict[str, Any]:
             "BLOCKED",
             criterion="Moon elevation < 0.1 deg",
             reason=str(error),
-            artifact_paths=[*[_relative(path) for path in paths], _relative(artifact), _relative(artifact.with_suffix(".json"))],
+            artifact_paths=[
+                *[_relative(path) for path in paths],
+                _relative(artifact),
+                _relative(artifact.with_suffix(".json")),
+            ],
         )
 
 
@@ -304,19 +397,31 @@ def _g7_gate(path: Path) -> dict[str, Any]:
         # The qualitative half of G7, checked against ISRO's own timeline (scripts/run_g7_timeline.py). It is recorded as evidence only: the
         # gate's status still follows the quantitative 8.75 deg claim's source provenance, which is unresolved.
         timeline_path = path.with_name("g7_timeline.json")
-        timeline = json.loads(timeline_path.read_text(encoding="utf-8")) if timeline_path.exists() else None
-        timeline_value = None if timeline is None else {
-            "consistent_with_isro_timeline": timeline["consistent"],
-            "isro_source": timeline["isro_source"],
-            "lumen_terrain_sunset_utc": timeline["lumen_terrain_sunset_utc"],
-            "lumen_sun_below_6deg_utc": timeline["lumen_sun_below_6deg_utc"],
-            "lumen_next_terrain_sunrise_utc": timeline["lumen_next_terrain_sunrise_utc"],
-            "checks": timeline["checks"],
-        }
+        timeline = (
+            json.loads(timeline_path.read_text(encoding="utf-8"))
+            if timeline_path.exists()
+            else None
+        )
+        timeline_value = (
+            None
+            if timeline is None
+            else {
+                "consistent_with_isro_timeline": timeline["consistent"],
+                "isro_source": timeline["isro_source"],
+                "lumen_terrain_sunset_utc": timeline["lumen_terrain_sunset_utc"],
+                "lumen_sun_below_6deg_utc": timeline["lumen_sun_below_6deg_utc"],
+                "lumen_next_terrain_sunrise_utc": timeline["lumen_next_terrain_sunrise_utc"],
+                "checks": timeline["checks"],
+            }
+        )
         return _gate(
             "G7",
             "Chandrayaan-3 touchdown Sun elevation and timeline",
-            report["status"] if report.get("status") in ("PASS", "FAIL") else report["source_provenance_result"],
+            (
+                report["status"]
+                if report.get("status") in ("PASS", "FAIL")
+                else report["source_provenance_result"]
+            ),
             calculation_status=report["calculation_status"],
             numerical_result=report["numerical_result"],
             source_provenance_result=report["source_provenance_result"],
@@ -327,7 +432,9 @@ def _g7_gate(path: Path) -> dict[str, Any]:
                     "recorded_tolerance_deg": report["reference"]["recorded_tolerance_deg"],
                     "absolute_error_deg": report["absolute_error_deg"],
                     "reference_source_status": report["reference"]["primary_source_status"],
-                    "reference_source_url": report["reference"]["source_metadata"].get("source_url"),
+                    "reference_source_url": report["reference"]["source_metadata"].get(
+                        "source_url"
+                    ),
                     "open_caveats": report["reference"]["source_metadata"].get("open_caveats", []),
                 },
                 "timeline_status": report["qualitative_timeline_check"]["status"],
@@ -335,7 +442,10 @@ def _g7_gate(path: Path) -> dict[str, Any]:
                 "im2_touchdown_conditions": report["im2_touchdown_conditions"],
             },
             timestamp_utc=report["timestamp_utc"],
-            artifact_paths=[_relative(path), *([_relative(timeline_path)] if timeline is not None else [])],
+            artifact_paths=[
+                _relative(path),
+                *([_relative(timeline_path)] if timeline is not None else []),
+            ],
             provenance=report["reference"]["source_metadata"],
             test_commands=["pytest tests/gowri/test_g7.py"],
         )
@@ -352,12 +462,21 @@ def _g7_gate(path: Path) -> dict[str, Any]:
 def _g1_gate(path: Path) -> dict[str, Any]:
     description = "PA/ME frame transformations versus independent Skyfield reference"
     if not path.exists():
-        return _gate("G1", description, "BLOCKED", reason="G1 frame-validation evidence is missing.", artifact_paths=[_relative(path)])
+        return _gate(
+            "G1",
+            description,
+            "BLOCKED",
+            reason="G1 frame-validation evidence is missing.",
+            artifact_paths=[_relative(path)],
+        )
     try:
         report = json.loads(path.read_text(encoding="utf-8"))
         if report["id"] != "G1" or report["schema_version"] != 1:
             raise ValueError("unsupported G1 evidence schema")
-        if report["criteria"]["matrix_max_abs_error"] != {"operator": "<", "value": MATRIX_TOLERANCE}:
+        if report["criteria"]["matrix_max_abs_error"] != {
+            "operator": "<",
+            "value": MATRIX_TOLERANCE,
+        }:
             raise ValueError("G1 matrix criterion does not match the R3 tolerance")
         if report["criteria"]["direction_max_angular_error_rad"] != {
             "operator": "<",
@@ -375,7 +494,9 @@ def _g1_gate(path: Path) -> dict[str, Any]:
             raise ValueError("G1 mean-Earth frame definition does not match DE421")
         if len(report["epochs_utc"]) < 2:
             raise ValueError("G1 evidence must include multiple UTC epochs")
-        if not report["kernels"] or any(len(kernel["sha256"]) != 64 for kernel in report["kernels"]):
+        if not report["kernels"] or any(
+            len(kernel["sha256"]) != 64 for kernel in report["kernels"]
+        ):
             raise ValueError("G1 evidence lacks SHA-256 kernel identifiers")
 
         metrics = report["metrics"]
@@ -438,26 +559,45 @@ G0_CRITERION = "< 0.01 deg"
 def _g0_gate(path: Path) -> dict[str, Any]:
     if not path.exists():
         return _gate(
-            "G0", G0_DESCRIPTION, "PENDING", criterion=G0_CRITERION,
+            "G0",
+            G0_DESCRIPTION,
+            "PENDING",
+            criterion=G0_CRITERION,
             reason="No persisted G0 measurement artifact is available; run pipeline/scripts/record_ts_evidence.py g0.",
             artifact_paths=[_relative(path)],
         )
     try:
         report = json.loads(path.read_text(encoding="utf-8"))
         outcomes = {c["test"]: c["outcome"] for c in report["tests"]}
-        required_ok = all(outcomes.get(name) == "passed" for name in report["required_tests"]) and len(report["required_tests"]) >= 3
+        required_ok = (
+            all(outcomes.get(name) == "passed" for name in report["required_tests"])
+            and len(report["required_tests"]) >= 3
+        )
         clean = report["totals"]["not_passed"] == 0 and report["totals"]["tests"] > 0
         strict_enough = report["criterion_deg"] <= 0.01 and report["asserted_tolerance_count"] >= 4
         return _gate(
-            "G0", G0_DESCRIPTION, "PASS" if required_ok and clean and strict_enough else "FAIL", criterion=G0_CRITERION,
-            value={"tests": report["totals"]["tests"], "passed": report["totals"]["passed"], "required_tests": report["required_tests"],
-                   "asserted_tolerances_below_criterion": report["asserted_tolerance_count"]},
+            "G0",
+            G0_DESCRIPTION,
+            "PASS" if required_ok and clean and strict_enough else "FAIL",
+            criterion=G0_CRITERION,
+            value={
+                "tests": report["totals"]["tests"],
+                "passed": report["totals"]["passed"],
+                "required_tests": report["required_tests"],
+                "asserted_tolerances_below_criterion": report["asserted_tolerance_count"],
+            },
             artifact_paths=[_relative(path), "pipeline/tests/terrain/test_horizon_synthetic.py"],
             provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]}: {report['method']}",
             test_commands=["python pipeline/scripts/record_ts_evidence.py g0"],
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
-        return _gate("G0", G0_DESCRIPTION, "BLOCKED", reason=f"Invalid G0 artifact: {error}", artifact_paths=[_relative(path)])
+        return _gate(
+            "G0",
+            G0_DESCRIPTION,
+            "BLOCKED",
+            reason=f"Invalid G0 artifact: {error}",
+            artifact_paths=[_relative(path)],
+        )
 
 
 G8_DESCRIPTION = "Performance on the demo laptop"
@@ -468,8 +608,12 @@ def _g8_gate(path: Path) -> dict[str, Any]:
     """G8 is PASS only when every budget is measured and met on the demo laptop. A partial or over-budget measurement is reported, never promoted."""
     if not path.exists():
         return _gate(
-            "G8", G8_DESCRIPTION, "PENDING", criterion=G8_CRITERION,
-            reason="No measured demo-laptop performance artifact is available.", artifact_paths=[_relative(path)],
+            "G8",
+            G8_DESCRIPTION,
+            "PENDING",
+            criterion=G8_CRITERION,
+            reason="No measured demo-laptop performance artifact is available.",
+            artifact_paths=[_relative(path)],
         )
     try:
         report = json.loads(path.read_text(encoding="utf-8"))
@@ -482,9 +626,13 @@ def _g8_gate(path: Path) -> dict[str, Any]:
         over = []
         if site_p95 > budgets["siteSwitch"]:
             over.append(f"site switch p95 {site_p95:.0f} ms (budget {budgets['siteSwitch']} ms)")
-        final = measured.get("siteSwitchFinalMs")  # staged evaluation: numbers first (siteSwitchMs), +/- and verdict later
+        final = measured.get(
+            "siteSwitchFinalMs"
+        )  # staged evaluation: numbers first (siteSwitchMs), +/- and verdict later
         if final and float(final["p95"]) > budgets["siteSwitch"]:
-            over.append(f"site switch to the final +/- and verdict p95 {float(final['p95']):.0f} ms")
+            over.append(
+                f"site switch to the final +/- and verdict p95 {float(final['p95']):.0f} ms"
+            )
         if slip_p95 > budgets["slipFrame"] + 0.5:
             over.append(f"slip drag frame p95 {slip_p95:.1f} ms (budget {budgets['slipFrame']} ms)")
         reasons = list(over)
@@ -493,16 +641,38 @@ def _g8_gate(path: Path) -> dict[str, Any]:
         reasons.append("hover is measured to the next frame, not to overlay-drawn")
         reasons.append("the measuring machine is not confirmed to be the demo laptop")
         return _gate(
-            "G8", G8_DESCRIPTION, "PENDING", criterion=G8_CRITERION,
-            reason="Partly measured on " + str(report["machine"].get("cpu")) + "; not promoted: " + "; ".join(reasons) + ".",
-            value={"site_switch_ms": measured["siteSwitchMs"], "site_switch_final_ms": measured.get("siteSwitchFinalMs"), "slip_drag_frame_ms": measured["slipDragFrameMs"],
-                   "hover_to_next_frame_ms": measured["hoverToFrameMs"], "site_switch_p50_over_budget": site_p50 > budgets["siteSwitch"]},
+            "G8",
+            G8_DESCRIPTION,
+            "PENDING",
+            criterion=G8_CRITERION,
+            reason="Partly measured on "
+            + str(report["machine"].get("cpu"))
+            + "; not promoted: "
+            + "; ".join(reasons)
+            + ".",
+            value={
+                "site_switch_ms": measured["siteSwitchMs"],
+                "site_switch_final_ms": measured.get("siteSwitchFinalMs"),
+                "slip_drag_frame_ms": measured["slipDragFrameMs"],
+                "hover_to_next_frame_ms": measured["hoverToFrameMs"],
+                "site_switch_p50_over_budget": site_p50 > budgets["siteSwitch"],
+            },
             artifact_paths=[_relative(path)],
-            provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]}; " + " ".join(report["notes"]) + (f" {report['note']}" if report.get("note") else ""),
-            test_commands=["LUMEN_G8_OUT=<file> npx playwright test -c e2e/playwright.real.config.ts livePerf"],
+            provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]}; "
+            + " ".join(report["notes"])
+            + (f" {report['note']}" if report.get("note") else ""),
+            test_commands=[
+                "LUMEN_G8_OUT=<file> npx playwright test -c e2e/playwright.real.config.ts livePerf"
+            ],
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
-        return _gate("G8", G8_DESCRIPTION, "BLOCKED", reason=f"Invalid G8 artifact: {error}", artifact_paths=[_relative(path)])
+        return _gate(
+            "G8",
+            G8_DESCRIPTION,
+            "BLOCKED",
+            reason=f"Invalid G8 artifact: {error}",
+            artifact_paths=[_relative(path)],
+        )
 
 
 G6_DESCRIPTION = "Pad slope versus PGDA slope rasters"
@@ -513,7 +683,10 @@ G6_TOLERANCE_DEG = 3.0
 def _g6_gate(path: Path) -> dict[str, Any]:
     if not path.exists():
         return _gate(
-            "G6", G6_DESCRIPTION, "PENDING", criterion=G6_CRITERION,
+            "G6",
+            G6_DESCRIPTION,
+            "PENDING",
+            criterion=G6_CRITERION,
             reason="No independent PGDA slope-raster comparison artifact is available; run pipeline/scripts/run_g6.py.",
             artifact_paths=[_relative(path)],
         )
@@ -523,13 +696,28 @@ def _g6_gate(path: Path) -> dict[str, Any]:
         diffs = [float(r["abs_difference_vs_centre_deg"]) for r in rows]
         finite = all(math.isfinite(d) for d in diffs) and len(rows) >= 3
         # The recorded tolerance must be no looser than the gate's own reading of "a few degrees", and every site must meet it.
-        meets = finite and report["criterion_deg"] <= G6_TOLERANCE_DEG and all(d <= report["criterion_deg"] for d in diffs)
+        meets = (
+            finite
+            and report["criterion_deg"] <= G6_TOLERANCE_DEG
+            and all(d <= report["criterion_deg"] for d in diffs)
+        )
         return _gate(
-            "G6", G6_DESCRIPTION, "PASS" if meets else "FAIL", criterion=G6_CRITERION + f" (read as <= {G6_TOLERANCE_DEG:g} deg)",
+            "G6",
+            G6_DESCRIPTION,
+            "PASS" if meets else "FAIL",
+            criterion=G6_CRITERION + f" (read as <= {G6_TOLERANCE_DEG:g} deg)",
             value={
                 "sites_compared": len(rows),
                 "max_abs_difference_deg": max(diffs) if diffs else None,
-                "per_site": {r["site_id"]: {"pad_deg": r["pad_slope_deg"], "pgda_deg": r["pgda"]["centre_deg"], "difference_deg": r["abs_difference_vs_centre_deg"], "pgda_product": r["pgda_product"]} for r in rows},
+                "per_site": {
+                    r["site_id"]: {
+                        "pad_deg": r["pad_slope_deg"],
+                        "pgda_deg": r["pgda"]["centre_deg"],
+                        "difference_deg": r["abs_difference_vs_centre_deg"],
+                        "pgda_product": r["pgda_product"],
+                    }
+                    for r in rows
+                },
             },
             artifact_paths=[_relative(path)],
             provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]}. {report['method']} "
@@ -537,7 +725,13 @@ def _g6_gate(path: Path) -> dict[str, Any]:
             test_commands=["python pipeline/scripts/run_g6.py"],
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
-        return _gate("G6", G6_DESCRIPTION, "BLOCKED", reason=f"Invalid G6 artifact: {error}", artifact_paths=[_relative(path)])
+        return _gate(
+            "G6",
+            G6_DESCRIPTION,
+            "BLOCKED",
+            reason=f"Invalid G6 artifact: {error}",
+            artifact_paths=[_relative(path)],
+        )
 
 
 G5_DESCRIPTION = "Multi-year averages versus independent PGDA map pixels"
@@ -549,7 +743,10 @@ def _g5_gate(path: Path) -> dict[str, Any]:
     """PASS only if every compared site is within the tolerance; a site outside it makes the gate FAIL and is named, with the facts that bear on why."""
     if not path.exists():
         return _gate(
-            "G5", G5_DESCRIPTION, "BLOCKED", criterion=G5_CRITERION,
+            "G5",
+            G5_DESCRIPTION,
+            "BLOCKED",
+            criterion=G5_CRITERION,
             reason="Independent documented PGDA map-pixel references have not been supplied; run pipeline/scripts/run_g5.py.",
             required_artifacts=[_relative(path)],
         )
@@ -563,11 +760,20 @@ def _g5_gate(path: Path) -> dict[str, Any]:
         meets = finite and tolerance <= G5_TOLERANCE_POINTS and not outside
         per_site = {
             r["site_id"]: {
-                "lumen_pct": round(r["lumen_multi_year_sunlit_pct"], 1), "pgda_centre_pct": round(r["pgda"]["centre_pct"], 1),
-                "pgda_3x3_range_pct": [round(r["pgda"]["min_3x3_pct"], 1), round(r["pgda"]["max_3x3_pct"], 1)],
-                "difference_points": round(r["abs_difference_vs_centre_pct_points"], 1), "lumen_yearly_spread_points": round(r["lumen_yearly_spread_pct_points"], 1),
-                "lumen_by_observer_height_pct": {k: round(v, 1) for k, v in r.get("lumen_by_observer_height_pct", {}).items()},
-                "lumen_by_horizon_bias_deg_pct": {k: round(v, 1) for k, v in r.get("lumen_by_horizon_bias_deg_pct", {}).items()},
+                "lumen_pct": round(r["lumen_multi_year_sunlit_pct"], 1),
+                "pgda_centre_pct": round(r["pgda"]["centre_pct"], 1),
+                "pgda_3x3_range_pct": [
+                    round(r["pgda"]["min_3x3_pct"], 1),
+                    round(r["pgda"]["max_3x3_pct"], 1),
+                ],
+                "difference_points": round(r["abs_difference_vs_centre_pct_points"], 1),
+                "lumen_yearly_spread_points": round(r["lumen_yearly_spread_pct_points"], 1),
+                "lumen_by_observer_height_pct": {
+                    k: round(v, 1) for k, v in r.get("lumen_by_observer_height_pct", {}).items()
+                },
+                "lumen_by_horizon_bias_deg_pct": {
+                    k: round(v, 1) for k, v in r.get("lumen_by_horizon_bias_deg_pct", {}).items()
+                },
             }
             for r in rows
         }
@@ -580,37 +786,73 @@ def _g5_gate(path: Path) -> dict[str, Any]:
             px = path.with_name(f"g5_pixels_{site}.json")
             if px.exists():
                 pr = json.loads(px.read_text(encoding="utf-8"))
-                d["map_3x3_pixels"] = {**{k: round(v, 3) for k, v in pr["summary"].items()},
-                                       "lumen_range_pct": [round(min(p["lumen_pct"] for p in pr["pixels"]), 1), round(max(p["lumen_pct"] for p in pr["pixels"]), 1)]}
+                d["map_3x3_pixels"] = {
+                    **{k: round(v, 3) for k, v in pr["summary"].items()},
+                    "lumen_range_pct": [
+                        round(min(p["lumen_pct"] for p in pr["pixels"]), 1),
+                        round(max(p["lumen_pct"] for p in pr["pixels"]), 1),
+                    ],
+                }
                 diag_paths.append(_relative(px))
             rs = path.with_name(f"g5_resolution_{site}.json")
             if rs.exists():
                 rr = json.loads(rs.read_text(encoding="utf-8"))
-                d["terrain_resolution_sunlit_pct"] = {k: round(v["sunlit_pct"], 1) for k, v in rr["variants"].items()}
+                d["terrain_resolution_sunlit_pct"] = {
+                    k: round(v["sunlit_pct"], 1) for k, v in rr["variants"].items()
+                }
                 diag_paths.append(_relative(rs))
             if d:
                 diagnostics[site] = d
         if outside:
             extra["reason"] = (
-                "Outside the " + f"{tolerance:g}-point tolerance: " + ", ".join(f"{site} ({diffs[site]:.1f} points)" for site in outside)
+                "Outside the "
+                + f"{tolerance:g}-point tolerance: "
+                + ", ".join(f"{site} ({diffs[site]:.1f} points)" for site in outside)
                 + ". Not explained away: a constant horizon bias of +/-0.5 degrees moves it only a few points and observer height only partly (see value). "
-                + ("Ruled out by the recorded diagnostics: a single-pixel/footprint effect (LUMEN is lower than the map at all nine map pixels around the "
-                   "site, by a similar amount) and terrain resolution (coarser terrain makes LUMEN darker, not brighter). Remaining hypothesis, untested: a "
-                   "horizontal offset of this knife-edge crest between the 2016 map's DEM and the 2023 re-adjusted DEMs LUMEN uses. " if diagnostics else "")
+                + (
+                    "Ruled out by the recorded diagnostics: a single-pixel/footprint effect (LUMEN is lower than the map at all nine map pixels around the "
+                    "site, by a similar amount) and terrain resolution (coarser terrain makes LUMEN darker, not brighter). Remaining hypothesis, untested: a "
+                    "horizontal offset of this knife-edge crest between the 2016 map's DEM and the 2023 re-adjusted DEMs LUMEN uses. "
+                    if diagnostics
+                    else ""
+                )
                 + "The cause is not established and the site's mask needs a terrain-owner review."
             )
         if diagnostics:
             extra["diagnostics"] = diagnostics
         return _gate(
-            "G5", G5_DESCRIPTION, "PASS" if meets else "FAIL", criterion=G5_CRITERION + f" (read as <= {G5_TOLERANCE_POINTS:g} percentage points)",
-            value={"sites_compared": len(rows), "max_difference_points": round(max(diffs.values()), 1) if diffs else None, "per_site": per_site},
+            "G5",
+            G5_DESCRIPTION,
+            "PASS" if meets else "FAIL",
+            criterion=G5_CRITERION + f" (read as <= {G5_TOLERANCE_POINTS:g} percentage points)",
+            value={
+                "sites_compared": len(rows),
+                "max_difference_points": round(max(diffs.values()), 1) if diffs else None,
+                "per_site": per_site,
+            },
             artifact_paths=[_relative(path), *diag_paths],
             provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]}. {report['method']}",
-            test_commands=["python pipeline/scripts/run_g5.py", *(["python pipeline/scripts/g5_pixel_comparison.py", "python pipeline/scripts/g5_resolution_test.py"] if diag_paths else [])],
+            test_commands=[
+                "python pipeline/scripts/run_g5.py",
+                *(
+                    [
+                        "python pipeline/scripts/g5_pixel_comparison.py",
+                        "python pipeline/scripts/g5_resolution_test.py",
+                    ]
+                    if diag_paths
+                    else []
+                ),
+            ],
             **extra,
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
-        return _gate("G5", G5_DESCRIPTION, "BLOCKED", reason=f"Invalid G5 artifact: {error}", artifact_paths=[_relative(path)])
+        return _gate(
+            "G5",
+            G5_DESCRIPTION,
+            "BLOCKED",
+            reason=f"Invalid G5 artifact: {error}",
+            artifact_paths=[_relative(path)],
+        )
 
 
 G4_CRITERION = "elevation < 0.005 deg; events +/-1 min; dt +/-5%; metrics +/-1%"
@@ -621,7 +863,10 @@ G11_DESCRIPTION = "Windows Table, barcode, and CSV integrity"
 def _g4_gate(path: Path) -> dict[str, Any]:
     if not path.exists():
         return _gate(
-            "G4", G4_DESCRIPTION, "PENDING", criterion=G4_CRITERION,
+            "G4",
+            G4_DESCRIPTION,
+            "PENDING",
+            criterion=G4_CRITERION,
             reason="No browser-engine parity artifact is available; run pipeline/scripts/record_ts_evidence.py.",
             artifact_paths=[_relative(path)],
         )
@@ -650,9 +895,16 @@ def _g4_gate(path: Path) -> dict[str, Any]:
         )
         status = "PASS" if within_criterion and all_ran else "FAIL"
         return _gate(
-            "G4", G4_DESCRIPTION, status, criterion=G4_CRITERION,
-            value={"tests": totals["tests"], "passed": totals["passed"], "golden_set1_cases": sets["golden_set1"]["cases"],
-                   "golden_set2_synthetic_cases": sets["golden_set2_synthetic"]["cases"]},
+            "G4",
+            G4_DESCRIPTION,
+            status,
+            criterion=G4_CRITERION,
+            value={
+                "tests": totals["tests"],
+                "passed": totals["passed"],
+                "golden_set1_cases": sets["golden_set1"]["cases"],
+                "golden_set2_synthetic_cases": sets["golden_set2_synthetic"]["cases"],
+            },
             tolerances={"golden_set1": tol1, "golden_set2_synthetic": tol2},
             artifact_paths=[_relative(path)],
             provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]} (vitest, real ephemeris and golden files). "
@@ -660,14 +912,23 @@ def _g4_gate(path: Path) -> dict[str, Any]:
             test_commands=["python pipeline/scripts/record_ts_evidence.py g4"],
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
-        return _gate("G4", G4_DESCRIPTION, "BLOCKED", reason=f"Invalid G4 artifact: {error}", artifact_paths=[_relative(path)])
+        return _gate(
+            "G4",
+            G4_DESCRIPTION,
+            "BLOCKED",
+            reason=f"Invalid G4 artifact: {error}",
+            artifact_paths=[_relative(path)],
+        )
 
 
 def _g11_gate(path: Path) -> dict[str, Any]:
     criterion = "100 percent match and CSV round-trip"
     if not path.exists():
         return _gate(
-            "G11", G11_DESCRIPTION, "PENDING", criterion=criterion,
+            "G11",
+            G11_DESCRIPTION,
+            "PENDING",
+            criterion=criterion,
             reason="No cross-frontend Windows Table/barcode/CSV round-trip artifact is available; run pipeline/scripts/record_ts_evidence.py.",
             artifact_paths=[_relative(path)],
         )
@@ -676,8 +937,12 @@ def _g11_gate(path: Path) -> dict[str, Any]:
         t = report["tally"]
         totals = report["totals"]
         complete = (
-            t["cases"] > 0 and t["windows"] > 0 and t["barcodeCells"] > 0 and t["metricsRows"] > 0
-            and totals["failed"] == 0 and totals["passed"] == totals["tests"] == t["cases"]
+            t["cases"] > 0
+            and t["windows"] > 0
+            and t["barcodeCells"] > 0
+            and t["metricsRows"] > 0
+            and totals["failed"] == 0
+            and totals["passed"] == totals["tests"] == t["cases"]
         )
         exact = (
             t["windowsMatched"] == t["windows"]
@@ -686,28 +951,51 @@ def _g11_gate(path: Path) -> dict[str, Any]:
             and t["jsonLossless"] == t["cases"]
         )
         return _gate(
-            "G11", G11_DESCRIPTION, "PASS" if complete and exact else "FAIL", criterion=criterion,
+            "G11",
+            G11_DESCRIPTION,
+            "PASS" if complete and exact else "FAIL",
+            criterion=criterion,
             value={
-                "cases": t["cases"], "windows_compared": t["windows"], "windows_matched": t["windowsMatched"],
-                "metric_rows_compared": t["metricsRows"], "metric_rows_matched": t["metricsMatched"],
-                "barcode_cells_compared": t["barcodeCells"], "barcode_cells_agreeing": t["barcodeAgree"],
+                "cases": t["cases"],
+                "windows_compared": t["windows"],
+                "windows_matched": t["windowsMatched"],
+                "metric_rows_compared": t["metricsRows"],
+                "metric_rows_matched": t["metricsMatched"],
+                "barcode_cells_compared": t["barcodeCells"],
+                "barcode_cells_agreeing": t["barcodeAgree"],
                 "barcode_cells_skipped_at_window_edges": t["barcodeSkippedAtEdges"],
             },
             artifact_paths=[_relative(path)],
             provenance=f"Recorded {report['recorded_utc']} at commit {report['git_commit'][:10]}: {report['method']} "
-            "Sites: " + ", ".join(sorted({d['site'] for d in report['detail']})) + "; 30 days from " + report["window_start_utc"][:10] + ".",
+            "Sites: "
+            + ", ".join(sorted({d["site"] for d in report["detail"]}))
+            + "; 30 days from "
+            + report["window_start_utc"][:10]
+            + ".",
             test_commands=["python pipeline/scripts/record_ts_evidence.py g11"],
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
-        return _gate("G11", G11_DESCRIPTION, "BLOCKED", reason=f"Invalid G11 artifact: {error}", artifact_paths=[_relative(path)])
+        return _gate(
+            "G11",
+            G11_DESCRIPTION,
+            "BLOCKED",
+            reason=f"Invalid G11 artifact: {error}",
+            artifact_paths=[_relative(path)],
+        )
 
 
 def build_validation_report(
-    *, fixtures_dir: str | Path | None = None, g7_report_path: str | Path | None = None,
-    validation_doc_path: str | Path | None = None, g1_report_path: str | Path | None = None,
-    g4_report_path: str | Path | None = None, g11_report_path: str | Path | None = None,
-    g0_report_path: str | Path | None = None, g8_report_path: str | Path | None = None,
-    g6_report_path: str | Path | None = None, g5_report_path: str | Path | None = None,
+    *,
+    fixtures_dir: str | Path | None = None,
+    g7_report_path: str | Path | None = None,
+    validation_doc_path: str | Path | None = None,
+    g1_report_path: str | Path | None = None,
+    g4_report_path: str | Path | None = None,
+    g11_report_path: str | Path | None = None,
+    g0_report_path: str | Path | None = None,
+    g8_report_path: str | Path | None = None,
+    g6_report_path: str | Path | None = None,
+    g5_report_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Assemble report data from checked-in artifacts without network access."""
     fixture_directory = Path(fixtures_dir) if fixtures_dir is not None else default_fixture_dir()
@@ -719,7 +1007,11 @@ def build_validation_report(
     g5_path = Path(g5_report_path) if g5_report_path is not None else default_g5_report_path()
     g4_path = Path(g4_report_path) if g4_report_path is not None else default_g4_report_path()
     g11_path = Path(g11_report_path) if g11_report_path is not None else default_g11_report_path()
-    g2_path = Path(validation_doc_path) if validation_doc_path is not None else default_validation_doc_path()
+    g2_path = (
+        Path(validation_doc_path)
+        if validation_doc_path is not None
+        else default_validation_doc_path()
+    )
     gates = _pending_gates() + [
         _g1_gate(g1_path),
         _g2_gate(g2_path),
