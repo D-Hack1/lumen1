@@ -1,8 +1,8 @@
 {
-  "created_utc": "2026-11-16T10:33:16.591091Z",
+  "created_utc": "2026-11-16T16:38:29.941795Z",
   "d_min_m": 11.999999999995799,
   "dispersion_slope_stats": {
-    "max": 13.784154820703556,
+    "max": 13.784154820703558,
     "p50": 1.8375026609515388,
     "p95": 4.4308339047040475,
     "pct_below_tolerance": 99.9430013842521,
@@ -12,11 +12,11 @@
     "source": "dem_gradient",
     "unit": "deg"
   },
-  "downhill_aspect_deg": 140.30036402524235,
+  "downhill_aspect_deg": 140.30036402562695,
   "ground_normal_me": [
-    -0.6355479242183344,
-    -0.34412186015105833,
-    -0.691128773375803
+    -0.6355479242180706,
+    -0.34412186015088514,
+    -0.6911287733761318
   ],
   "near_field_resolution_m": 3.9999999999986,
   "plane_fit": {
@@ -34,9 +34,9 @@
   },
   "producer": "lumen_pipeline.terrain.pad",
   "site_id": "change6_apollo_basin",
-  "slope_deg": 2.737035998953537,
+  "slope_deg": 2.7370359989720936,
   "under_resolved": false,
-  "uphill_az_deg": 320.30036402524235,
+  "uphill_az_deg": 320.30036402562695,
   "version": "0.1.0",
-  "z0_m": -5253.210912458862
+  "z0_m": -5253.2109124588615
 }
