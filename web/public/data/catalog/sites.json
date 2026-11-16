@@ -41,15 +41,17 @@
       "source_url": "https://www.nasa.gov/missions/artemis/clps/",
       "target_coords": null,
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/im2_athena.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 10.0,
+        "pad": {
+          "slope_deg": 2.8089403306282548
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "A",
       "touchdown_precision": "second",
       "touchdown_utc": "2025-03-06T17:28:50Z",
       "verification_status": "verified",
@@ -98,15 +100,17 @@
         "source": "PRL, Current Science pre-landing target"
       },
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/cy3_shiv_shakti.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 60.0,
+        "pad": {
+          "slope_deg": 0.5137536572065533
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "A",
       "touchdown_precision": "minute",
       "touchdown_utc": "2023-08-23T12:33:00Z",
       "verification_status": "verified",
@@ -153,13 +157,15 @@
       "terrain": {
         "dispersion_file": null,
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 10.0,
+        "pad": {
+          "slope_deg": 19.843391750866978
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "A",
       "touchdown_precision": null,
       "touchdown_utc": null,
       "verification_status": "verified",
@@ -210,9 +216,9 @@
         "pad": null,
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "unavailable"
       },
-      "tier": "pending",
+      "tier": "C",
       "touchdown_precision": "minute",
       "touchdown_utc": "2025-03-02T08:34:00Z",
       "verification_status": "verified",
@@ -257,15 +263,17 @@
       "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
       "target_coords": null,
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/apollo_11.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 2.0000000000006,
+        "pad": {
+          "slope_deg": 1.820653061694684
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "C",
       "touchdown_precision": null,
       "touchdown_utc": null,
       "verification_status": "verified",
@@ -310,15 +318,17 @@
       "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
       "target_coords": null,
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/apollo_12.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 2.0000000000006,
+        "pad": {
+          "slope_deg": 6.4896605613257865
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "C",
       "touchdown_precision": null,
       "touchdown_utc": null,
       "verification_status": "verified",
@@ -363,15 +373,17 @@
       "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
       "target_coords": null,
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/apollo_14.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 2.0000000000006,
+        "pad": {
+          "slope_deg": 6.366814634698112
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "C",
       "touchdown_precision": null,
       "touchdown_utc": null,
       "verification_status": "verified",
@@ -416,15 +428,17 @@
       "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
       "target_coords": null,
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/apollo_15.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 2.0000000000006,
+        "pad": {
+          "slope_deg": 0.3414461851810531
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "C",
       "touchdown_precision": null,
       "touchdown_utc": null,
       "verification_status": "verified",
@@ -469,15 +483,17 @@
       "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
       "target_coords": null,
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/apollo_16.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 2.0000000000006,
+        "pad": {
+          "slope_deg": 1.363670237374389
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "C",
       "touchdown_precision": null,
       "touchdown_utc": null,
       "verification_status": "verified",
@@ -522,15 +538,17 @@
       "source_url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
       "target_coords": null,
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/apollo_17.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 4.9999999999999,
+        "pad": {
+          "slope_deg": 2.039660724828713
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "C",
       "touchdown_precision": null,
       "touchdown_utc": null,
       "verification_status": "verified",
@@ -581,9 +599,9 @@
         "pad": null,
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "unavailable"
       },
-      "tier": "pending",
+      "tier": "C",
       "touchdown_precision": "minute",
       "touchdown_utc": "2024-01-19T15:20:00Z",
       "verification_status": "verified",
@@ -628,15 +646,17 @@
       "source_url": "https://lroc.im-ldi.com/images/1374",
       "target_coords": null,
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/change6_apollo_basin.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 3.9999999999986,
+        "pad": {
+          "slope_deg": 2.7370359989720936
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "C",
       "touchdown_precision": null,
       "touchdown_utc": null,
       "verification_status": "verified",
@@ -681,15 +701,17 @@
         "source": "LROC image 1247 \"Traversing the Shackleton de Gerlache Ridge\" (Robinson, 1 Apr 2022; NASA/GSFC/Arizona State University) - centre of the 750 m wide NAC mosaic at the ridge/Shackleton-rim intersection"
       },
       "terrain": {
-        "dispersion_file": null,
+        "dispersion_file": "terrain/dispersion/shackleton_rim_ridge.bin",
         "mask": null,
-        "near_field_res_m": null,
-        "pad": null,
+        "near_field_res_m": 10.0,
+        "pad": {
+          "slope_deg": 5.83101069550598
+        },
         "psr": null,
         "sigma": null,
-        "status": "pending"
+        "status": "available"
       },
-      "tier": "pending",
+      "tier": "A",
       "touchdown_precision": null,
       "touchdown_utc": null,
       "verification_status": "verified",

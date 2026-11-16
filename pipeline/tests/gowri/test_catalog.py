@@ -14,7 +14,7 @@ from lumen_pipeline.common.frames import site_rotation_matrix
 
 def test_g6_catalog_schema_coordinates_and_pending_terrain(tmp_path):
     output = tmp_path / "sites.json"
-    catalog = build_catalog(output_path=output)
+    catalog = build_catalog(output_path=output, terrain_root=tmp_path / "terrain")
 
     assert catalog["schema"] == "catalog"
     assert catalog["version"] == 1
@@ -49,8 +49,8 @@ def test_g6_catalog_schema_coordinates_and_pending_terrain(tmp_path):
             "notes",
         }
         assert site["coordinate_frame"] == "MOON_ME_DE421"
-        assert site["tier"] == "pending"
-        assert site["terrain"]["status"] == "pending"
+        assert site["tier"] in {"A", "C"}
+        assert site["terrain"]["status"] == "unavailable"
         assert all(value is None for key, value in site["terrain"].items() if key != "status")
         assert site["verification_status"] == "verified"
 
@@ -95,6 +95,64 @@ def test_g6_catalog_is_deterministic(tmp_path):
     assert output.read_bytes() == first
 
 
+def test_catalog_exposes_only_validated_pad_and_dispersion_paths(tmp_path):
+    terrain = tmp_path / "terrain"
+    (terrain / "pad").mkdir(parents=True)
+    (terrain / "dispersion").mkdir()
+    (terrain / "pad" / "apollo_11.json").write_text(
+        json.dumps({"site_id": "apollo_11", "slope_deg": 1.25, "near_field_resolution_m": 2.0}),
+        encoding="utf-8",
+    )
+    (terrain / "dispersion" / "apollo_11.bin").write_bytes(bytes(121))
+    (terrain / "dispersion" / "apollo_11.json").write_text(
+        json.dumps(
+            {"site_id": "apollo_11", "nodes": [11, 11], "spacing_m": 50.0, "dtype": "uint8"}
+        ),
+        encoding="utf-8",
+    )
+
+    catalog = build_catalog(output_path=tmp_path / "sites.json", terrain_root=terrain)
+    sites = {site["id"]: site for site in catalog["sites"]}
+
+    assert sites["apollo_11"]["terrain"] == {
+        "status": "available",
+        "near_field_res_m": 2.0,
+        "mask": None,
+        "sigma": None,
+        "pad": {"slope_deg": 1.25},
+        "dispersion_file": "terrain/dispersion/apollo_11.bin",
+        "psr": None,
+    }
+    assert sites["blue_ghost_m1"]["terrain"]["status"] == "unavailable"
+    assert sites["slim_shioli"]["terrain"]["dispersion_file"] is None
+
+
+def test_catalog_rejects_incomplete_or_mismatched_terrain_artifacts(tmp_path):
+    terrain = tmp_path / "terrain"
+    (terrain / "pad").mkdir(parents=True)
+    (terrain / "dispersion").mkdir()
+    (terrain / "pad" / "apollo_11.json").write_text(
+        json.dumps({"site_id": "other", "slope_deg": 1, "near_field_resolution_m": 2}),
+        encoding="utf-8",
+    )
+    (terrain / "dispersion" / "apollo_11.bin").write_bytes(bytes(120))
+    (terrain / "dispersion" / "apollo_11.json").write_text(
+        json.dumps({"site_id": "apollo_11", "nodes": [11, 11], "spacing_m": 50, "dtype": "uint8"}),
+        encoding="utf-8",
+    )
+
+    site = next(
+        site
+        for site in build_catalog(output_path=tmp_path / "sites.json", terrain_root=terrain)[
+            "sites"
+        ]
+        if site["id"] == "apollo_11"
+    )
+    assert site["terrain"]["status"] == "unavailable"
+    assert site["terrain"]["pad"] is None
+    assert site["terrain"]["dispersion_file"] is None
+
+
 def test_g6_catalog_allows_missing_optional_metadata(tmp_path):
     source = yaml.safe_load(default_sites_path().read_text(encoding="utf-8"))
     athena = next(site for site in source["sites"] if site["id"] == "im2_athena")
@@ -134,13 +192,36 @@ def test_expanded_sites_are_source_verified_with_no_invented_times(tmp_path):
     catalog = build_catalog(output_path=tmp_path / "sites.json")
     by_id = {site["id"]: site for site in catalog["sites"]}
     # Values as printed on the cited NASA / LROC pages.
-    assert (by_id["apollo_11"]["latitude_deg"], by_id["apollo_11"]["longitude_deg_east"]) == (0.67416, 23.47314)
-    assert (by_id["apollo_12"]["latitude_deg"], by_id["apollo_12"]["longitude_deg_east"]) == (-3.0128, -23.4219)
-    assert (by_id["apollo_17"]["latitude_deg"], by_id["apollo_17"]["longitude_deg_east"]) == (20.1911, 30.7723)
-    assert (by_id["slim_shioli"]["latitude_deg"], by_id["slim_shioli"]["longitude_deg_east"]) == (-13.316, 25.251)
-    assert (by_id["change6_apollo_basin"]["latitude_deg"], by_id["change6_apollo_basin"]["longitude_deg_east"]) == (-41.6385, 206.0148)
+    assert (by_id["apollo_11"]["latitude_deg"], by_id["apollo_11"]["longitude_deg_east"]) == (
+        0.67416,
+        23.47314,
+    )
+    assert (by_id["apollo_12"]["latitude_deg"], by_id["apollo_12"]["longitude_deg_east"]) == (
+        -3.0128,
+        -23.4219,
+    )
+    assert (by_id["apollo_17"]["latitude_deg"], by_id["apollo_17"]["longitude_deg_east"]) == (
+        20.1911,
+        30.7723,
+    )
+    assert (by_id["slim_shioli"]["latitude_deg"], by_id["slim_shioli"]["longitude_deg_east"]) == (
+        -13.316,
+        25.251,
+    )
+    assert (
+        by_id["change6_apollo_basin"]["latitude_deg"],
+        by_id["change6_apollo_basin"]["longitude_deg_east"],
+    ) == (-41.6385, 206.0148)
     assert by_id["slim_shioli"]["touchdown_utc"] == "2024-01-19T15:20:00Z"
-    for site_id in ("apollo_11", "apollo_12", "apollo_14", "apollo_15", "apollo_16", "apollo_17", "change6_apollo_basin"):
+    for site_id in (
+        "apollo_11",
+        "apollo_12",
+        "apollo_14",
+        "apollo_15",
+        "apollo_16",
+        "apollo_17",
+        "change6_apollo_basin",
+    ):
         assert by_id[site_id]["touchdown_utc"] is None, site_id
     for site in catalog["sites"]:
         assert -180.0 <= site["longitude_deg_east"] <= 360.0

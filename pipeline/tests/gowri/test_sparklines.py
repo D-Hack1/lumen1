@@ -56,12 +56,20 @@ def test_sparklines_are_deterministic_and_use_utc_day_boundaries(tmp_path, monke
     second = tmp_path / "second.bin"
 
     metadata = sparklines.build_sparklines(
-        sites_path, ephemeris_path, first, tmp_path / "missing-terrain",
-        start_utc="2023-01-01T00:00:00Z", end_utc="2023-01-03T00:00:00Z",
+        sites_path,
+        ephemeris_path,
+        first,
+        tmp_path / "missing-terrain",
+        start_utc="2023-01-01T00:00:00Z",
+        end_utc="2023-01-03T00:00:00Z",
     )
     sparklines.build_sparklines(
-        sites_path, ephemeris_path, second, tmp_path / "missing-terrain",
-        start_utc="2023-01-01T00:00:00Z", end_utc="2023-01-03T00:00:00Z",
+        sites_path,
+        ephemeris_path,
+        second,
+        tmp_path / "missing-terrain",
+        start_utc="2023-01-01T00:00:00Z",
+        end_utc="2023-01-03T00:00:00Z",
     )
 
     assert first.read_bytes() == second.read_bytes()
@@ -76,8 +84,12 @@ def test_sparklines_mark_missing_masks_and_exclude_preliminary_shackleton(tmp_pa
     monkeypatch.setattr(sparklines.Ephemeris, "from_file", lambda path: _Ephemeris())
 
     metadata = sparklines.build_sparklines(
-        sites_path, ephemeris_path, tmp_path / "sparklines.bin", tmp_path / "missing-terrain",
-        start_utc="2023-01-01T00:00:00Z", end_utc="2023-01-02T00:00:00Z",
+        sites_path,
+        ephemeris_path,
+        tmp_path / "sparklines.bin",
+        tmp_path / "missing-terrain",
+        start_utc="2023-01-01T00:00:00Z",
+        end_utc="2023-01-02T00:00:00Z",
     )
 
     assert metadata["sites"] == ["smooth"]
@@ -85,12 +97,57 @@ def test_sparklines_mark_missing_masks_and_exclude_preliminary_shackleton(tmp_pa
     assert "unresolved target coordinates" in metadata["excluded_sites"]["shackleton_ridge"]
 
 
+def test_sparklines_resume_from_checkpoint_without_replacing_output(tmp_path, monkeypatch):
+    sites_path, ephemeris_path = _inputs(tmp_path)
+    source = yaml.safe_load(sites_path.read_text(encoding="utf-8"))
+    source["sites"] = [
+        source["sites"][0],
+        {"id": "second", "latitude_deg": -81.0, "longitude_deg_east": 21.0},
+    ]
+    sites_path.write_text(yaml.safe_dump(source), encoding="utf-8")
+    monkeypatch.setattr(sparklines.Ephemeris, "from_file", lambda path: _Ephemeris())
+    output = tmp_path / "sparklines.bin"
+    output.write_bytes(b"previous-output")
+
+    partial = sparklines.build_sparklines(
+        sites_path,
+        ephemeris_path,
+        output,
+        tmp_path / "missing-terrain",
+        start_utc="2023-01-01T00:00:00Z",
+        end_utc="2023-01-02T00:00:00Z",
+        max_sites=1,
+    )
+
+    assert partial == {"complete": False, "sites": ["smooth"], "remaining_sites": ["second"]}
+    assert output.read_bytes() == b"previous-output"
+    assert output.with_suffix(".partial.npy").is_file()
+    complete = sparklines.build_sparklines(
+        sites_path,
+        ephemeris_path,
+        output,
+        tmp_path / "missing-terrain",
+        start_utc="2023-01-01T00:00:00Z",
+        end_utc="2023-01-02T00:00:00Z",
+    )
+
+    assert complete["sites"] == ["smooth", "second"]
+    data, metadata = read_array(output)
+    assert data.shape == (2, 2, 1)
+    assert metadata["sites"] == ["smooth", "second"]
+    assert not output.with_suffix(".partial.npy").exists()
+
+
 def test_sparklines_encode_percentage_boundaries():
     horizon = sparklines.Horizon(observer_height_m=2.0)
     day = sparklines.parse_utc("2023-01-01T00:00:00Z")
 
-    assert sparklines._daily_percentages(_ConstantEphemeris(-1.0), -80.0, 20.0, horizon, day, day) == (0, 0)
-    assert sparklines._daily_percentages(_ConstantEphemeris(1.0), -80.0, 20.0, horizon, day, day) == (100, 100)
+    assert sparklines._daily_percentages(
+        _ConstantEphemeris(-1.0), -80.0, 20.0, horizon, day, day
+    ) == (0, 0)
+    assert sparklines._daily_percentages(
+        _ConstantEphemeris(1.0), -80.0, 20.0, horizon, day, day
+    ) == (100, 100)
 
 
 def test_mask_requires_matching_coordinate_metadata(tmp_path):
@@ -111,8 +168,22 @@ def test_mask_requires_matching_coordinate_metadata(tmp_path):
         "d_min_m": 30.0,
     }
     header = struct.pack(
-        "<8sHHIIfffIIIIIIQ", b"LUMENMSK", 1, 64, 4, 3600, 0.1, 250.0, 1.0,
-        64, 57664, 57600, 57600, 0, 0, 0,
+        "<8sHHIIfffIIIIIIQ",
+        b"LUMENMSK",
+        1,
+        64,
+        4,
+        3600,
+        0.1,
+        250.0,
+        1.0,
+        64,
+        57664,
+        57600,
+        57600,
+        0,
+        0,
+        0,
     )
     (masks / "smooth.bin").write_bytes(header + np.zeros((4, 7200), dtype="<f4").tobytes())
     (masks / "smooth.json").write_text(json.dumps(metadata), encoding="utf-8")
@@ -147,8 +218,12 @@ def test_cy3_uses_landing_not_display_or_target_coordinates(tmp_path, monkeypatc
 
     monkeypatch.setattr(sparklines.Ephemeris, "from_file", lambda path: RecordingEphemeris())
     sparklines.build_sparklines(
-        sites_path, ephemeris_path, tmp_path / "sparklines.bin", tmp_path / "missing-terrain",
-        start_utc="2023-01-01T00:00:00Z", end_utc="2023-01-02T00:00:00Z",
+        sites_path,
+        ephemeris_path,
+        tmp_path / "sparklines.bin",
+        tmp_path / "missing-terrain",
+        start_utc="2023-01-01T00:00:00Z",
+        end_utc="2023-01-02T00:00:00Z",
     )
 
     assert set(calls) == {(-69.373, 32.319)}
@@ -159,12 +234,26 @@ def test_published_sparklines_match_the_contract_and_exclude_shackleton():
     data, metadata = read_array(binary)
 
     assert data.dtype == np.uint8
-    assert data.shape == (3, 2, 1096)
+    assert data.shape == (12, 2, 1096)
     assert np.all(data <= 100)
-    assert metadata["sites"] == ["cy3_shiv_shakti", "im2_athena", "blue_ghost_m1"]
+    assert metadata["sites"] == [
+        "cy3_shiv_shakti",
+        "im2_athena",
+        "blue_ghost_m1",
+        "apollo_11",
+        "apollo_12",
+        "apollo_14",
+        "apollo_15",
+        "apollo_16",
+        "apollo_17",
+        "slim_shioli",
+        "change6_apollo_basin",
+        "shackleton_rim_ridge",
+    ]
     assert metadata["start_utc"] == "2023-01-01T00:00:00Z"
     assert metadata["days"] == 1096
-    assert set(metadata["provenance"].values()) == {"smooth-sphere estimate; terrain unavailable"}
+    assert metadata["provenance"]["blue_ghost_m1"] == "smooth-sphere estimate; terrain unavailable"
+    assert metadata["provenance"]["apollo_11"] == "verified site-matched terrain mask"
     assert "unresolved target coordinates" in metadata["excluded_sites"]["shackleton_ridge"]
 
 
@@ -192,7 +281,10 @@ def test_sparklines_require_utc_midnight_bounds(tmp_path, monkeypatch):
 
     try:
         sparklines.build_sparklines(
-            sites_path, ephemeris_path, tmp_path / "sparklines.bin", start_utc="2023-01-01T01:00:00Z"
+            sites_path,
+            ephemeris_path,
+            tmp_path / "sparklines.bin",
+            start_utc="2023-01-01T01:00:00Z",
         )
     except ValueError as error:
         assert "UTC midnight" in str(error)
