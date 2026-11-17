@@ -6,6 +6,7 @@ import { buildScenarioResult, type ScenarioRequest } from './core/buildResult';
 import { loadEphem } from './data/ephem';
 import { loadMaskOrNull, loadMasksFor } from './data/masks';
 import { loadSigmaOrNull } from './data/sigma';
+import { resolveTierBTerrain } from './data/tierb';
 import { loadDsnOrNull } from './data/dsn';
 import { dataMode } from './data/source';
 import { perf } from './perf';
@@ -34,7 +35,8 @@ export function evaluateScenario(req: ScenarioRequest): Promise<ScenarioResult> 
     const w = engine();
     if (w) return w.evaluateScenario(mode, req);
     const eph = await loadEphem();
-    return buildScenarioResult(eph, { ...req, dataVersions: { ...req.dataVersions, ephem: eph.mock ? 'mock' : 'real' } }, await loadDsnOrNull(), await loadMaskOrNull(req.siteId), req.nominalOnly ? null : await loadSigmaOrNull(req.siteId));
+    const terrain = await resolveTierBTerrain(req.siteId, req.latDeg, req.lonDegEast, req.heightM);
+    return buildScenarioResult(eph, { ...req, dataVersions: { ...req.dataVersions, ephem: eph.mock ? 'mock' : 'real' } }, await loadDsnOrNull(), await loadMaskOrNull(req.siteId), req.nominalOnly ? null : await loadSigmaOrNull(req.siteId), terrain.tier === 'B' ? terrain : null, terrain.tier === 'C' ? terrain.reason : null);
   });
 }
 

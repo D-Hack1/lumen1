@@ -1,6 +1,9 @@
 // Owner: Nived
 // Loader: terrain/tierb/index.json + tiles/<id>.bin (data_tierb.md v0.1.0).
-import { DataError, fetchBuffer, fetchJson } from './source';
+import { DataError, dataMode, dataUrl, fetchBuffer, fetchJson } from './source';
+import { LUNAR_RADIUS_KM } from '../core/constants';
+import { groundNormalFromPad, type Vec3 } from '../core/padPower';
+import { Horizon } from '../core/visibility';
 
 interface Section {
   dtype: 'float32' | 'uint16';
@@ -12,12 +15,21 @@ interface Section {
   unavailable_sentinel?: number;
   unit?: string;
 }
-interface RawIndex {
+interface RawTile {
+  id: string;
+  file: string;
+  n_nodes: number;
+  spacing_m: number;
+  bbox_xy_m: [number, number, number, number];
+  sections: Record<string, Section>;
+}
+export interface RawIndex {
   schema: 'tierb_index';
   version: '0.1.0';
+  crs: string;
   bin_deg: number;
   height_m: number;
-  tiles: Array<{ id: string; file: string; n_nodes: number; sections: Record<string, Section> }>;
+  tiles: RawTile[];
 }
 
 export interface TierBTile {
@@ -34,15 +46,45 @@ export interface TierBTile {
   dMinM: Float32Array;
 }
 
+export interface TierBTerrain {
+  tier: 'B';
+  horizon: Horizon;
+  observerElevationM: number;
+  groundNormal: Vec3;
+  snapDistanceKm: number;
+  tileId: string;
+  nodeIndex: number;
+}
+
+export interface TierBFallback {
+  tier: 'C';
+  reason: 'tier_a_precedence' | 'tierb_observer_height_unsupported' | 'tierb_unavailable' | 'tierb_not_covered' | 'tierb_invalid_node';
+}
+
+const CRS = '+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400';
+
 let idx: Promise<RawIndex> | null = null;
 export function parseTierBIndex(index: RawIndex): RawIndex {
-  if (index.schema !== 'tierb_index' || index.version !== '0.1.0' || index.bin_deg !== 0.5 || index.height_m !== 1 || !Array.isArray(index.tiles)) {
+  if (index.schema !== 'tierb_index' || index.version !== '0.1.0' || index.crs !== CRS || index.bin_deg !== 0.5 || index.height_m !== 1 || !Array.isArray(index.tiles)) {
     throw new DataError('tierb: index disagrees with v0.1.0 contract');
+  }
+  const ids = new Set<string>();
+  for (const tile of index.tiles) {
+    if (!tile || typeof tile.id !== 'string' || !tile.id || ids.has(tile.id) || typeof tile.file !== 'string' || !/^tiles\/.+\.bin$/.test(tile.file) || !Number.isInteger(tile.n_nodes) || tile.n_nodes <= 0 || (tile.spacing_m !== 2000 && tile.spacing_m !== 4000) || !Array.isArray(tile.bbox_xy_m) || tile.bbox_xy_m.length !== 4 || tile.bbox_xy_m.some((value) => !Number.isFinite(value)) || tile.bbox_xy_m[0] > tile.bbox_xy_m[2] || tile.bbox_xy_m[1] > tile.bbox_xy_m[3] || !tile.sections || typeof tile.sections !== 'object') {
+      throw new DataError('tierb: index has malformed tile metadata');
+    }
+    ids.add(tile.id);
   }
   return index;
 }
 
-export const loadTierBIndex = (): Promise<RawIndex> => (idx ??= fetchJson<RawIndex>('terrain/tierb/index.json', ['0.1.0']).then(parseTierBIndex));
+export const loadTierBIndex = (): Promise<RawIndex> => {
+  if (!idx) {
+    idx = fetchJson<RawIndex>('terrain/tierb/index.json', ['0.1.0']).then(parseTierBIndex);
+    idx.catch(() => { idx = null; });
+  }
+  return idx;
+};
 
 const tiles = new Map<string, Promise<TierBTile>>();
 
@@ -130,4 +172,89 @@ export function nearestTierBNode(tile: TierBTile, latitudeDeg: number, longitude
     }
   }
   return nearest;
+}
+
+function projectedXY(latitudeDeg: number, longitudeDeg: number): [number, number] {
+  const colatitude = (90 + latitudeDeg) * Math.PI / 180;
+  const radiusM = 2 * LUNAR_RADIUS_KM * 1000 * Math.tan(colatitude / 2);
+  const longitude = longitudeDeg * Math.PI / 180;
+  return [radiusM * Math.sin(longitude), radiusM * Math.cos(longitude)];
+}
+
+/** Covering tiles sorted by ID make shared-boundary selection deterministic. */
+export function coveringTierBTiles(index: RawIndex, latitudeDeg: number, longitudeDeg: number): RawTile[] {
+  const [x, y] = projectedXY(latitudeDeg, longitudeDeg);
+  // Writer bboxes describe node centres. Expand to their nearest-node cells so
+  // adjacent 20 km tiles meet at the deterministic half-spacing boundary.
+  return index.tiles.filter((tile) => x >= tile.bbox_xy_m[0] - tile.spacing_m / 2 && x <= tile.bbox_xy_m[2] + tile.spacing_m / 2 && y >= tile.bbox_xy_m[1] - tile.spacing_m / 2 && y <= tile.bbox_xy_m[3] + tile.spacing_m / 2).sort((a, b) => a.id.localeCompare(b.id));
+}
+
+function validNode(tile: TierBTile, index: number): boolean {
+  if (!Number.isFinite(tile.latDeg[index]) || !Number.isFinite(tile.lonDeg[index]) || !Number.isFinite(tile.slopeDeg[index]) || tile.slopeDeg[index] < 0 || tile.slopeDeg[index] >= 90 || !Number.isFinite(tile.downhillAspectDeg[index]) || tile.downhillAspectDeg[index] < 0 || tile.downhillAspectDeg[index] >= 360 || !Number.isFinite(tile.z0M[index]) || !Number.isFinite(tile.dMinM[index]) || tile.dMinM[index] <= 0) return false;
+  const offset = index * 720;
+  for (let bin = 0; bin < 720; bin++) if (!Number.isFinite(tile.maskDeg[offset + bin])) return false;
+  return true;
+}
+
+function nearestValidTierBNode(tile: TierBTile, latitudeDeg: number, longitudeDeg: number): number | null {
+  let node: number | null = null;
+  let dot = -Infinity;
+  const latitude = latitudeDeg * Math.PI / 180;
+  const longitude = longitudeDeg * Math.PI / 180;
+  for (let i = 0; i < tile.nNodes; i++) {
+    if (!validNode(tile, i)) continue;
+    const candidateLatitude = tile.latDeg[i] * Math.PI / 180;
+    const candidateDot = Math.sin(latitude) * Math.sin(candidateLatitude) + Math.cos(latitude) * Math.cos(candidateLatitude) * Math.cos(longitude - tile.lonDeg[i] * Math.PI / 180);
+    if (candidateDot > dot) {
+      dot = candidateDot;
+      node = i;
+    }
+  }
+  return node;
+}
+
+const unavailable = new Set<string>();
+
+/** Resolve custom-point terrain only; curated requests retain their Tier-A path. */
+export async function resolveTierBTerrain(siteId: string | null, latitudeDeg: number, longitudeDeg: number, heightM: number): Promise<TierBTerrain | TierBFallback> {
+  if (siteId) return { tier: 'C', reason: 'tier_a_precedence' };
+  if (heightM !== 1) return { tier: 'C', reason: 'tierb_observer_height_unsupported' };
+  if (dataMode() !== 'real') return { tier: 'C', reason: 'tierb_unavailable' };
+  const key = dataUrl('terrain/tierb/index.json');
+  if (unavailable.has(key)) return { tier: 'C', reason: 'tierb_unavailable' };
+  let index: RawIndex;
+  try {
+    index = await loadTierBIndex();
+  } catch {
+    unavailable.add(key);
+    return { tier: 'C', reason: 'tierb_unavailable' };
+  }
+  const entries = coveringTierBTiles(index, latitudeDeg, longitudeDeg);
+  if (!entries.length) return { tier: 'C', reason: 'tierb_not_covered' };
+  for (const entry of entries) {
+    try {
+      const tile = await loadTierBTile(entry.id);
+      const node = nearestValidTierBNode(tile, latitudeDeg, longitudeDeg);
+      if (node == null) continue;
+      const snapDistanceKm = Math.acos(Math.min(1, Math.max(-1, Math.sin(latitudeDeg * Math.PI / 180) * Math.sin(tile.latDeg[node] * Math.PI / 180) + Math.cos(latitudeDeg * Math.PI / 180) * Math.cos(tile.latDeg[node] * Math.PI / 180) * Math.cos((longitudeDeg - tile.lonDeg[node]) * Math.PI / 180)))) * LUNAR_RADIUS_KM;
+      return {
+        tier: 'B',
+        horizon: new Horizon({ elevationsDeg: tile.maskDeg.subarray(node * 720, (node + 1) * 720), binWidthDeg: tile.binDeg, slopeDeg: tile.slopeDeg[node], uphillAzimuthDeg: (tile.downhillAspectDeg[node] + 180) % 360, dMinM: tile.dMinM[node], observerHeightM: 1 }),
+        observerElevationM: tile.z0M[node] + 1,
+        groundNormal: groundNormalFromPad(tile.slopeDeg[node], tile.downhillAspectDeg[node]),
+        snapDistanceKm,
+        tileId: entry.id,
+        nodeIndex: node,
+      };
+    } catch {
+      return { tier: 'C', reason: 'tierb_unavailable' };
+    }
+  }
+  return { tier: 'C', reason: 'tierb_invalid_node' };
+}
+
+export function __resetTierBForTests(): void {
+  idx = null;
+  tiles.clear();
+  unavailable.clear();
 }
