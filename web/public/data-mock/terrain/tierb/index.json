@@ -1,67 +1,103 @@
 {
-  "schema": "tierb_index",
-  "version": 1,
-  "mock": true,
-  "note": "MOCK DATA \u2014 synthetic values, not for science or demo claims",
-  "node_spacing_m": 2000,
   "bin_deg": 0.5,
+  "crs": "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400",
+  "git_commit": "dc09b9dd4d44af7754d868168499f70b2dc6dbc9",
   "height_m": 1.0,
-  "d_min_m": 6000,
-  "sigma_default_deg": 0.5,
+  "producer": "lumen_pipeline.terrain.tierb",
+  "schema": "tierb_index",
   "tiles": [
     {
-      "id": "s90_000",
-      "file": "tiles/s90_000.bin",
-      "n_nodes": 64,
-      "grid": [
-        8,
-        8
+      "bbox_deg": {
+        "lat_max": -89.16053508621981,
+        "lat_min": -90.0,
+        "lon_max": 90.0,
+        "lon_min": 0.0
+      },
+      "bbox_xy_m": [
+        0.0,
+        0.0,
+        18000.0,
+        18000.0
       ],
+      "file": "tiles/s2000_x+000000_y+000000.bin",
+      "id": "s2000_x+000000_y+000000",
+      "n_nodes": 100,
       "sections": {
-        "lat_deg": {
+        "d_min_m": {
+          "byte_length": 400,
           "dtype": "float32",
-          "offset_bytes": 0,
-          "byte_length": 256
-        },
-        "lon_deg": {
-          "dtype": "float32",
-          "offset_bytes": 256,
-          "byte_length": 256
-        },
-        "mask": {
-          "dtype": "uint8",
-          "offset_bytes": 512,
-          "byte_length": 46080,
+          "offset_bytes": 145600,
           "shape": [
-            64,
-            720
+            100
           ],
-          "scale": 0.05,
-          "offset": -2.0
-        },
-        "slope_deg": {
-          "dtype": "uint8",
-          "offset_bytes": 46592,
-          "byte_length": 64,
-          "unit": 0.1
+          "unit": "m"
         },
         "downhill_aspect_deg": {
+          "byte_length": 200,
           "dtype": "uint16",
-          "offset_bytes": 46656,
-          "byte_length": 128,
-          "unit": 0.01
+          "offset": 0.0,
+          "offset_bytes": 145000,
+          "scale": 0.01,
+          "shape": [
+            100
+          ],
+          "unit": "deg"
+        },
+        "lat_deg": {
+          "byte_length": 400,
+          "dtype": "float32",
+          "offset_bytes": 0,
+          "shape": [
+            100
+          ],
+          "unit": "deg"
+        },
+        "lon_deg": {
+          "byte_length": 400,
+          "dtype": "float32",
+          "offset_bytes": 400,
+          "shape": [
+            100
+          ],
+          "unit": "deg"
+        },
+        "mask": {
+          "byte_length": 144000,
+          "dtype": "uint16",
+          "offset": -10.0,
+          "offset_bytes": 800,
+          "scale": 0.01,
+          "shape": [
+            100,
+            720
+          ],
+          "unavailable_sentinel": 65535,
+          "unit": "deg"
+        },
+        "slope_deg": {
+          "byte_length": 200,
+          "dtype": "uint16",
+          "offset": 0.0,
+          "offset_bytes": 144800,
+          "scale": 0.01,
+          "shape": [
+            100
+          ],
+          "unit": "deg"
         },
         "z0_m": {
-          "dtype": "int16",
-          "offset_bytes": 46784,
-          "byte_length": 128,
-          "unit": 0.5
+          "byte_length": 400,
+          "dtype": "float32",
+          "offset_bytes": 145200,
+          "shape": [
+            100
+          ],
+          "unit": "m"
         }
       },
-      "bbox_deg": {
-        "lat_min": -89.95336222862885,
-        "lat_max": -89.67353646561696
-      }
+      "sha256": "5634e909b5909514e01edaf39d4dd4f64a34b000bf1ed7ac4790e35821d5fbbe",
+      "spacing_m": 2000
     }
-  ]
+  ],
+  "version": "0.1.0"
 }

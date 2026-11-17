@@ -2,7 +2,7 @@
 
 _Owner: Shiva Shakthi_
 
-Status: **Proposed — implementation baseline**
+Status: **Frozen — v0.1.0 producer/consumer contract**
 Contract version: **`0.1.0`**
 
 ### Summary of Status & Decisions
@@ -34,10 +34,10 @@ Tier-B provides a precomputed regional horizon dataset with per-node terrain met
 - **Deep South (inside 85° S, -90.0° ≤ latitude < -85.0°):** Nominal **2 km** node spacing.
 - **Outer Polar (80° S – 85° S, -85.0° ≤ latitude ≤ -80.0°):** Nominal **4 km** node spacing.
 
-### 2.3 Grid Geometry, Alignment, and Boundaries (Unresolved Decisions)
-- **Boundary Ownership at 85° S (Unresolved):** There is no agreed exact ownership rule for nodes lying on the 85.0° S latitude boundary. Whether boundary nodes belong to the 2 km zone, the 4 km zone, or a shared seam requires coordination between pipeline generation and client-side nearest-neighbor lookups.
-- **Grid Projection & Alignment (Unresolved):** The project plan specifies metric spacing (2 km / 4 km), but the exact cartographic projection (e.g., South Polar Stereographic with standard parallel at 90° S or 75° S, central meridian 0° E, vs. spherical/geodesic grid) and grid origin remain unresolved pending coordination with the map layer pipeline.
-- **Proposed Choice:** A Polar Stereographic projection centered at the South Pole with grid alignment matching the regional map layers is proposed, but not frozen.
+### 2.3 Grid Geometry, Alignment, and Boundaries (Confirmed)
+- CRS: `+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +R=1737400`.
+- Nodes are aligned to integer multiples of their zone spacing from the pole. Tiles are 20 km squares and nodes are row-major (west-to-east, then south-to-north in projected coordinates).
+- The 2 km zone owns nodes with latitude `< -85.0°`; the 4 km zone owns nodes with latitude `>= -85.0°`. A seam-crossing tile is invalid and must be split. Tile origins are 20 km multiples and adjacent tiles do not duplicate nodes.
 
 ---
 
@@ -73,41 +73,34 @@ Tier-B adheres to the verified coordinate frame in `data_masks.md` §2:
 - Nodes are grouped into geographic tiles of approximately **20 km × 20 km**.
 - Tile processing must be **resumable**: tiles are generated atomically, and finished tiles are skipped on subsequent runs to allow long-running batch generation on unattended laptops.
 
-### 4.2 Packaging Architecture: Binary Payload + JSON Sidecar Header (Confirmed Direction)
+### 4.2 Packaging Architecture: Raw Binary Payload + JSON Index (Confirmed)
 - Per the work-distribution specification, data artifacts follow the pattern of **binary arrays accompanied by a sidecar JSON header**.
 - Intended publication directory: `web/public/data/terrain/tierb/`
   - Tile binaries: `tiles/<tile_id>.bin`
   - Tile metadata / header sidecars: `tiles/<tile_id>.json`
   - Regional index: `index.json`
 
-### 4.3 Unresolved Tile Layout & Schema Details (Unresolved Decisions)
-- **Binary Header & Field Layout (Unresolved):** The exact binary layout inside `<tile_id>.bin` (magic bytes, version, header size, byte offsets, ordering of nodes, and whether per-node metadata is multiplexed into the binary or kept exclusively in the sidecar) is **not** specified in the master plan and remains pending coordination with Gowri (`binio.py`) and Nived.
-- **Node Ordering within Tile (Unresolved):** Whether nodes are indexed in row-major Cartesian order, Morton / Hilbert space-filling curve order, or an explicit coordinate array is unresolved.
-- **Index Schema & Spatial Representation (Proposed, Not Frozen):** The format of `index.json` (such as geographic bounding boxes vs. projected metric envelopes vs. tile ID lookup tables) and exact producer strings are proposed design choices and must not be treated as frozen requirements until agreed upon.
+### 4.3 v0.1.0 Binary and Index Schema (Confirmed)
+- `<tile_id>.bin` is raw little-endian sections with no header. `index.json` is `{"schema":"tierb_index","version":"0.1.0"}` and records `crs`, `bin_deg`, `height_m`, `producer`, `git_commit`, and tile descriptors.
+- Each descriptor has `id`, `file`, `n_nodes`, `spacing_m`, `bbox_xy_m`, `bbox_deg`, SHA-256, and section descriptors (`dtype`, `offset_bytes`, `byte_length`, `shape`, plus `scale`, `offset`, and `unit` where applicable).
+- Sections are `lat_deg` Float32, `lon_deg` Float32, `mask` UInt16 `[n_nodes,720]`, `slope_deg` UInt16, `downhill_aspect_deg` UInt16, `z0_m` Float32, and `d_min_m` Float32. Optional `<tile_id>.json` records provenance and checksum. There is no global `node_spacing_m` or `d_min_m`.
 
 ---
 
 ## 5. UInt8 Horizon Quantization and Out-of-Range Handling
 
 ### 5.1 Quantization Step (Confirmed)
-- Data type: `UInt8` (unsigned 8-bit integer, values 0 to 255).
-- Scale: **`0.05` degrees per quantization step**.
+- Mask data type: little-endian `UInt16`; decoded elevation is `code * 0.01° - 10°`.
+- `65535` is the only unavailable sentinel and is never a valid encoded horizon value. Finite values outside the representable range are rejected, never clamped.
 
-### 5.2 Quantization Arithmetic (Proposed Choice & Mathematical Correction)
+### 5.2 Other Per-Node Encodings (Confirmed)
 Decoding formula:
 $$\text{elevation\_deg} = \text{code} \times 0.05^\circ + \text{offset\_deg}$$
 
-- **Proposed Offset:** `offset_deg = -2.5°`.
-- **Proposed Unavailable Sentinel:** `code = 255` reserved as `UNAVAILABLE` / `NODATA`.
-- **Valid Quantization Range:** With offset `-2.5°`, step `0.05°`, and code `255` reserved:
-  - Code `0` decodes to: $0 \times 0.05^\circ + (-2.5^\circ) = -2.5^\circ$.
-  - Code `254` decodes to: $254 \times 0.05^\circ + (-2.5^\circ) = +10.2^\circ$.
-  - Valid decoded codes `0 – 254` cover **`-2.5°` to `+10.2°`** (dynamic span of $254 \times 0.05^\circ = 12.7^\circ$).
+- `slope_deg` and `downhill_aspect_deg` are UInt16 with `0.01°` scale and zero offset. `z0_m` and `d_min_m` are Float32 metres. Uphill azimuth is derived as `(downhill + 180) mod 360`.
 
-### 5.3 Out-of-Range and Unavailable Value Handling (Unresolved Decisions)
-- **Quantization Offset Agreement (Unresolved):** The fixed global offset of `-2.5°` is a proposed choice. Alternative choices (such as per-tile dynamic offsets stored in the sidecar header) remain open pending review of extreme topographic relief in deep polar craters.
-- **Out-of-Range Handling (Unresolved):** The behavior when a raycasted elevation falls outside the decodable range (e.g. $< -2.5^\circ$ or $> +10.2^\circ$) must **not** be clamped silently. Whether to clamp with a warning flag, saturate at extrema, or expand dynamic range via tile-specific offsets requires team agreement.
-- **Missing Value Sentinel (Unresolved):** Reserving code `255` requires explicit confirmation from Nived for consumer-side Web Worker decoding.
+### 5.3 Out-of-Range and Unavailable Value Handling (Confirmed)
+- Nodata horizons encode as `65535`; finite out-of-range horizons and invalid slope/aspect values fail generation. Writer and reader validate all section bounds, shapes, and little-endian lengths before publishing/reusing a tile.
 
 ---
 

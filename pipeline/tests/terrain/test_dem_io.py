@@ -28,6 +28,7 @@ from lumen_pipeline.terrain.dem_io import (
     DemReader,
     _remote_identity,
     load_products,
+    local_dem_path,
 )
 
 VERIFIED_STATUS = "source_page_and_urls_provided"
@@ -38,6 +39,26 @@ PIXEL_M = 20.0
 ROWS = COLS = 400
 DEM_BOUNDS = (2000.0, -6000.0, 7000.0, -1000.0)
 FULL_BOUNDS = (0.0, -ROWS * PIXEL_M, COLS * PIXEL_M, 0.0)
+
+
+def test_local_dem_requires_matching_verified_manifest(tmp_path):
+    product = DemProduct(
+        key="local", name="local", url="https://example.test/dem.tif", resolution_m=20,
+        unit="m", scale=1, offset=0, nodata=float("nan"), vertical_reference="height_relative",
+        verification_status=VERIFIED_STATUS,
+    )
+    target = tmp_path / "dem.tif"
+    target.with_suffix(".tif.part").write_bytes(b"interrupted")
+    assert local_dem_path(product, tmp_path) is None
+    target.write_bytes(b"not-a-geotiff")
+    assert local_dem_path(product, tmp_path) is None
+    target.with_suffix(".tif.lumen.json").write_text(json.dumps({
+        "source_url": product.url, "size_bytes": target.stat().st_size,
+        "sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
+    }))
+    assert local_dem_path(product, tmp_path) == target
+    target.write_bytes(b"interrupted-or-corrupt")
+    assert local_dem_path(product, tmp_path) is None
 REMOTE_ROWS = REMOTE_COLS = 512
 REMOTE_TRANSFORM = from_origin(0.0, 0.0, PIXEL_M, PIXEL_M)
 REMOTE_VALUES = (
