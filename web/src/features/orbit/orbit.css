@@ -209,6 +209,47 @@
   border: 1px solid var(--line2);
   border-radius: 10px;
   padding: 10px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+.lm-clock__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mut);
+  transition: background 0.25s ease;
+}
+.lm-clock--live {
+  color: var(--fg);
+  border-color: var(--fg2);
+  transform: scale(1.06);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg) 14%, transparent), 0 0 18px color-mix(in srgb, var(--fg) 28%, transparent);
+}
+.lm-clock--live .lm-clock__dot {
+  background: var(--fg);
+  animation: lm-clock-pulse 0.9s ease-in-out infinite;
+}
+@keyframes lm-clock-pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lm-clock,
+  .lm-clock--live {
+    transition: none;
+    transform: none;
+  }
+  .lm-clock--live .lm-clock__dot {
+    animation: none;
+  }
 }
 .lm-datepick {
   display: flex;

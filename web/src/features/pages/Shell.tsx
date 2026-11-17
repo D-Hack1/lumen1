@@ -1,7 +1,7 @@
 // Owner: Abhinav
 // The Lumen page shell from the design: logo, the four-view nav, the clock (Orbit / Stand here) and the theme toggle.
 // Routes are hash links so the preview needs no router; the real app would swap these for its own navigation.
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { timeLabel } from '../orbit/orbitModel';
 import { OPEN_EVENT } from '../ask/askWhy';
 import { openQuickStart } from '../guidance/quickstart';
@@ -23,6 +23,13 @@ export function Shell({ route, lumen, children }: { route: Route; lumen: LumenSt
   const showClock = route === 'orbit' || route === 'stand-here';
   const startUtc = useWindowStart();
   const showDate = dataMode() === 'real' && route !== 'methodology';
+  // The clock "pops" while the time is moving (playing or scrubbing) and settles 400 ms after it stops.
+  const [ticking, setTicking] = useState(false);
+  useEffect(() => {
+    setTicking(true);
+    const id = setTimeout(() => setTicking(false), 400);
+    return () => clearTimeout(id);
+  }, [lumen.t]);
   return (
     <div className={`lm-page lm-shell ${lumen.light ? 'lm-theme-light' : 'lm-theme-dark'}`}>
       <header className="lm-header">
@@ -61,7 +68,12 @@ export function Shell({ route, lumen, children }: { route: Route; lumen: LumenSt
             />
           </label>
         )}
-        {showClock && <div className="lm-clock">{timeLabel(lumen.t)}</div>}
+        {showClock && (
+          <div className={`lm-clock${ticking ? ' lm-clock--live' : ''}`} aria-label="Simulation time" role="timer" aria-live="off">
+            <span className="lm-clock__dot" aria-hidden="true" />
+            {timeLabel(lumen.t)}
+          </div>
+        )}
         <button type="button" className="lm-btn lm-btn--ghost" onClick={openQuickStart} title="Four guided ways to start">
           Quick start
         </button>

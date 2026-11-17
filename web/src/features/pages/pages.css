@@ -21,6 +21,17 @@
   justify-content: space-between;
   gap: 16px;
 }
+/* Stand here: the site picker is its own row at the top-left, so it never moves when the title changes length. */
+.lm-pagehead--stack {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+}
+.lm-segs--fixed .lm-segs__all {
+  width: 260px;
+  flex: 0 0 auto;
+}
 .lm-h1 {
   margin: 0;
   font-family: 'DM Sans', Inter, sans-serif;

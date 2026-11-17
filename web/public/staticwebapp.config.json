@@ -1,0 +1,14 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/data/*", "/assets/*", "/*.{png,jpg,jpeg,svg,ico,webp,json,js,css,wasm,bin,webmanifest,txt}"]
+  },
+  "mimeTypes": {
+    ".bin": "application/octet-stream",
+    ".webmanifest": "application/manifest+json"
+  },
+  "routes": [
+    { "route": "/sw.js", "headers": { "cache-control": "no-cache" } },
+    { "route": "/index.html", "headers": { "cache-control": "no-cache" } }
+  ]
+}

@@ -59,7 +59,8 @@ export function SurfacePage() {
   }, [playing, setT]);
 
   const QUICK = SITES.slice(0, 4);
-  const options: Site[] = QUICK.some((s) => s.id === site.id) ? [...QUICK] : [...QUICK, site];
+  // A fixed set of quick buttons: the select shows the current site, so a non-quick site no longer adds a button that shifts the row.
+  const options: Site[] = [...QUICK];
   // Every site (the catalog in real mode), grouped as on the Orbit page; a custom pin is listed too so the select can show it.
   const all: Site[] = SITES.some((s) => s.id === site.id) ? [...SITES] : [...SITES, site];
   const groups = all.reduce<Map<string, Site[]>>((acc, s) => acc.set(s.group || 'Other', [...(acc.get(s.group || 'Other') ?? []), s]), new Map());
@@ -89,13 +90,8 @@ export function SurfacePage() {
 
   return (
     <main className="lm-wrap">
-      <div className="lm-pagehead">
-        <div>
-          <div className="lm-eyebrow">Standing at</div>
-          <h1 className="lm-h1 lm-h1--tight">{site.name}</h1>
-          <div className="lm-coords lm-coords--lg">{fmtCoords(site.lat, site.lon)} · looking all the way around</div>
-        </div>
-        <div role="group" aria-label="Site" className="lm-segs">
+      <div className="lm-pagehead lm-pagehead--stack">
+        <div role="group" aria-label="Site" className="lm-segs lm-segs--fixed">
           {options.map((s) => (
             <button key={s.id} type="button" aria-pressed={s.id === site.id} onClick={() => L.selectSite(s.id)}>
               {SHORT[s.id] ?? s.short}
@@ -112,6 +108,11 @@ export function SurfacePage() {
               </optgroup>
             ))}
           </select>
+        </div>
+        <div>
+          <div className="lm-eyebrow">Standing at</div>
+          <h1 className="lm-h1 lm-h1--tight">{site.name}</h1>
+          <div className="lm-coords lm-coords--lg">{fmtCoords(site.lat, site.lon)} · looking all the way around</div>
         </div>
       </div>
 
