@@ -176,6 +176,8 @@ export interface ResultMeta {
   tierBadge: string; // e.g. "Tier A · near-field 5 m"
   sigmaSource: string; // "default" | "Monte-Carlo, 30 clones" | "calibrated vs Tier A" | "smooth-sphere estimate; terrain unavailable"
   snapDistanceKm: number | null; // Tier B only
+  /** Explicit reason when a custom point remains on Tier C after Tier-B resolution. */
+  terrainFallbackReason?: string | null;
   definitionsSummary: string;
   dataVersions: Record<string, number | string>;
   mock: boolean;

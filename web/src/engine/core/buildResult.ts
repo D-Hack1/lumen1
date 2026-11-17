@@ -10,7 +10,7 @@ import { makeSite, type Mat3 } from './geometry';
 import { inEphemerisRange } from './interp';
 import { evaluateVerdict, type VerdictProfile, type VerdictWeights } from './verdict';
 import { FINE_STEP_MS, refineTransition } from './events';
-import { energyPerDayWh, powerSeries, type PowerConfig } from './padPower';
+import { energyPerDayWh, powerSeries, type PowerConfig, type Vec3 } from './padPower';
 import type { DsnSeries } from '../data/dsn';
 import { Horizon, diskFractionVisible } from './visibility';
 import { horizonFromMask, sigmaAtAzimuth, sigmaRowFor } from './terrainHorizon';
@@ -47,6 +47,14 @@ export interface ScenarioRequest {
    * must replace it with the full (stage 'final') result.
    */
   nominalOnly?: boolean;
+}
+
+/** A contract-valid Tier-B node selected by the data layer for a custom point. */
+export interface TierBTerrainOverride {
+  horizon: Horizon;
+  observerElevationM: number;
+  groundNormal: Vec3;
+  snapDistanceKm: number;
 }
 
 /** Masks built from a DEM coarser than this (metres per pixel) are labelled "coarse". The polar Tier-A masks are 5-60 m. */
@@ -137,6 +145,8 @@ export function buildScenarioResult(
   dsn: DsnSeries | null = null,
   mask: Mask | null = null,
   sigma: Sigma | null = null,
+  tierB: TierBTerrainOverride | null = null,
+  tierBFallbackReason: string | null = null,
 ): ScenarioResult {
   const endMs = req.startMs + req.durationDays * DAY;
   if (!inEphemerisRange(eph, req.startMs) || !inEphemerisRange(eph, endMs)) {
@@ -145,8 +155,8 @@ export function buildScenarioResult(
     );
   }
   // A site with a usable terrain mask (right height, no gaps) is evaluated on it. Everything else uses the smooth-sphere model.
-  const site = makeSite(req.latDeg, req.lonDegEast, req.heightM, req.rotation ?? undefined);
-  const terrainHorizon = horizonFromMask(mask, req.heightM);
+  const site = makeSite(req.latDeg, req.lonDegEast, tierB?.observerElevationM ?? req.heightM, req.rotation ?? undefined);
+  const terrainHorizon = tierB?.horizon ?? horizonFromMask(mask, req.heightM);
   // A mask from the global ~237 m elevation model (sites outside the polar DEM products) is real terrain but coarse: horizons near the site are smoothed.
   const coarse = terrainHorizon !== null && mask !== null && mask.meta.nearFieldResolutionM >= COARSE_TERRAIN_M;
   const horizon = terrainHorizon ?? new Horizon({ observerHeightM: req.heightM });
@@ -159,7 +169,7 @@ export function buildScenarioResult(
   const bw: BoundedEvaluation | null =
     sigmaRow && sigmaAt ? evaluateWithBounds(input, { sigmaDeg: sigmaRow, sigmaAtAzimuthDeg: sigmaAt }) : null;
   const ev = bw ? bw.nominal : evaluate(input);
-  const series = buildSeries(ev, req.power ?? null, sigmaAt);
+  const series = buildSeries(ev, req.power ? { ...req.power, groundNormal: tierB?.groundNormal ?? req.power.groundNormal } : null, sigmaAt);
 
   const tScrub = Math.min(Math.max(req.tScrubMs, req.startMs), endMs);
   const cur = stateAt(eph, site, horizon, d, tScrub, dsn);
@@ -246,20 +256,25 @@ export function buildScenarioResult(
     error: null,
     meta: {
       siteId: req.siteId ?? 'custom',
-      tier: req.tier,
+      tier: tierB ? 'B' : req.tier,
       tierBadge:
-        bw && sigma
+        tierB
+          ? `Tier B · snapped ${tierB.snapDistanceKm.toFixed(2)} km · uncertainty unavailable`
+          : bw && sigma
           ? `Terrain mask · σ ${sigmaSourceLabel(sigma)}`
           : terrainHorizon
             ? `${coarse ? `Coarse terrain mask (${Math.round(mask!.meta.nearFieldResolutionM)} m)` : 'Terrain mask'} · ${req.nominalOnly ? 'computing ±…' : 'σ unavailable'}`
-            : 'Smooth-Moon horizon · terrain pending',
+            : `Smooth-Moon horizon · ${tierBFallbackReason ?? 'terrain pending'}`,
       sigmaSource:
-        bw && sigma
+        tierB
+          ? 'Tier-B terrain, uncertainty unavailable'
+          : bw && sigma
           ? sigmaSourceLabel(sigma)
           : terrainHorizon
             ? `${coarse ? 'coarse terrain mask' : 'terrain mask'}, ${req.nominalOnly ? 'computing ±' : 'σ unavailable'}`
-            : 'smooth-sphere estimate; terrain unavailable',
-      snapDistanceKm: null,
+            : `smooth-sphere estimate; ${tierBFallbackReason ?? 'terrain unavailable'}`,
+      snapDistanceKm: tierB?.snapDistanceKm ?? null,
+      terrainFallbackReason: tierB ? null : tierBFallbackReason,
       definitionsSummary: `Sun available = ≥${Math.round(d.sunDiskThreshold * 100)}% disk above the horizon${d.minSunElevationOpsDeg > 0 ? ` and ≥${d.minSunElevationOpsDeg}° elevation` : ''} @${req.heightM} m · Link = Earth ≥${d.earthMarginDeg}° above the horizon${ev.dsnApplied ? ` + DSN ≥${d.dsnMaskDeg}°` : ' (DSN not applied)'}`,
       dataVersions: req.dataVersions,
       mock: eph.mock,
