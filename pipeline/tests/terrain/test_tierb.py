@@ -64,24 +64,33 @@ def test_tile_round_trip_layout_and_determinism(tmp_path):
     # Serialization uses synthetic values only; production generation requires a PGDA DEM window.
     spec = TileSpec(0, 0, 2000)
     _, _, latitude, longitude = _tile_coordinates(spec)
+    mask = np.zeros((100, 720), dtype=np.float32)
+    mask[0, :3] = [-10.0, np.nan, 0.0]
     tile = TierBTile(
         spec=spec,
         latitude_deg=latitude.astype(np.float32),
         longitude_deg=longitude.astype(np.float32),
-        mask_deg=np.zeros((100, 720), dtype=np.float32),
-        slope_deg=np.zeros(100, dtype=np.float32),
-        downhill_aspect_deg=np.zeros(100, dtype=np.float32),
-        z0_m=np.zeros(100, dtype=np.float32),
-        d_min_m=np.full(100, 60.0, dtype=np.float32),
+        mask_deg=mask,
+        slope_deg=np.arange(100, dtype=np.float32) * 0.01,
+        downhill_aspect_deg=np.arange(100, dtype=np.float32) * 0.01,
+        z0_m=-50.0 + np.arange(100, dtype=np.float32) * 0.25,
+        d_min_m=60.0 + (np.arange(100, dtype=np.float32) % 2) * 30.0,
         provenance={"synthetic": True},
     )
     entry = write_tile(tile, tmp_path)
     write_index([entry], tmp_path)
     decoded = read_tile(entry, tmp_path)
     assert decoded["mask"].shape == (100, 720)
-    assert decoded["d_min_m"].tolist() == [60.0] * 100
+    assert decoded["mask"][0, :3].tolist() == [0, 65535, 1000]
+    assert decoded["d_min_m"][:2].tolist() == [60.0, 90.0]
+    assert decoded["slope_deg"][:2].tolist() == [0, 1]
+    assert decoded["downhill_aspect_deg"][:2].tolist() == [0, 1]
     assert entry["sections"]["mask"]["offset"] == -10.0
     assert entry["sections"]["mask"]["unavailable_sentinel"] == 65535
+    section_end = 0
+    for section in entry["sections"].values():
+        assert section["offset_bytes"] == section_end
+        section_end += section["byte_length"]
     index = json.loads((tmp_path / "tierb" / "index.json").read_text())
     assert index["version"] == "0.1.0"
     assert "node_spacing_m" not in index and "d_min_m" not in index

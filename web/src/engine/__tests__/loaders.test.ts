@@ -8,7 +8,7 @@ import { EPHEM, EPHEM_STRIDE, loadEphem } from '../data/ephem';
 import { loadGolden } from '../data/golden';
 import { loadPad, parsePad } from '../data/pad';
 import { loadPsr } from '../data/psr';
-import { loadTierBTile } from '../data/tierb';
+import { loadTierBIndex, loadTierBTile, nearestTierBNode, parseTierBIndex } from '../data/tierb';
 import { readMock, stubFetch } from './helpers';
 
 beforeAll(() => stubFetch());
@@ -151,7 +151,7 @@ describe('golden (skips while empty)', () => {
   });
 });
 
-describe('draft loaders (formats not yet frozen)', () => {
+describe('loaders', () => {
   it('dispersion 11x11', async () => {
     const d = await loadDispersion('im2_athena');
     expect(d.slopeDeg.length).toBe(121);
@@ -164,10 +164,24 @@ describe('draft loaders (formats not yet frozen)', () => {
     expect(r.distanceKm(250, 250)).toBeGreaterThan(0);
   });
   it('tier-B tile', async () => {
-    const t = await loadTierBTile('s90_000');
-    expect(t.nNodes).toBe(64);
-    expect(t.maskDeg.length).toBe(64 * 720);
+    const t = await loadTierBTile('s2000_x+000000_y+000000');
+    expect(t.nNodes).toBe(100);
+    expect(t.maskDeg.length).toBe(100 * 720);
     expect(t.latDeg[0]).toBeLessThan(-89);
+    expect(t.maskDeg[0]).toBe(-10);
+    expect(Number.isNaN(t.maskDeg[1])).toBe(true);
+    expect(t.maskDeg[2]).toBe(0);
+    expect(t.slopeDeg[1]).toBeCloseTo(0.01, 6);
+    expect(t.downhillAspectDeg[1]).toBeCloseTo(0.01, 6);
+    expect(t.z0M[1]).toBeCloseTo(-49.75, 6);
+    expect(t.dMinM[0]).toBe(60);
+    expect(t.dMinM[1]).toBe(90);
+    expect(nearestTierBNode(t, t.latDeg[0], t.lonDeg[0])).toBe(0);
+    expect(nearestTierBNode({ ...t, nNodes: 2, latDeg: new Float32Array([-89, -89]), lonDeg: new Float32Array([0, 2]) }, -89, 1)).toBe(0);
     await expect(loadTierBTile('nope')).rejects.toThrow(/no tile/);
+    await expect(loadTierBIndex()).resolves.toMatchObject({ version: '0.1.0' });
+  });
+  it('rejects a Tier-B index version outside the frozen contract', () => {
+    expect(() => parseTierBIndex({ schema: 'tierb_index', version: '9.9.9', bin_deg: 0.5, height_m: 1, tiles: [] } as never)).toThrow(/v0\.1\.0/);
   });
 });

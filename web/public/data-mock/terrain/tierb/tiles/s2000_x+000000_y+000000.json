@@ -1,0 +1,12 @@
+{
+  "git_commit": "dc09b9dd4d44af7754d868168499f70b2dc6dbc9",
+  "producer": "lumen_pipeline.terrain.tierb",
+  "provenance": {
+    "serialization_only": true,
+    "synthetic": true
+  },
+  "schema": "tierb_tile_provenance",
+  "sha256": "5634e909b5909514e01edaf39d4dd4f64a34b000bf1ed7ac4790e35821d5fbbe",
+  "tile_id": "s2000_x+000000_y+000000",
+  "version": "0.1.0"
+}

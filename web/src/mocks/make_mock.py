@@ -2,7 +2,7 @@
 # Owner: Nived
 """Generate web/public/data-mock/ — a FAKE dataset with the same folder structure as data/.
 
-Stdlib only. Deterministic (no randomness without a fixed seed). Run from anywhere:
+Deterministic (no randomness without a fixed seed). Run from anywhere:
 
     python3 web/src/mocks/make_mock.py
 
@@ -17,9 +17,21 @@ import json
 import math
 import random
 import struct
+import sys
 import zlib
 from datetime import datetime, timezone
 from pathlib import Path
+
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "pipeline"))
+from lumen_pipeline.terrain.tierb import (
+    TierBTile,
+    TileSpec,
+    _tile_coordinates,
+    write_index,
+    write_tile,
+)
 
 OUT = Path(__file__).resolve().parents[2] / "public" / "data-mock"
 R_MOON_M = 1_737_400.0
@@ -329,47 +341,33 @@ def make_pad_disp_summaries():
 
 # ---------------------------------------------------------------- Tier-B tile + sigma calibration
 
-TILE_N = 8
-TILE_SPACING_M = 2000
 TILE_BINS = 720
 
 
 def make_tierb():
-    nodes = []
-    for j in range(TILE_N):
-        for i in range(TILE_N):
-            x = (i - (TILE_N - 1) / 2) * TILE_SPACING_M
-            y = (j - (TILE_N - 1) / 2) * TILE_SPACING_M
-            r = math.hypot(x, y)
-            colat = 2 * math.atan(r / (2 * R_MOON_M))
-            nodes.append((-(90.0 - math.degrees(colat)), math.degrees(math.atan2(x, y)) % 360.0))
-    n = len(nodes)
-    lat = b"".join(struct.pack("<f", a) for a, _ in nodes)
-    lon = b"".join(struct.pack("<f", b) for _, b in nodes)
-    scale, offset = 0.05, -2.0  # deg = u8 * scale + offset
-    mask = bytearray()
-    for k in range(n):
-        for b in range(TILE_BINS):
-            az = (b + 0.5) * 0.5
-            v = 0.8 + 1.4 * math.sin(math.radians(az) * 3 + k * 0.2) + 0.6 * math.sin(math.radians(az) * 11)
-            mask.append(max(0, min(255, round((v - offset) / scale))))
-    slope = bytes(max(0, min(255, round((3 + (k % 7)) * 10))) for k in range(n))
-    aspect = b"".join(struct.pack("<H", round(((k * 47) % 360) * 100)) for k in range(n))
-    z0 = b"".join(struct.pack("<h", round(((k % 9) - 4) * 2.0)) for k in range(n))  # unit 0.5 m
-    secs, blob, off = {}, bytearray(), 0
-    for name, dt, data, extra in [("lat_deg", "float32", lat, {}), ("lon_deg", "float32", lon, {}),
-                                  ("mask", "uint8", bytes(mask), {"shape": [n, TILE_BINS], "scale": scale, "offset": offset}),
-                                  ("slope_deg", "uint8", slope, {"unit": 0.1}), ("downhill_aspect_deg", "uint16", aspect, {"unit": 0.01}),
-                                  ("z0_m", "int16", z0, {"unit": 0.5})]:
-        secs[name] = {"dtype": dt, "offset_bytes": off, "byte_length": len(data), **extra}
-        blob += data
-        off += len(data)
-    tid = "s90_000"
-    w_bin(f"terrain/tierb/tiles/{tid}.bin", bytes(blob))
-    w_json("terrain/tierb/index.json", hdr(
-        "tierb_index", node_spacing_m=TILE_SPACING_M, bin_deg=0.5, height_m=1.0, d_min_m=6000, sigma_default_deg=0.5,
-        tiles=[{"id": tid, "file": f"tiles/{tid}.bin", "n_nodes": n, "grid": [TILE_N, TILE_N], "sections": secs,
-                "bbox_deg": {"lat_min": min(a for a, _ in nodes), "lat_max": max(a for a, _ in nodes)}}]))
+    # Use the production serializer so frontend mocks exercise the frozen layout.
+    spec = TileSpec(0, 0, 2000)
+    _, _, latitude, longitude = _tile_coordinates(spec)
+    n = latitude.size
+    mask = -10.0 + ((np.arange(n)[:, None] + np.arange(TILE_BINS)[None, :]) % 20000) * 0.01
+    mask = mask.astype(np.float32)
+    mask[0, :3] = [-10.0, np.nan, 0.0]
+    tile = TierBTile(
+        spec=spec,
+        latitude_deg=latitude.astype(np.float32),
+        longitude_deg=longitude.astype(np.float32),
+        mask_deg=mask,
+        slope_deg=np.arange(n, dtype=np.float32) * 0.01,
+        downhill_aspect_deg=np.arange(n, dtype=np.float32) * 0.01,
+        z0_m=-50.0 + np.arange(n, dtype=np.float32) * 0.25,
+        d_min_m=60.0 + (np.arange(n, dtype=np.float32) % 2) * 30.0,
+        provenance={"synthetic": True, "serialization_only": True},
+    )
+    terrain_root = OUT / "terrain"
+    legacy = terrain_root / "tierb" / "tiles" / "s90_000.bin"
+    legacy.unlink(missing_ok=True)
+    entry = write_tile(tile, terrain_root)
+    write_index([entry], terrain_root)
 
 
 def make_sigma_summary():
